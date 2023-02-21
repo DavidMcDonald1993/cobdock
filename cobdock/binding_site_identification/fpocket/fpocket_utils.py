@@ -36,8 +36,7 @@ from utils.molecules.pdb_utils import (
     AA3_TO_AA1,
     )
 
-# FPOCKET_EXECUTABLE = "fpocket"
-FPOCKET_EXECUTABLE = "./bin/location_analysis/fpocket/fpocket"
+FPOCKET_EXECUTABLE = "fpocket"
 
 FPOCKET_OUT = os.path.join(
     "cavities", 

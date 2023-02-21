@@ -149,7 +149,7 @@ def execute_cobdock(
 
 if __name__ == "__main__":
 
-    targets = ["P23219"]
+    targets = ["P23219", ]
 
     ligands_to_targets = {
         "aspirin": {
@@ -158,7 +158,7 @@ if __name__ == "__main__":
         },
     }
 
-    output_dir = "example_output"
+    output_dir = "test_output"
 
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,
