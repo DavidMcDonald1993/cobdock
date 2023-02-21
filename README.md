@@ -105,7 +105,6 @@ This function has the following input arguments:
     * num_complexes: the number of top poses to convert into complexes by combining with the structure of the target.
 
 
-
 ### Configuring future runs
 
 Edit the `ligands_to_targets` data structure defined in `./cobdock/run_cobdock.py` to configure all of the pairs that will be input into COBDock.
@@ -124,7 +123,36 @@ If Uniprot accession IDs are given, be sure to set the argument `map_uniprot_to_
 
 ### Output structure explained  
 The directory `example_output` provides a sample output from a run.
-Output directories are structured as follows: TODO
+Output directories are structured as follows: 
+
+The directory contains four subdirectories, and it is the following two:
+
+1. pocket_locations
+2. docking
+
+that are the most important. 
+
+#### pocket_locations subdirectory
+The `pocket_locations` subdirectory contains all of the primary outputs of the run:
+
+1. `pocket_locations/top_XXXX_pockets.json` provides details of the top XXXX (where XXXX is equal to the setting of the input paramter `num_top_pockets`) predicted binding sites for all ligand, target pairs.
+The data structure is a nested set of key-value maps, mapping ligand_id to Uniprot accession ID to PDB ID with chain to pocket ID to pocket data. 
+The pocket data is comprised of the location and size of the pocket, its machine-learning predicted pocket score, its rank, as well as its original ID for the binding site identification algorithm that predicted it. 
+
+2. `pocket_locations/pose_data.json` provides a summary of all of the poses that were generated after executing docking at all of the pockets defined in `pocket_locations/top_XXXX_pockets.json`.
+The data structure is similar to that of `pocket_locations/top_XXXX_pockets.json`, however, instead of pocket data, each pocket ID now maps to pose ID, which maps to pose data.
+Pose data provides the location and size of the bounding box of the pose, and its binding energy (given under the key `energy`).
+
+The `pocket_locations` subdirectory also contains a `local_docking` subdirectory that contains PDB files of all of the predicted poses (and complexes).
+The poses for a ligand with the ligand ID `LIGAND`, docked into target `ACCESSION` (crystal structure `PDBID`), pocket number `POCKETNUM` can be found at:
+
+```
+pocket_locations/local_docking/LIGAND/ACCESSION/PDBID/POCKETNUM/poses
+```
+and, if `num_complexes` > 0, then any complexes can be found at:
+```
+pocket_locations/local_docking/LIGAND/ACCESSION/PDBID/POCKETNUM/complexes
+```
 
 
 
