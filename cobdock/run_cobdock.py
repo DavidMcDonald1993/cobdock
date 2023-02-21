@@ -36,7 +36,7 @@ def execute_cobdock(
     rerank_with_prefix: bool = True,
     prefix_size: int = 3,
     fill_pdb_list_with_similar_targets: bool = False,
-    use_alphafold: bool = True,
+    use_alphafold: bool = False,
 
     delete_output_directory: bool = False,
     delete_prepared_targets_directory: bool = True,
@@ -149,42 +149,23 @@ def execute_cobdock(
 
 if __name__ == "__main__":
 
-    # targets = ["4D75_A", "6NNA", "6SHK_A"]
-    targets = ["P09874"]
+    targets = ["P23219"]
 
     ligands_to_targets = {
         "aspirin": {
             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
             "targets": targets,
         },
-        "ibuprofen": {
-            "smiles": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
-            "targets": targets,
-        },
-        "PK9": {
-            "smiles": "CC(C)(C)OC(=O)NCCCCCC(=O)NCc1cccnc1",
-            "targets": targets,
-        }
     }
 
-    from utils.io.io_utils import read_smiles
-
-    smiles = read_smiles("test_compounds/Book1.smi", return_list=True, verbose=True, assume_clean_input=True)
-
-    for molecule in smiles:
-        ligands_to_targets[molecule["molecule_id"]] = {
-            "smiles": molecule["smiles"],
-            "targets": targets,
-        }
-
-    output_dir = "cob_dock_test_2"
+    output_dir = "example_output"
 
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,
         output_dir=output_dir,
         map_uniprot_to_pdb=True,
         # map_uniprot_to_pdb=False,
-        number_of_pdb=5,
+        number_of_pdb=1,
         bounding_box_scale=1.,
         num_poses=1,
         num_complexes=1,

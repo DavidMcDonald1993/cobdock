@@ -1,0 +1,73 @@
+{
+    "aspirin": {
+        "P23219": {
+            "6Y3C_A": {
+                "1": {
+                    "1": {
+                        "center_x": -33.749,
+                        "center_y": -45.535,
+                        "center_z": 5.208,
+                        "size_x": 3.0,
+                        "size_y": 6.0,
+                        "size_z": 5.0,
+                        "energy": -6.3,
+                        "rmsd_lb": 0.0,
+                        "rmsd_ub": 0.0
+                    }
+                },
+                "5": {
+                    "1": {
+                        "center_x": -45.811,
+                        "center_y": -36.765,
+                        "center_z": 7.616,
+                        "size_x": 5.0,
+                        "size_y": 5.0,
+                        "size_z": 5.0,
+                        "energy": -5.0,
+                        "rmsd_lb": 0.0,
+                        "rmsd_ub": 0.0
+                    }
+                },
+                "3": {
+                    "1": {
+                        "center_x": -42.124,
+                        "center_y": -55.33,
+                        "center_z": 7.478,
+                        "size_x": 4.0,
+                        "size_y": 6.0,
+                        "size_z": 5.0,
+                        "energy": -6.4,
+                        "rmsd_lb": 0.0,
+                        "rmsd_ub": 0.0
+                    }
+                },
+                "2": {
+                    "1": {
+                        "center_x": -46.956,
+                        "center_y": -59.966,
+                        "center_z": 10.607,
+                        "size_x": 5.0,
+                        "size_y": 5.0,
+                        "size_z": 6.0,
+                        "energy": -5.2,
+                        "rmsd_lb": 0.0,
+                        "rmsd_ub": 0.0
+                    }
+                },
+                "4": {
+                    "1": {
+                        "center_x": -41.707,
+                        "center_y": -55.873,
+                        "center_z": 6.904,
+                        "size_x": 5.0,
+                        "size_y": 5.0,
+                        "size_z": 6.0,
+                        "energy": -6.9,
+                        "rmsd_lb": 0.0,
+                        "rmsd_ub": 0.0
+                    }
+                }
+            }
+        }
+    }
+}

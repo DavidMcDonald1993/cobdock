@@ -1,0 +1,228 @@
+{
+    "aspirin": {
+        "P23219": {
+            "6Y3C_A": {
+                "16": {
+                    "center_x": -21.208,
+                    "center_y": -44.693,
+                    "center_z": 17.21,
+                    "size_x": 6.0,
+                    "size_y": 3.0,
+                    "size_z": 6.0,
+                    "energy": -4.8,
+                    "rmsd_lb": 23.836,
+                    "rmsd_ub": 25.567
+                },
+                "20": {
+                    "center_x": -39.837,
+                    "center_y": -52.109,
+                    "center_z": -14.107,
+                    "size_x": 5.0,
+                    "size_y": 5.0,
+                    "size_z": 6.0,
+                    "energy": -4.6,
+                    "rmsd_lb": 20.872,
+                    "rmsd_ub": 22.234
+                },
+                "2": {
+                    "center_x": -14.71,
+                    "center_y": -56.217,
+                    "center_z": -0.186,
+                    "size_x": 4.0,
+                    "size_y": 5.0,
+                    "size_z": 6.0,
+                    "energy": -6.2,
+                    "rmsd_lb": 27.794,
+                    "rmsd_ub": 28.617
+                },
+                "13": {
+                    "center_x": -13.266,
+                    "center_y": -44.682,
+                    "center_z": -0.91,
+                    "size_x": 3.0,
+                    "size_y": 6.0,
+                    "size_z": 5.0,
+                    "energy": -5.0,
+                    "rmsd_lb": 30.385,
+                    "rmsd_ub": 32.036
+                },
+                "12": {
+                    "center_x": -50.369,
+                    "center_y": -49.396,
+                    "center_z": 22.668,
+                    "size_x": 5.0,
+                    "size_y": 5.0,
+                    "size_z": 4.0,
+                    "energy": -5.1,
+                    "rmsd_lb": 17.11,
+                    "rmsd_ub": 18.686
+                },
+                "7": {
+                    "center_x": -51.008,
+                    "center_y": -48.393,
+                    "center_z": 21.717,
+                    "size_x": 5.0,
+                    "size_y": 6.0,
+                    "size_z": 4.0,
+                    "energy": -5.3,
+                    "rmsd_lb": 16.62,
+                    "rmsd_ub": 18.439
+                },
+                "10": {
+                    "center_x": -46.953,
+                    "center_y": -60.007,
+                    "center_z": 10.585,
+                    "size_x": 5.0,
+                    "size_y": 5.0,
+                    "size_z": 6.0,
+                    "energy": -5.2,
+                    "rmsd_lb": 6.282,
+                    "rmsd_ub": 7.579
+                },
+                "18": {
+                    "center_x": -12.747,
+                    "center_y": -65.898,
+                    "center_z": -3.395,
+                    "size_x": 4.0,
+                    "size_y": 5.0,
+                    "size_z": 6.0,
+                    "energy": -4.7,
+                    "rmsd_lb": 31.631,
+                    "rmsd_ub": 33.182
+                },
+                "6": {
+                    "center_x": -30.626,
+                    "center_y": -55.553,
+                    "center_z": -14.304,
+                    "size_x": 6.0,
+                    "size_y": 4.0,
+                    "size_z": 5.0,
+                    "energy": -5.6,
+                    "rmsd_lb": 23.252,
+                    "rmsd_ub": 24.891
+                },
+                "3": {
+                    "center_x": -13.933,
+                    "center_y": -57.325,
+                    "center_z": -0.195,
+                    "size_x": 4.0,
+                    "size_y": 6.0,
+                    "size_z": 5.0,
+                    "energy": -6.2,
+                    "rmsd_lb": 28.094,
+                    "rmsd_ub": 29.607
+                },
+                "11": {
+                    "center_x": -30.632,
+                    "center_y": -55.749,
+                    "center_z": -14.93,
+                    "size_x": 5.0,
+                    "size_y": 4.0,
+                    "size_z": 6.0,
+                    "energy": -5.1,
+                    "rmsd_lb": 23.767,
+                    "rmsd_ub": 25.394
+                },
+                "15": {
+                    "center_x": -22.715,
+                    "center_y": -44.617,
+                    "center_z": 18.56,
+                    "size_x": 6.0,
+                    "size_y": 5.0,
+                    "size_z": 4.0,
+                    "energy": -4.9,
+                    "rmsd_lb": 23.254,
+                    "rmsd_ub": 24.969
+                },
+                "17": {
+                    "center_x": -38.592,
+                    "center_y": -52.353,
+                    "center_z": -13.269,
+                    "size_x": 6.0,
+                    "size_y": 3.0,
+                    "size_z": 5.0,
+                    "energy": -4.8,
+                    "rmsd_lb": 20.135,
+                    "rmsd_ub": 21.472
+                },
+                "9": {
+                    "center_x": -50.36,
+                    "center_y": -49.926,
+                    "center_z": 22.516,
+                    "size_x": 5.0,
+                    "size_y": 4.0,
+                    "size_z": 5.0,
+                    "energy": -5.2,
+                    "rmsd_lb": 16.833,
+                    "rmsd_ub": 18.202
+                },
+                "8": {
+                    "center_x": -13.713,
+                    "center_y": -61.249,
+                    "center_z": -1.145,
+                    "size_x": 3.0,
+                    "size_y": 6.0,
+                    "size_z": 5.0,
+                    "energy": -5.3,
+                    "rmsd_lb": 29.694,
+                    "rmsd_ub": 30.408
+                },
+                "4": {
+                    "center_x": -14.156,
+                    "center_y": -59.094,
+                    "center_z": -0.616,
+                    "size_x": 3.0,
+                    "size_y": 6.0,
+                    "size_z": 6.0,
+                    "energy": -6.0,
+                    "rmsd_lb": 28.477,
+                    "rmsd_ub": 29.504
+                },
+                "19": {
+                    "center_x": -39.818,
+                    "center_y": -60.38,
+                    "center_z": 5.335,
+                    "size_x": 5.0,
+                    "size_y": 6.0,
+                    "size_z": 6.0,
+                    "energy": -4.7,
+                    "rmsd_lb": 5.227,
+                    "rmsd_ub": 6.794
+                },
+                "14": {
+                    "center_x": -35.352,
+                    "center_y": -36.181,
+                    "center_z": 14.858,
+                    "size_x": 6.0,
+                    "size_y": 5.0,
+                    "size_z": 4.0,
+                    "energy": -4.9,
+                    "rmsd_lb": 20.177,
+                    "rmsd_ub": 21.878
+                },
+                "1": {
+                    "center_x": -42.122,
+                    "center_y": -55.332,
+                    "center_z": 7.479,
+                    "size_x": 4.0,
+                    "size_y": 6.0,
+                    "size_z": 5.0,
+                    "energy": -6.4,
+                    "rmsd_lb": 0.0,
+                    "rmsd_ub": 0.0
+                },
+                "5": {
+                    "center_x": -23.056,
+                    "center_y": -45.57,
+                    "center_z": -10.117,
+                    "size_x": 6.0,
+                    "size_y": 5.0,
+                    "size_z": 3.0,
+                    "energy": -5.7,
+                    "rmsd_lb": 26.207,
+                    "rmsd_ub": 27.88
+                }
+            }
+        }
+    }
+}
