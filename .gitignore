@@ -1,4 +1,6 @@
 bin
-data
+# MGLTools-1.5.6
+
+data/prepared_targets
 
 notes.txt
