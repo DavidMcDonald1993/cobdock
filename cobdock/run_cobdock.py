@@ -39,7 +39,7 @@ def execute_cobdock(
     use_alphafold: bool = False,
 
     delete_output_directory: bool = False,
-    delete_prepared_targets_directory: bool = True,
+    delete_prepared_targets_directory: bool = False,
 
     run_post_docking_analysis: bool = True, 
     
@@ -149,13 +149,20 @@ def execute_cobdock(
 
 if __name__ == "__main__":
 
-    targets = ["P23219", ]
 
     ligands_to_targets = {
         "aspirin": {
             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
-            "targets": targets,
+            "targets": ["P23219", ],
         },
+        "ibuprofen": {
+            "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
+            "targets": ["P23219", ],
+        },
+        "olaparib": {
+            "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
+            "targets": ["P23219", "P09874"]
+        }
     }
 
     output_dir = "test_output"
@@ -166,10 +173,8 @@ if __name__ == "__main__":
         map_uniprot_to_pdb=True,
         # map_uniprot_to_pdb=False,
         number_of_pdb=1,
-        bounding_box_scale=1.,
+        num_top_pockets=5,
         num_poses=1,
         num_complexes=1,
-        num_top_pockets=5,
-        delete_prepared_targets_directory=False,
         verbose=True,
     )
