@@ -61,7 +61,7 @@ Fpocket4.0 [5] has is included in the provided Anaconda environment.
 
 ### P2Rank 2.3.1
 P2Rank 2.3.1 can be downloaded as an archive [here](https://github.com/rdk/p2rank/releases/download/2.3.1/p2rank_2.3.1.tar.gz).
-Extract it to the `./bin/location_analysis` subdirectory so that `p2rank_2.3.1` can be found inside `./bin/location/analysis`.
+Extract it to the `./bin/location_analysis` subdirectory so that `p2rank_2.3.1` can be found inside `./bin/location_analysis`.
 Confirm that the `prank` binary can be found at `./bin/location_analysis/p2rank_2.3.1/prank`.
 
 
