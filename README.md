@@ -58,8 +58,8 @@ mkdir bin/docking/zdock
 ```
 and place the ZDOCK binary and all of the suppliementary files inside the newly created `zdock` subdirectory. 
 
-### fpocket4.0
-Fpocket4.0 [5] has is included in the provided Anaconda environment.
+### FPocket4.0
+FPocket4.0 [5] has is included in the provided Anaconda environment.
 
 ### P2Rank 2.3.1
 P2Rank 2.3.1 can be downloaded as an archive [here](https://github.com/rdk/p2rank/releases/download/2.3.1/p2rank_2.3.1.tar.gz).

@@ -356,6 +356,7 @@ def execute_reverse_docking_plants(
                 collated_data[ligand_id][accession] = {}
             for pdb_id in pdb_ids:
                 if pdb_id not in collated_data[ligand_id][accession] or len(collated_data[ligand_id][accession][pdb_id]) == 0:
+                    collated_data[ligand_id][accession][pdb_id] = {}
                     collated_data[ligand_id][accession][pdb_id][None] = MISSING_POSE_DATA
                     if compute_rmsd_with_submitted_ligand:
                         collated_data[ligand_id][accession][pdb_id][None]["pymol_rmsd"] = np.nan
