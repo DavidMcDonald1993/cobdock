@@ -8,7 +8,7 @@ We have provided an Anaconda environment file for easy set up.
 If you do not have Anaconda installed, you can get Miniconda from [here](https://docs.conda.io/en/latest/miniconda.html).
 Create the `cobdock-env` environment using the following command:
 ```bash
-conda create -n cobdock-env -f environment.yml
+conda env create -n cobdock-env -f environment.yml
 conda activate cobdock-env
 ```
 Then, install additional packages with pip using the following command:
