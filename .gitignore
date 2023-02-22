@@ -4,3 +4,6 @@
 
 /notes.txt
 /environment_broken.yml
+/test_output
+
+*.pyc

@@ -7,7 +7,9 @@
 ######
 ## Set some environment variable.
 # MGL_ROOT="/home/david/MGLTools-1.5.6" 
-# export MGL_ROOT
+MGL_ROOT="$(pwd)/MGLTools-1.5.6" 
+export MGL_ROOT
+echo "Set MGL_ROOT to" $MGL_ROOT
 
 ########
 ## plaform we run on
