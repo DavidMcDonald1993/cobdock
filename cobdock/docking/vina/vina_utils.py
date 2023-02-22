@@ -39,6 +39,7 @@ SMINA_FEATURE_LOCATION = os.path.join(PROJECT_ROOT, "bin", "docking", "vina", "s
 VINA_MAX_MODES = 100
 
 VINA_N_PROC = int(os.environ.get("VINA_N_PROC", default=1))
+VINA_TIMEOUT = os.environ.get("VINA_TIMEOUT", default="1h")
 
 CUSTOM_SCORE_FUNCTION_ROOT_DIR = os.path.join(
     PROJECT_ROOT, 
@@ -310,7 +311,7 @@ def execute_vina(
     cmd = f"{vina_location} {args}"
 
     try: # catch invalid atoms
-        execute_system_command(cmd, verbose=verbose)
+        execute_system_command(cmd, timeout=VINA_TIMEOUT, verbose=verbose)
     except Exception as e:
         print ("VINA exception", e)
         return None

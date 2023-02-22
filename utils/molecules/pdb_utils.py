@@ -2096,9 +2096,6 @@ def get_cofactors_for_accessions(
     }
 
 # def check_for_natural_ligand_in_pdb_file():
-#     '''
-#     TO HELP YAVUZ
-#     '''
 
 #     import pandas as pd 
 
@@ -2228,8 +2225,16 @@ def download_all_pdbs(
 if __name__ == "__main__":
 
 
-    download_all_pdbs()
+    # download_all_pdbs()
 
+    bounding_box = define_target_binding_site_using_biopython(
+        pdb_filename="6NNA.pdb",
+        scale=1,
+        precision=3,
+        verbose=True,
+    )
+
+    print (bounding_box)
 
     # print (get_cofactors_for_accessions(["P09874", "Q65WW7"]))
 

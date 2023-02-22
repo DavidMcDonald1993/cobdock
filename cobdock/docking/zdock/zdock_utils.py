@@ -38,6 +38,7 @@ CREATE_LIG_LOCATION = os.path.join(CREATE_PL_DIRECTORY, "create_lig")
 ZDOCK_NUM_POSES = 100
 
 ZDOCK_N_PROC = int(os.environ.get("ZDOCK_N_PROC", default=1))
+ZDOCK_TIMEOUT = os.environ.get("ZDOCK_TIMEOUT", default="1h")
 
 def link_to_directory(
     file_to_link: str,
@@ -78,7 +79,6 @@ def link_create_lig(
 def prepare_for_zdock(
     input_filename: str,
     output_filename: str = None,
-    timeout: str = "1m",
     overwrite: bool = False,
     verbose: bool = True,
     ):
@@ -121,7 +121,7 @@ def prepare_for_zdock(
         try:
             execute_system_command(
                 cmd, 
-                timeout=timeout, # sometimes mark_sur hangs for some reason
+                timeout=ZDOCK_TIMEOUT, # sometimes mark_sur hangs for some reason
                 verbose=verbose
                 )
         except Exception as e:
@@ -143,7 +143,6 @@ def execute_zdock(
     target_filename: str,
     output_filename: str,
     fix: bool = True,
-    timeout: str = "1h",
     num_poses: int = None,
     verbose: bool = True,
     ):
@@ -199,7 +198,7 @@ def execute_zdock(
         execute_system_command(
             cmd,
             allow_non_zero_return=True, # TODO: return to this
-            timeout=timeout,
+            timeout=ZDOCK_TIMEOUT,
             verbose=verbose,
         )
         if os.path.exists(output_basename) and os.path.abspath(output_basename) != output_filename: #' output filename is an abspath

@@ -37,6 +37,7 @@ SPORES_LOCATION = os.path.join(PROJECT_ROOT, "bin", "docking", "plants", "SPORES
 PLANTS_NUM_POSES = 100
 
 PLANTS_N_PROC = int(os.environ.get("PLANTS_N_PROC", default=1))
+PLANTS_TIMEOUT = os.environ.get("PLANTS_TIMEOUT", default="1h")
 
 def determine_binding_site_radius(
     # target_data: dict,
@@ -103,7 +104,7 @@ def prepare_for_plants(
         {SPORES_LOCATION} --mode {spores_mode} {input_filename} {output_filename}
         '''
         try:
-            execute_system_command(cmd, verbose=verbose)
+            execute_system_command(cmd, timeout=PLANTS_TIMEOUT, verbose=verbose)
         except Exception as e:
             print ("SPORES EXCEPTION", e)
             return None
@@ -300,7 +301,7 @@ def execute_plants(
         cmd = f'''\
         {PLANTS_LOCATION} --mode {mode} {configfile_location}
         '''
-        execute_system_command(cmd, timeout="10m", verbose=verbose)
+        execute_system_command(cmd, timeout=PLANTS_TIMEOUT, verbose=verbose)
     except Exception as e:
         print ("Exception running PLANTS", e)
     finally:

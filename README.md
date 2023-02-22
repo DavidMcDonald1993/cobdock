@@ -11,8 +11,9 @@ Create the `cobdock-env` environment using the following command:
 conda create -n cobdock-env -f environment.yml
 conda activate cobdock-env
 ```
-Then, install two additional packages from git using the following command:
+Then, install additional packages with pip using the following command:
 ```bash
+pip install pdb-tools scoria
 pip install git+https://github.com/thelahunginjeet/kbutil
 pip install git+https://github.com/thelahunginjeet/pyrankagg 
 ```
@@ -50,11 +51,12 @@ and place both binaries inside the newly created `plants` subdirectory.
 
 ### ZDOCK
 The ZDOCK [4] binary is available [here](https://zdock.umassmed.edu/software/).
+Also required are the following files: `create_lig`, `create.pl`, `mark_sur`, and `uniCHARMM`.
 Execute this command to create a `zdock` subdirectory inside `./bin/docking`:
 ```bash
 mkdir bin/docking/zdock
 ```
-and place the ZDOCK binary inside the newly created `zdock` subdirectory. 
+and place the ZDOCK binary and all of the suppliementary files inside the newly created `zdock` subdirectory. 
 
 ### fpocket4.0
 Fpocket4.0 [5] has is included in the provided Anaconda environment.
@@ -80,6 +82,10 @@ Modify the `.env` file to set the maximum number of processes for:
 5. Executing ZDOCK
 
 We strongly advise setting a low number of processes for PLANTS since it is memory intensive.
+This file can also be used to configure timeouts for all of the molecular docking programs (set to "1h" (one hour) by default). 
+To set the timeout to 30 minutes, change the timeout to "30m".
+To set the timeout to 10 seconds, change the timeout to "10s".
+
 
 ### Running the COBDock pipeline
 Run the following command:

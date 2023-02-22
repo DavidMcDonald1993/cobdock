@@ -155,14 +155,14 @@ if __name__ == "__main__":
             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
             "targets": ["P23219", ],
         },
-        "ibuprofen": {
-            "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
-            "targets": ["P23219", ],
-        },
-        "olaparib": {
-            "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
-            "targets": ["P23219", "P09874"]
-        }
+        # "ibuprofen": {
+        #     "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
+        #     "targets": ["P23219", ],
+        # },
+        # "olaparib": {
+        #     "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
+        #     "targets": ["P23219", "P09874"]
+        # }
     }
 
     output_dir = "test_output"

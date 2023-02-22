@@ -31,6 +31,7 @@ RUN_GALAXYDOCK_LOCATION = os.path.join(GALAXYDOCK_HOME, "script", "run_GalaxyDoc
 GALAXYDOCK_MAX_POSES = 100
 
 GALAXYDOCK_N_PROC = int(os.environ.get("GALAXYDOCK_N_PROC", default=1))
+GALAXYDOCK_TIMEOUT = os.environ.get("GALAXYDOCK_TIMEOUT", default="1h")
 
 def prepare_ligand_for_galaxydock(
     input_filename: str,
@@ -99,7 +100,7 @@ def run_GalaxyDock3_python3(
     n_elem_z: int,
     e0max: float = 1000.0,
     e1max: float = 1000000.0,
-    timeout: str = "1h",
+    # timeout: str = "1h",
     n_proc: int = 1,
     verbose: bool = True,
     ):
@@ -139,7 +140,7 @@ def run_GalaxyDock3_python3(
         f.write(input)
     #
     # os.system(f'{EXEC_GALAXYDOCK3} {input_filename} > {log_filename}')
-    execute_system_command(f'{EXEC_GALAXYDOCK3} {input_filename} > {log_filename}', timeout=timeout, verbose=verbose)
+    execute_system_command(f'{EXEC_GALAXYDOCK3} {input_filename} > {log_filename}', timeout=GALAXYDOCK_TIMEOUT, verbose=verbose)
     if not os.path.exists('GD3_fb.E.info'):
         print ('''ERROR: Failed to run GalaxyDock.''')
         # sys.exit()
@@ -161,8 +162,6 @@ def execute_galaxydock(
     size_z: float,
     use_multiprocessing: bool = False,
     n_proc: int = None,
-    # timeout: str = "1h", # kill after 1 hour of runtime
-    timeout: str = "10m", # kill after 10 mins of runtime
     num_poses: int = None,
     verbose: bool = True,
     ):
@@ -275,7 +274,7 @@ def execute_galaxydock(
             n_elem_x=n_elem_x,
             n_elem_y=n_elem_y,
             n_elem_z=n_elem_z,
-            timeout=timeout,
+            # timeout=timeout,
         )
 
     except Exception as e:
@@ -285,293 +284,6 @@ def execute_galaxydock(
         os.chdir(current_dir)
 
     return galaxydock_output_filename, pose_mol2_file
-
-# def calculate_RMSD_galaxydock(
-#     reference_ligand_filename,
-#     model_ligand_filename,
-#     output_directory,
-#     delete_hydrogen=True,
-#     add_hydrogen=False,
-#     verbose: bool = False,
-#     ):
-
-#     # if not reference_ligand_filename.endswith(".mol2"):
-#     reference_ligand_stem, ext = os.path.splitext(reference_ligand_filename)
-#     ext = ext.replace(".", "")
-#     reference_ligand_filename = obabel_convert(
-#         input_format=ext,
-#         input_filename=reference_ligand_filename,
-#         output_format="mol2",
-#         output_filename=f"{reference_ligand_stem}_galaxydock.mol2",
-#         delete_hydrogen=delete_hydrogen,
-#         add_hydrogen=add_hydrogen,
-#         canonical=True,
-#         title="reference",
-#     )
-#     # if not model_ligand_filename.endswith(".mol2"):
-#     model_ligand_stem, ext = os.path.splitext(model_ligand_filename)
-#     ext = ext.replace(".", "")
-#     model_ligand_filename = obabel_convert(
-#         input_format=ext,
-#         input_filename=model_ligand_filename,
-#         output_format="mol2",
-#         output_filename=f"{model_ligand_stem}_galaxydock.mol2",
-#         delete_hydrogen=delete_hydrogen,
-#         add_hydrogen=add_hydrogen,
-#         canonical=True,
-#         title="model",
-#     )
-#     # assert model_ligand_filename.endswith(".mol2")
-#     assert os.path.exists(reference_ligand_filename), f"{reference_ligand_filename} DOES NOT EXIST"
-#     assert os.path.exists(model_ligand_filename), f"{model_ligand_filename} DOES NOT EXIST"
-
-
-#     print ("CALCULATING RMSD FOR LIGAND FILES", reference_ligand_filename, model_ligand_filename)
-#     print ("OUTPUTTING TO DIRECTORY", output_directory)
-
-#     current_directory = os.getcwd()
-
-    
-#     reference_ligand_filename = os.path.abspath(reference_ligand_filename)
-#     model_ligand_filename = os.path.abspath(model_ligand_filename)
-
-#     print ("MAKING DIRECTORY", output_directory)
-#     os.makedirs(output_directory, exist_ok=True)
-
-#     reference_ligand_basename = os.path.basename(reference_ligand_filename)
-#     model_ligand_basename = os.path.basename(model_ligand_filename)
-    
-#     reference_ligand_filename_in_dir = os.path.join(output_directory, reference_ligand_basename)
-#     model_ligand_filename_in_dir = os.path.join(output_directory, model_ligand_basename)
-
-#     copy_file(reference_ligand_filename, reference_ligand_filename_in_dir)
-#     print (reference_ligand_filename, reference_ligand_filename_in_dir)
-#     shutil.copy(model_ligand_filename, model_ligand_filename_in_dir)
-#     print (model_ligand_filename, model_ligand_filename_in_dir)
-
-#     os.chdir(output_directory)
-
-
-#     cmd = f'''
-#     python {CALCULATE_RMSD_SCRIPT_LOCATION} \
-#         {GALAXYDOCK_HOME} \
-#         {reference_ligand_basename} \
-#         {model_ligand_basename} \
-#     '''
-
-#     execute_system_command(cmd, )
-
-#     os.chdir(current_directory)
-
-#     log_filename = os.path.join(output_directory, "rmsd.log")
-#     if os.path.exists(log_filename):
-#         rmsd = subprocess.check_output(f"awk '/RMSD/ {{print $5}}' {log_filename}", shell=True)
-#         # print ("REMOVING DIRECTORY", output_directory)
-#         # shutil.rmtree(output_directory)
-
-#         try:
-#             rmsd = float(rmsd)
-#             return rmsd
-#         except:
-#             print ("RMSD CONVERSION TO FLOAT FAIL", rmsd)
-#             pass 
-
-#     return None
-
-# def collate_galaxydock_data(
-#     ligands_to_targets,
-#     output_dir,
-#     output_filename,
-#     precision=3,
-#     compute_rmsd_with_submitted_ligand=True,
-#     num_complexes=1,
-#     ):
-
-#     if os.path.exists(output_filename):
-#         print(output_filename, "EXISTS -- LOADING IT")
-#         galaxydock_data = load_json(output_filename)
-
-#     else:
-#         galaxydock_data = {}
-
-#         for ligand_name in ligands_to_targets:
-
-#             if ligand_name not in galaxydock_data:
-#                 galaxydock_data[ligand_name] = {}
-
-#             submitted_ligand_location = ligands_to_targets[ligand_name]["pdb_filename"]
-
-#             # copy ligand from docking_dir into galaxy dir
-#             ligand_galaxydock_out_dir = os.path.join(
-#                 output_dir,
-#                 GALAXYDOCK_OUT_DIRECTORY, 
-#                 ligand_name)
-
-
-#             ligand_accessions = ligands_to_targets[ligand_name]["prepared_targets"]
-
-#             for accession in ligand_accessions:
-
-#                 if accession not in galaxydock_data[ligand_name]:
-#                     galaxydock_data[ligand_name][accession] = {}
-
-#                 ligand_pdb_targets = ligand_accessions[accession]
-
-#                 for ligand_pdb_target in ligand_pdb_targets:
-
-#                     # add PDB target to return dictionary
-#                     if ligand_pdb_target not in galaxydock_data[ligand_name][accession]:
-#                         galaxydock_data[ligand_name][accession][ligand_pdb_target] = {}
-
-#                     prepared_target_filename = ligand_accessions[accession][ligand_pdb_target]["prepared_filename"]
-
-#                     ligand_target_galaxydock_out_directory = os.path.join(
-#                         ligand_galaxydock_out_dir, 
-#                         ligand_pdb_target)
-                   
-#                     galaxydock_info_filename = os.path.join(
-#                         ligand_target_galaxydock_out_directory,
-#                         f"GD{GALAXYDOCK_VERSION}_fb.E.info")
-
-#                     galaxydock_pose_output_filename = os.path.join(
-#                         ligand_target_galaxydock_out_directory, 
-#                         f"GD{GALAXYDOCK_VERSION}_fb.mol2")
-
-#                     if os.path.exists(galaxydock_info_filename) and os.path.exists(galaxydock_pose_output_filename): 
-
-#                         print ("Reading GalaxyDock scores from", galaxydock_info_filename)
-#                         galaxydock_output_df = pd.read_fwf(
-#                             galaxydock_info_filename, 
-#                             comment="!", 
-#                             sep="\t", 
-#                             index_col=0)
-#                         # necessary
-#                         galaxydock_output_df = galaxydock_output_df.fillna(0)
-
-#                         # make pose and complex directory
-#                         pose_output_dir = os.path.join(
-#                             ligand_target_galaxydock_out_directory, 
-#                             "poses")
-#                         os.makedirs(pose_output_dir, exist_ok=True)
-
-#                         complex_output_dir = os.path.join(
-#                             ligand_target_galaxydock_out_directory,
-#                             "complexes")
-#                         os.makedirs(complex_output_dir, exist_ok=True)
-
-#                         # convert to pdb and split
-#                         obabel_return = obabel_convert(
-#                             input_format="mol2",
-#                             input_filename=galaxydock_pose_output_filename,
-#                             output_format="pdb",
-#                             output_filename="pose_",
-#                             output_dir=pose_output_dir, 
-#                             multiple=True,
-#                         )
-
-#                         # iterate over pose PDB files
-#                         for pose_pdb_filename in glob.iglob(os.path.join(pose_output_dir, "pose_*.pdb")):
-
-#                             # get rank
-#                             stem, ext = os.path.splitext(pose_pdb_filename)
-#                             rank = int(stem.split("_")[-1])
-
-#                             if num_complexes is not None and rank <= num_complexes:
-
-#                                 # make complex with current pose 
-#                                 complex_filename = os.path.join(
-#                                     complex_output_dir,
-#                                     f"complex_{rank}.pdb")
-#                                 create_complex_with_pymol(
-#                                     input_pdb_files=[prepared_target_filename, pose_pdb_filename],
-#                                     output_pdb_filename=complex_filename,
-#                                 )
-
-#                             # compute bounding box for current pose
-#                             center_of_mass = identify_centre_of_mass(pose_pdb_filename)
-#                             if center_of_mass is None:
-#                                 continue
-#                             center_x, center_y, center_z = center_of_mass
-#                             size_x, size_y, size_z = get_bounding_box_size(pose_pdb_filename)
-
-
-#                             galaxydock_score = galaxydock_output_df["Energy"].loc[rank]
-#                             if isinstance(galaxydock_score, str):
-#                                 galaxydock_score = 0
-#                             galaxydock_rmsd = galaxydock_output_df["l_RMSD"].loc[rank]
-#                             if isinstance(galaxydock_rmsd, str):
-#                                 galaxydock_rmsd = 0
-#                             galaxydock_autodock = galaxydock_output_df["ATDK_E"].loc[rank]
-#                             if isinstance(galaxydock_autodock, str):
-#                                 galaxydock_autodock = 0
-#                             galaxydock_internal_energy = galaxydock_output_df["INT_E"].loc[rank]
-#                             if isinstance(galaxydock_autodock, str):
-#                                 galaxydock_internal_energy = 0
-#                             galaxydock_drug_score = galaxydock_output_df["DS_E"].loc[rank]
-#                             if isinstance(galaxydock_drug_score, str):
-#                                 galaxydock_drug_score = 0
-
-#                             if isinstance(precision, int):
-#                                 galaxydock_score = round(galaxydock_score, precision)
-#                                 galaxydock_rmsd = round(galaxydock_rmsd, precision)
-#                                 galaxydock_autodock = round(galaxydock_autodock, precision)
-#                                 galaxydock_internal_energy = round(galaxydock_internal_energy, precision)
-#                                 galaxydock_drug_score = round(galaxydock_drug_score, precision)
-
-#                             pose_data = {
-#                                 "center_x": center_x, 
-#                                 "center_y": center_y, 
-#                                 "center_z": center_z, 
-#                                 "size_x": size_x, 
-#                                 "size_y": size_y, 
-#                                 "size_z": size_z, 
-#                                 "rmsd": galaxydock_rmsd,
-#                                 "score": galaxydock_score,
-#                                 "autodock": galaxydock_autodock,
-#                                 "drug_score": galaxydock_drug_score,
-#                                 "internal_energy": galaxydock_internal_energy, 
-#                             }
-
-#                             if compute_rmsd_with_submitted_ligand:
-
-#                                 # calculate RMSD with submitted ligand
-#                                 pose_data["rmsd_submitted"] = calculate_RMSD_pymol(
-#                                     reference_filename=submitted_ligand_location,
-#                                     model_filename=pose_pdb_filename,
-#                                 )
-
-#                             galaxydock_data[ligand_name][accession][ligand_pdb_target][rank] = pose_data
-
-
-#                     # no poses
-#                     if len(galaxydock_data[ligand_name][accession][ligand_pdb_target]) == 0:
-#                         missing_pose_data = {
-#                             "center_x": None, 
-#                             "center_y": None, 
-#                             "center_z": None, 
-#                             "size_x": None, 
-#                             "size_y": None, 
-#                             "size_z": None, 
-#                             "rmsd": None,
-#                             "score": None,
-#                             "autodock": None,
-#                             "drug_score": None,
-#                             "internal_energy": None, 
-#                         }
-#                         if compute_rmsd_with_submitted_ligand:
-#                             missing_pose_data["rmsd_submitted"] = None
-#                         galaxydock_data[ligand_name][accession][ligand_pdb_target][None] = missing_pose_data
-
-#             # delete ligand pose files
-#             for ext in ("pdb", "mol2"):
-#                 for filename in glob.iglob(os.path.join(ligand_galaxydock_out_dir, f"pose_*.{ext}")):
-#                     print("REMOVING FILE", filename)
-#                     os.remove(filename)
-
-#         print ("WRITING GALAXYDOCK DATA TO", output_filename)
-#         write_json(galaxydock_data, output_filename)
-
-#     return galaxydock_data
 
 if __name__ == "__main__":
 
