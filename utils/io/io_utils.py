@@ -642,7 +642,7 @@ def read_smiles(
     remove_invalid_molecules: bool = True, 
     clean_molecules_with_rdkit: bool = False,
     return_series: bool = False, 
-    return_list: bool = False,
+    return_list: bool = True,
     assume_clean_input: bool = False,
     molecule_identifier_key: str = "molecule_id",
     smiles_key: str = "smiles",
@@ -662,7 +662,7 @@ def read_smiles(
     return_series : bool, optional
         Flag to return as an instance of Pandas Series, by default False
     return_list : bool, optional
-        Flag to return as a list of dicts, by default False
+        Flag to return as a list of dicts, by default True
     assume_clean_input : bool, optional
         Flag to assume input is well-formed with a delimiter, by default False
     molecule_identifier_key : str, optional
@@ -908,13 +908,14 @@ def delete_file(
     verbose : bool, optional
         Flag to print updates to console, by default False
     """
-    if os.path.exists(filename):
-        if verbose:
-            print ("Deleting file", filename)
-        try:
-            os.remove(filename)
-        except Exception as e:
-            print ("Error deleting file", filename, ":", e)
+    if filename is None or not os.path.exists(filename):
+        return
+    if verbose:
+        print ("Deleting file", filename)
+    try:
+        os.remove(filename)
+    except Exception as e:
+        print ("Error deleting file", filename, ":", e)
 
 def copy_directory(
     directory_to_copy: str,

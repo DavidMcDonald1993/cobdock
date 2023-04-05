@@ -163,7 +163,8 @@ pocket_locations/local_docking/LIGAND/ACCESSION/PDBID/POCKETNUM/complexes
 
 
 ## Acknowledgements
-We sincerely thank the authors of the software that comprises the COBDock pipeline.  
+We sincerely thank the authors of all of the software that comprises the COBDock pipeline.  
+We thank the authors of CBDock [7] for sharing their data. 
 
 ## References
 
@@ -178,3 +179,5 @@ We sincerely thank the authors of the software that comprises the COBDock pipeli
 [5] Le Guilloux, Vincent, Peter Schmidtke, and Pierre Tuffery. "Fpocket: an open source platform for ligand pocket detection." BMC bioinformatics 10.1 (2009): 1-11.
 
 [6] Krivák, Radoslav, and David Hoksza. "P2Rank: machine learning based tool for rapid and accurate prediction of ligand binding sites from protein structure." Journal of cheminformatics 10 (2018): 1-12.
+
+[7] Liu, Yang, et al. "CB-Dock: A web server for cavity detection-guided protein–ligand blind docking." Acta Pharmacologica Sinica 41.1 (2020): 138-144.

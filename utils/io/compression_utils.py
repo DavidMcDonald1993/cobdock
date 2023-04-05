@@ -66,7 +66,10 @@ def extract_compressed_tarball(
     """
     if verbose:
         print ("Extracting compressed tarball located at", compressed_tarball_path, "to", output_dir)
-    assert compressed_tarball_path.endswith(".tar.gz")
+    # assert compressed_tarball_path.endswith(".tar.gz")
+    if not compressed_tarball_path.endswith(".tar.gz"):
+        print ("Incorrect compressed tarball filename:", compressed_tarball_path)
+        return None 
     with tarfile.open(compressed_tarball_path, "r:gz") as tar:
         tar.extractall(path=output_dir)
     if verbose:
@@ -109,14 +112,14 @@ def make_zip_archive(
 
 if __name__ == "__main__":
 
-    # make_compressed_tarball(
-    #     compressed_tarball_path="checkme.tar.gz",
-    #     source_dir="dock_test_deleteme",
-    #     exclude=["pose_ranking","pockets"],
-    # )
-
-    make_zip_archive(
-        "checkme",
-        source_dir="utils/io/",
-        verbose=True,
+    make_compressed_tarball(
+        compressed_tarball_path="checkme.tar.gz",
+        source_dir="utils/io",
+        exclude=["pose_ranking","pockets"],
     )
+
+    # make_zip_archive(
+    #     "checkme",
+    #     source_dir="utils/io/",
+    #     verbose=True,
+    # )

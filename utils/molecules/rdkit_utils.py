@@ -45,6 +45,9 @@ from rdkit.Chem.BRICS import BRICSDecompose
 
 from rdkit.Chem.EnumerateStereoisomers import EnumerateStereoisomers, StereoEnumerationOptions
 
+# filtering 
+from rdkit.Chem.FilterCatalog import *
+
 from utils.io.io_utils import read_smiles, write_json, load_json
 
 BASE_FEATURES_LOCATION  = os.path.join(PROJECT_ROOT, "data", "rdkit", "BaseFeatures.fdef")
@@ -535,7 +538,7 @@ def compute_molecule_properties(
         properties_dict[property_string] = property_function
 
     if verbose:
-        print ("Obtaining properties for a single molecule")
+        print ("Obtaining molecular properties of a single molecule")
 
     if mol is None:
         if smi is not None:
@@ -842,44 +845,6 @@ def generate_cf_images(
             m, ms[0], acceptFailure=True
         )
 
-        # print ("creating manager")
-         
-        # manager = Manager()
-
-        # print ("creating return_dict")
-        # return_dict = manager.dict()
-
-        # p = Process(
-        #     target=moldiff_process, 
-        #     args=(ms[0], m, return_dict),
-        # )
-        # print ("starting process")
-        # p.start()
-
-        # timeout = 5
-        # p.join(timeout)
-
-        # # If thread is still active
-        # if p.is_alive():
-        #     # print ("running... let's kill it...")
-
-        #     # Terminate - may not work if process is stuck for good
-        # #     p.terminate()
-        #     # OR Kill - will work for sure, no chance for process to finish nicely however
-        #     p.kill()
-        #     print ("Generate CF timeout, process killed")
-
-
-        #     p.join()
-        # if "inv_match" not in return_dict:
-        #     # timeout
-        #     continue
-        # aidx = return_dict["inv_match"]
-        # if "bond_match" not in return_dict:
-        #     # timeout
-        #     continue
-        # bidx = return_dict["bond_match"]
-
         aidx, bidx = moldiff(ms[0], m)
 
         imgs.append(
@@ -1017,6 +982,119 @@ def enumerate_stereoisomers(
 
     return all_isomers
 
+# begin functions relating to violations
+def list_violations(
+    filter_catalogue,
+    smi: str = None,
+    mol = None,
+    ):
+
+    # initialise params
+    params = FilterCatalogParams()
+    # add filter catalogue
+    params.AddCatalog(filter_catalogue)
+    # create final catalogue
+    catalog = FilterCatalog(params)
+
+    all_violations = []
+
+    if mol is None:
+        if smi is None:
+            print ("Missing smiles!")
+            return all_violations
+        mol = Chem.MolFromSmiles(smi)
+    if mol is None:
+        print ("Failed to sanitise molecule")
+        return all_violations
+    # add hydrogen
+    mol = Chem.AddHs(mol)
+
+    for violation in catalog.GetMatches(mol):
+
+        all_violations.append({
+            "filter_set": violation.GetProp("FilterSet"), 
+            "scope": violation.GetProp("Scope"),
+            "description": violation.GetDescription(),
+            # "reference": violation.GetProp("Reference"),
+        })
+    return all_violations
+
+def list_ALL_violations(
+    smi: str = None,
+    mol = None,
+    ):
+    return list_violations(
+        filter_catalogue=FilterCatalogParams.FilterCatalogs.ALL,
+        smi=smi,
+        mol=mol,
+    )
+
+def list_PAINS_violations(
+    smi: str = None,
+    mol = None,
+    ):
+    return list_violations(
+        filter_catalogue=FilterCatalogParams.FilterCatalogs.PAINS,
+        smi=smi,
+        mol=mol,
+    )
+
+
+def list_BRENK_violations(
+    smi: str = None,
+    mol = None,
+    ):
+    return list_violations(
+        filter_catalogue=FilterCatalogParams.FilterCatalogs.BRENK,
+        smi=smi,
+        mol=mol,
+    )
+
+def list_NIH_violations(
+    smi: str = None,
+    mol = None,
+    ):
+    return list_violations(
+        filter_catalogue=FilterCatalogParams.FilterCatalogs.NIH,
+        smi=smi,
+        mol=mol,
+    )
+
+def list_lipinski_violations(
+    molecule_properties: dict,
+    ):
+    # Lipinski:
+    #     Molecular Weight <= 500
+    #     LogP <= 5
+    #     H-Bond Donor Count <= 5
+    #     H-Bond Acceptor Count <= 10
+
+    lipinski_thresholds = (
+        ("molecular_weight", 500),
+        ("log_p", 5),
+        ("num_hydrogen_donors", 5),
+        ("num_hydrogen_acceptors", 10),
+    )
+
+    all_violations = []
+
+    for property_name, max_value in lipinski_thresholds:
+        if property_name not in molecule_properties:
+            continue
+        property_value = molecule_properties[property_name]
+        if property_value > max_value:
+
+            all_violations.append({
+                "property_name": property_name,
+                "maximum_value": max_value,
+                "value": property_value,
+            })
+
+
+    return all_violations
+
+
+
 
 if __name__ == "__main__":
 
@@ -1084,25 +1162,25 @@ if __name__ == "__main__":
 
     # print (len(imgs))
 
-    molecules = [
-        {
-            "molecule_id": "my_mol",
-            "smiles": "BrC=CC1OC(C2)(F)C2(Cl)C1",
-        },
-        {
-            "molecule_id": "aspirin",
-            "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
-        }
-    ]
+    # molecules = [
+    #     {
+    #         "molecule_id": "my_mol",
+    #         "smiles": "BrC=CC1OC(C2)(F)C2(Cl)C1",
+    #     },
+    #     {
+    #         "molecule_id": "aspirin",
+    #         "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+    #     }
+    # ]
 
-    smiles = [mol["smiles"] for mol in molecules]
+    # smiles = [mol["smiles"] for mol in molecules]
 
 
-    diversity_molecule_selection(
-        smiles=smiles, 
-        sample_size=1,
-        verbose=True,
-    )
+    # diversity_molecule_selection(
+    #     smiles=smiles, 
+    #     sample_size=1,
+    #     verbose=True,
+    # )
 
 
     # isomers = enumerate_stereoisomers(molecules, verbose=True,)
@@ -1112,3 +1190,17 @@ if __name__ == "__main__":
     # fragments = BRICS_decompose_smiles_using_RDKit(molecules, verbose=True)
 
     # print (fragments)
+
+    smiles = "O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
+
+    molecule_properties = compute_molecule_properties(smi=smiles)
+
+    print (molecule_properties)
+
+    print (list_lipinski_violations(molecule_properties))
+
+    pains_violations = list_BRENK_violations(
+        smi="O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
+    )
+
+    print (pains_violations)

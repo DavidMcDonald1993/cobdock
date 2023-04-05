@@ -165,7 +165,7 @@ def execute_system_command(
 
     if return_code != 0 and not allow_non_zero_return:
         # raise Warning("BAD RETURN CODE")
-        raise Exception("BAD RETURN CODE", return_code)
+        raise Exception("Bad return code:", return_code)
         
     if verbose:
         print ("Obtained return code", return_code)

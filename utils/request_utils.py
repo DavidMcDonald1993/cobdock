@@ -16,21 +16,31 @@ from time import sleep
 
 from utils.io.io_utils import write_json
 
+def prepare_data_for_ajax(
+    data: dict,
+    ):
+    if not isinstance(data, dict):
+        return data
+    return {
+        k: json.dumps(v)
+        for k, v in data.items()
+    }
+
 def get_request_handle(
     request,
+    copy: bool = False
     ):
     """Obtain the handle of a request
-
     Parameters
     ----------
     request : HttpRequest
         An instance of HttpRequest
-
+    copy : bool,
+        Flag which if positive will return a copy of the request handle dict, by default False
     Returns
     -------
     object
         Handle on GET/POST arguments
-
     Raises
     ------
     NotImplementedError
@@ -45,6 +55,8 @@ def get_request_handle(
     else:
         raise NotImplementedError
 
+    if copy:
+        return request_handle.copy()
     return request_handle
 
 def handle_json_request(
@@ -137,6 +149,8 @@ def get_http_parameter_value(
         value = r[param_name]
         if value == "None":
             return None # handle explicit None argument for max_actives 
+        if value == "":
+            return default
         try:
             return param_type(value)
         except:
@@ -169,8 +183,7 @@ def handle_checkbox_request(
 
     if param_name in r.keys():
         return True
-    else:
-        return default
+    return default
 
 def handle_select_multiple_request(
     request, 
@@ -197,12 +210,13 @@ def handle_select_multiple_request(
         return json_request
     r = get_request_handle(request)
     for param_name in (param_name, f"{param_name}[]"):
-        if param_name in r.keys():
-            args = [urlparse.unquote(a) for a in r.getlist(param_name)
-                if a != ""]
-            if len(args) == 0:
-                args = default 
-            return args
+        if param_name not in r.keys():
+            continue
+        args = [urlparse.unquote(a) for a in r.getlist(param_name)
+            if a != ""]
+        if len(args) == 0:
+            args = default 
+        return args
     return default
 
 def make_get_request(
@@ -608,23 +622,62 @@ if __name__ == "__main__":
             "molecule_id": "Olaparib",
             "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
         }
-    ]
+    ][:1]
 
     pdb_targets = ["1htp"]
 
-    response = make_get_request(
-        url="http://localhost:8000/hit-optimisation",
+    gene_names  = ['AKR1C2', 'AKR1C3', 'CA1', 'CA12', 'CA14', 'CA2', 'CA7', 'CA9', 'GP6', 'NAPRT', 'P2RY12', 'POLK', 'PTGS1', 'PTGS2', 'TBXAS1']
+
+    response = make_http_request(
+        # url="http://47.102.129.50:80/enrichment/genes",
+        # url="http://localhost:8080/enrichment/cancers",
+        # url="http://47.102.129.50:80/natural_products/gene_ontology_enrichment",
+        # url="http://localhost:8080/natural_products/gene_ontology_enrichment",
+        # url="http://localhost:8000/hit-optimisation",
+        # url="http://localhost:8000/natural_products/superkingdoms",
+        # url="http://localhost:8000/natural_products/species",
+        # url="http://localhost:8000/natural_products/organisms",
+        # url="http://localhost:8000/natural_products/search",
+        # url="http://localhost:8000/natural_products/species_names",
+        # url="http://localhost:8000/natural_products/scaffolds",
+        # url="http://localhost:8000/natural_products/cluster",
+        # url="http://localhost:8000/natural_products/single_protein_targets/all",
+        # url="http://localhost:8000/natural_products/single_protein_targets/info",
+        url="http://localhost:8000/natural_products/single_protein_targets/screen",
+        # url="http://localhost:8000/natural_products/pathway_enrichment",
+        # url="http://localhost:8000/natural_products/cancer_enrichment",
+        # url="http://localhost:8000/natural_products/reactions/all",
+        # url="http://localhost:8000/natural_products/pathway_enrichment",
+        # url="http://localhost:8000/toxicity-predict/",
         params={
-            "molecule_smiles": json.dumps(molecule_smiles),
-            "pdb_targets": json.dumps(pdb_targets),
-            "population_size": 50,
-            "number_of_generations": 2,
-            "n_proc": 23,
+            # "small_molecule_ids": [14060, 20239],
+            # "log_p_lt": 3,
+            # "log_p_gt": 2.9,
+            # "molecular_weight_lt": 300,
+            # "molecular_weight_gt": 295,
+            "gene-list": gene_names,
+            "genus": "Homo",
+            # "genus": "Aconitum",
+            # "chinese_species_name": "乌头",
+            "chinese_only": True,
+            # "columns": ["small_molecule_id", "smiles"],
+            # "natural_product_ids": ["CNP0114535", ],
+            # "diseases": ["Retinoblastoma", ],
+            # "language_code": "zh_Hans",
+            "accession": ["P09874"],
+            # "pathways": ["G1 Phase"],
+            # "drug_ids": ["D00AAN", ],
+            # "name_like": "gink",
+            # "summarise": True,
+            # "supplied_mols": json.dumps(molecule_smiles),
+            # "pdb_targets": json.dumps(pdb_targets),
+            # "population_size": 50,
+            # "number_of_generations": 2,
+            # "n_proc": 23,
         },
         max_retries=1,
+        method="POST",
         verbose=True,
     )
 
-
-
-    write_json(json.dumps(response.text), "checkme.json")
+    write_json(json.dumps(response.text), "checkme.json", verbose=True)

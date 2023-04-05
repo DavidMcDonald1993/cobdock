@@ -128,7 +128,7 @@ def create_complex_with_pymol(
     cmd.reinitialize()
 
     if verbose:
-        print ("Writing complex containing", len(input_pdb_files), "structures")
+        print ("Writing complex containing", len(input_pdb_files), "structure(s)")
 
     for input_pdb_file in input_pdb_files:
         if verbose:

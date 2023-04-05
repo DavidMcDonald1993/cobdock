@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     # output_filename = f"testdir/alphafold-{tuberculosis_accession}"
 
-    accession = "P49327"
+    accession = "Q13451-1"
 
     download_alphafold_structure(
         accession,

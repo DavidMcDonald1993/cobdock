@@ -1759,7 +1759,7 @@ def identify_centre_of_mass(
     
     if mol is None: # construct molecule
         assert mol_path is not None and isinstance(mol_path, str)
-        mol = load_scoria_molecule(mol_path)
+        mol = load_scoria_molecule(mol_path, verbose=verbose)
         
     if not geometric:
         if verbose:
@@ -2227,14 +2227,17 @@ if __name__ == "__main__":
 
     # download_all_pdbs()
 
-    bounding_box = define_target_binding_site_using_biopython(
-        pdb_filename="6NNA.pdb",
-        scale=1,
-        precision=3,
-        verbose=True,
-    )
+    # bounding_box = define_target_binding_site_using_biopython(
+    #     pdb_filename="6NNA.pdb",
+    #     scale=1,
+    #     precision=3,
+    #     verbose=True,
+    # )
 
-    print (bounding_box)
+    # print (bounding_box)
+
+    print (identify_centre_of_mass("2rcw_B_AAI.pdb", geometric=True))
+    print (identify_centre_of_mass("2rcw_B_AAI.pdb", geometric=False))
 
     # print (get_cofactors_for_accessions(["P09874", "Q65WW7"]))
 
