@@ -35,7 +35,7 @@ from utils.molecules.pdb_utils import (
     write_single_model,
     get_all_chain_ids_in_a_PDB_file,
     get_cofactors_for_accessions,
-    define_target_binding_site_using_biopython
+    define_target_bounding_box_using_biopython
     )
 from utils.molecules.openbabel_utils import obabel_convert, smiles_to_3D
 from utils.molecules.pymol_utils import convert_to_ligand, create_complex_with_pymol
@@ -78,55 +78,30 @@ os.makedirs(PREPARE_TARGETS_ROOT_DIR, exist_ok=True)
 
 PREPARE_TARGETS_N_PROC = int(os.environ.get("PREPARE_TARGETS_N_PROC", default=1))
 
-def predocking_preparation(
+
+def predocking_ligand_preparation(
     ligands_to_targets: dict,
-    output_dir: str,
-    submitted_ligand_structure_files: dict ={}, # mapping from ligand name to .pdb file
-    submitted_target_pdb_files: dict ={}, # mapping from target name to .pdb file
-    map_uniprot_to_pdb: bool = False, 
-    number_of_pdb: int = 1,
-    allow_mutant: bool = True, # mutant pdb file targets 
-    allow_engineered: bool = True, # engineered pdb file targets  
-    bounding_box_scale: float = 1., 
-    max_bounding_box_size: float = None,
-    prefix_size: int = 3,
-    consider_prefix_in_reranking: bool = True,
-    compute_voxel_locations: bool = False,
-    fill_pdb_list_with_similar_targets: bool = False,
-    determine_natural_ligands: bool = True,
-    target_pH: float = 7.4,
+    submitted_ligand_structure_files: dict,
+    ligand_structure_output_dir: str,
     ligand_pH: float = 7.4,
-    run_fpocket: bool = True,
-    run_fpocket_old: bool = False,
-    run_p2rank: bool = True,
-    use_alphafold: bool = False,
-    max_pockets_to_keep: int = 1,
-    keep_cofactors: bool = False,
     molecule_identifier_key: str = "molecule_id",
     smiles_key: str = "smiles",
     verbose: bool = True,
     ):
 
-    if not isinstance(ligands_to_targets, dict):
-        print ("ligands_to_targets is not a dictionary, returning", {})
-        return {}
-
-    if submitted_ligand_structure_files is None:
-        submitted_ligand_structure_files = {}
-
-    if verbose:
-        print ("Beginning all pre-docking preparation")
-        print ("Making output directory", output_dir)
-    os.makedirs(output_dir, exist_ok=True)
-
-    ligand_structure_output_dir = os.path.join(output_dir, "ligand_structures")
-    os.makedirs(ligand_structure_output_dir, exist_ok=True)
-
     # clean up supplied ligand names
-    ligands_to_targets = {
-        sanitise_filename(ligand_id): ligand_data
-        for ligand_id, ligand_data in ligands_to_targets.items()
-    }
+    ligands_to_targets_clean = {}
+    for ligand_id, ligand_data in ligands_to_targets.items():
+
+        ligand_id_clean = sanitise_filename(ligand_id, max_length=100)
+        if ligand_id_clean in ligands_to_targets_clean:
+
+            # add a wart
+            ligand_id_clean += get_token(5)
+
+        ligands_to_targets_clean[ligand_id_clean] = ligand_data
+
+    ligands_to_targets = ligands_to_targets_clean
 
     ligand_structure_filename_keys = ("structure_filename", "pdb_filename", )
 
@@ -308,268 +283,361 @@ def predocking_preparation(
             print ("Dropping ligand", ligand_to_drop)
         del ligands_to_targets[ligand_to_drop]
 
-    # build set of unique targets 
-    # may be either PDB IDs or Uniprot accessions
-    all_targets = set()
+    return ligands_to_targets
 
-    for ligand_id in ligands_to_targets:
-        # uniprot targets for the ligand
-        ligand_targets = ligands_to_targets[ligand_id]["targets"]
-        all_targets.update(ligand_targets)
+def predocking_target_preparation_uniprot_target_input(
+    ligands_to_targets: dict,
+    output_dir: str,
+    number_of_pdb: int = 1,
+    use_alphafold: bool = True,
+    allow_mutant: bool = True, 
+    allow_engineered: bool = True,   
+    prefix_size: int = 3,
+    consider_prefix_in_reranking: bool = True,
+    verbose: bool = True,
+    ):
+    
+    # all targets in ligands to targets
+    all_uniprot_targets_in_ligands_to_targets = {
+        accession
+        for ligand_id, ligand_data in ligands_to_targets.items()
+        for accession in ligand_data["targets"]
+    }
 
+    # map from accession to pdb id using file (also includes chains)
+    # format is accession -> pdb_id -> list of chains
+    uniprot_to_pdb_id_data = map_uniprot_accession_to_pdb_id(
+        accessions=all_uniprot_targets_in_ligands_to_targets,
+        return_single_chain_only=True, # take first chain only?
+        # keep_maximum_sequence_length_only=True, # only largest chains possible?
+        keep_maximum_sequence_length_only=False, # all structures considered?
+        verbose=verbose,
+    )
 
-    if map_uniprot_to_pdb == 1:
-
-        # map from accession to pdb id using file (also includes chains)
-        # format is accession -> pdb_id -> list of chains
-        uniprot_to_pdb_id_data = map_uniprot_accession_to_pdb_id(
-            accessions=all_targets,
-            # return_single_chain_only=True, # take first chain only?
-            return_single_chain_only=False, 
-            verbose=verbose,
-        )
-
-        # can handle multiple chains from same PDB if needed
-        # convert to upper case because there is duplication (P25025/6KVA_B, P25025/6KVA_b)
-        uniprot_to_pdb_id_chains = {
-            accession: {
-                f"{pdb_id}_{chain['chain_id']}".upper(): [chain["chain_id"].upper()]
-                for pdb_id, pdb_chains in accession_data.items()
-                for chain in pdb_chains # all chains 
-                # for chain in sorted(pdb_chains, key=lambda chain: (chain["sequence_length"], chain["chain_id"]))[:1] # first chain
-            }
-            for accession, accession_data in uniprot_to_pdb_id_data.items()
+    # can handle multiple chains from same PDB if needed
+    # convert to upper case because there is duplication (P25025/6KVA_B, P25025/6KVA_b)
+    uniprot_to_pdb_id_chains = {
+        accession: {
+            f"{pdb_id}_{chain}".upper(): [chain.upper()]
+            for pdb_id, pdb_chains in accession_data.items()
+            for chain in pdb_chains # all chains 
         }
-        # sequence lengths 
-        uniprot_to_pdb_sequence_lengths = {
-            accession: {
-               f"{pdb_id}_{chain['chain_id']}".upper() : chain["sequence_length"]
-                for pdb_id, pdb_chains in accession_data.items()
-                for chain in pdb_chains # all chains 
-                # for chain in sorted(pdb_chains, key=lambda chain: (chain["sequence_length"], chain["chain_id"]))[:1] # first chain
-            }
-            for accession, accession_data in uniprot_to_pdb_id_data.items()
-        }
+        for accession, accession_data in uniprot_to_pdb_id_data.items()
+    }
 
-        # write ranks to file
-        pdb_id_ranks_for_all_uniprot_accessions_filename = os.path.join(
-            output_dir, 
-            "pdb_id_ranks_for_all_uniprot_accessions.pkl.gz")
-        if os.path.exists(pdb_id_ranks_for_all_uniprot_accessions_filename):
-            pdb_id_ranks_for_all_uniprot_accessions = load_compressed_pickle(pdb_id_ranks_for_all_uniprot_accessions_filename, verbose=verbose)
-        else:
-
-            pdb_id_ranks_for_all_uniprot_accessions = {}
-
-        accessions_to_rank_structures_for = {
-            accession
-            for accession in uniprot_to_pdb_id_chains
-            if accession not in pdb_id_ranks_for_all_uniprot_accessions
-        }
-
-        if len(accessions_to_rank_structures_for) > 0:
-
-            uniprot_to_pdb_id_chains_to_rank = {
-                accession: pdb_id_chain 
-                for accession, pdb_id_chain in uniprot_to_pdb_id_chains.items()
-                if accession in accessions_to_rank_structures_for
-            }
-
-            # filter and rank PDB IDS for each unique Uniprot accession
-            pdb_id_ranks_for_all_uniprot_accessions_new = rank_all_pdb_structures_for_uniprot_accessions(
-                uniprot_to_pdb_id=uniprot_to_pdb_id_chains_to_rank,
-                sequence_lengths=uniprot_to_pdb_sequence_lengths,
-                allow_multi_model=True, # ?
-                allow_mutant=allow_mutant,
-                allow_engineered=allow_engineered,
-                prefix_size=prefix_size,
-                consider_prefix_in_reranking=consider_prefix_in_reranking,
-                verbose=verbose,
-            )
-
-            # add chains and update pdb_id_ranks_for_all_uniprot_accessions
-            for accession in pdb_id_ranks_for_all_uniprot_accessions_new:
-                if accession not in uniprot_to_pdb_id_chains:
-                    continue
-
-                # add access to pdb_id_ranks_for_all_uniprot_accessions
-                if accession not in pdb_id_ranks_for_all_uniprot_accessions:
-                    pdb_id_ranks_for_all_uniprot_accessions[accession] = {}
-
-                # iterate over PDB IDs and separate chains
-                for pdb_id, pdb_id_data in pdb_id_ranks_for_all_uniprot_accessions_new[accession].items():
-
-                    if pdb_id not in uniprot_to_pdb_id_chains[accession]:
-                        continue
-                    pdb_id_data["chains"] = uniprot_to_pdb_id_chains[accession][pdb_id]
-
-            # update pdb_id_ranks_for_all_uniprot_accessions
-            pdb_id_ranks_for_all_uniprot_accessions.update(pdb_id_ranks_for_all_uniprot_accessions_new)
-
-            # write pdb_id_ranks_for_all_uniprot_accessions to file 
-            write_compressed_pickle(pdb_id_ranks_for_all_uniprot_accessions, pdb_id_ranks_for_all_uniprot_accessions_filename, verbose=verbose)
-
-    # map PDB -> uniprot for screening down the line
-    elif map_uniprot_to_pdb == 0:
-
-        # no mapping from accession to pdb
+    # write ranks to file
+    pdb_id_ranks_for_all_uniprot_accessions_filename = os.path.join(
+        output_dir, 
+        "pdb_id_ranks_for_all_uniprot_accessions.pkl.gz")
+    # load ranks file if it exists
+    if os.path.exists(pdb_id_ranks_for_all_uniprot_accessions_filename):
+        pdb_id_ranks_for_all_uniprot_accessions = load_compressed_pickle(
+            pdb_id_ranks_for_all_uniprot_accessions_filename, 
+            verbose=verbose)
+    else:
         pdb_id_ranks_for_all_uniprot_accessions = {}
 
-        # all PDB IDs in all_targets
-        # map PDB ID to chain set to keep
-        pdb_id_to_chain_id = {}
+    # list of new accessions to identify PDB structures for
+    accessions_to_rank_structures_for = {
+        accession
+        for accession in uniprot_to_pdb_id_chains
+        if accession not in pdb_id_ranks_for_all_uniprot_accessions
+    }
 
-        # delete other chains if chains have been specified
-        for pdb_id in all_targets:
+    if len(accessions_to_rank_structures_for) > 0:
 
-            chain_id = None # keep all
+        uniprot_to_pdb_id_chains_to_rank = {
+            accession: pdb_id_chain 
+            for accession, pdb_id_chain in uniprot_to_pdb_id_chains.items()
+            if accession in accessions_to_rank_structures_for
+        }
 
-            if pdb_id.count("_") == 1:
-                pdb_id, chain_id = pdb_id.split("_")
-            if pdb_id not in pdb_id_to_chain_id:
-                pdb_id_to_chain_id[pdb_id] = set()
-            if chain_id is not None:
-                pdb_id_to_chain_id[pdb_id].add(chain_id)
-        
-        pdb_id_to_uniprot_accession = map_pdb_id_to_uniprot_accession(
-            pdb_ids=pdb_id_to_chain_id, # keyed by PDB ID only
+        # filter and rank PDB IDS for each unique Uniprot accession
+        pdb_id_ranks_for_all_uniprot_accessions_new = rank_all_pdb_structures_for_uniprot_accessions(
+            uniprot_to_pdb_id=uniprot_to_pdb_id_chains_to_rank,
+            allow_multi_model=True, # ?
+            allow_mutant=allow_mutant,
+            allow_engineered=allow_engineered,
+            prefix_size=prefix_size,
+            consider_prefix_in_reranking=consider_prefix_in_reranking,
             verbose=verbose,
         )
 
-        for pdb_id, existing_accessions_for_pdb_id in pdb_id_to_uniprot_accession.items():
+        # update pdb_id_ranks_for_all_uniprot_accessions
+        pdb_id_ranks_for_all_uniprot_accessions.update(pdb_id_ranks_for_all_uniprot_accessions_new)
 
-            chains_to_keep = pdb_id_to_chain_id[pdb_id]
-            if len(chains_to_keep) == 0: 
-                # keep all, no need to delete chains 
-                continue
+        # write pdb_id_ranks_for_all_uniprot_accessions to file 
+        write_compressed_pickle(
+            pdb_id_ranks_for_all_uniprot_accessions, 
+            pdb_id_ranks_for_all_uniprot_accessions_filename, 
+            verbose=verbose)
+        
+    
+    # iterate over ligands and update "targets"
+    for ligand_id, ligand_data in ligands_to_targets.items():
 
-            # otherwise, remove unnecessary chains
-            accessions_to_keep = {}
+        # original target list
+        ligand_targets = ligand_data["targets"]
 
-            for accession, accession_chains in existing_accessions_for_pdb_id.items():
-                accession_chains = [ 
-                    accession_chain 
-                    for accession_chain in accession_chains
-                    if accession_chain["chain_id"] in chains_to_keep
-                ]
-                if len(accession_chains) > 0:
-                    accessions_to_keep[accession] = accession_chains
+        if verbose:
+            print ("Selecting", number_of_pdb, "best PDB structures for each target for ligand", ligand_id)
 
-            # update pdb_id_to_uniprot_accession
-            pdb_id_to_uniprot_accession[pdb_id] = accessions_to_keep
+        # select top ranked pdb ids
+        # update ligand target list
+        ligand_uniprot_targets_with_pdb = dict()
 
-    # else:
-    #     # no mapping 
-    #     target_mapping = {
-    #         target: target for target in all_targets
-    #     }
-
-    # identify all PDB targets
-    # change to uniprot -> pdb
-    all_targets_to_prepare = {}
-
-    # construct uniprot -> pdb map for preparation
-    for ligand_id in ligands_to_targets:
-
-        ligand_targets = ligands_to_targets[ligand_id]["targets"]
-
-        if map_uniprot_to_pdb == 1:
+        # iterate over uniprot targets and select pdb ids
+        for accession in ligand_targets:
 
             if verbose:
-                print ("Selecting", number_of_pdb, "best PDB structures for each target for ligand", ligand_id)
+                print ("Processing UniProt target", accession, "for ligand", ligand_id)
 
-            # select top ranked pdb ids
-            # update ligand target list
-            ligand_uniprot_targets_with_pdb = dict()
-
-            # iterate over uniprot targets and select pdb ids
-            for accession in ligand_targets:
-
-                if verbose:
-                    print ("Processing UniProt target", accession, "for ligand", ligand_id)
-
-                selected_pdb_ids_for_uniprot_id = dict()
-                
-                # check that PDB structures exist in PDB database for current accession
-                if accession in pdb_id_ranks_for_all_uniprot_accessions: 
-
-                    # sort PDB structures for current accession using `reranked_rank`
-                    sorted_pdb_ids_for_current_uniprot_id = sorted(
-                        pdb_id_ranks_for_all_uniprot_accessions[accession],
-                        key=lambda pdb_id: pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
-                    ) 
-                    for pdb_id in sorted_pdb_ids_for_current_uniprot_id:
-                        
-                        # break out of loop if enough pdb ids have been found
-                        if number_of_pdb is not None and len(selected_pdb_ids_for_uniprot_id) >= number_of_pdb:
-                            break 
-                        selected_pdb_ids_for_uniprot_id[pdb_id] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]
-
-                # update ligand_uniprot_targets_with_pdb with PDB IDs selected for current accession
-                ligand_uniprot_targets_with_pdb[accession] = selected_pdb_ids_for_uniprot_id
-
-            # add alphafold-predicted crystal structures
-            # if use_alphafold:
-                
-            for accession in ligand_targets:
-                if use_alphafold == 0:
-                    continue
-                # only use alphafold if no structures are found?
-                if accession not in ligand_uniprot_targets_with_pdb: # should not be missing
-                    ligand_uniprot_targets_with_pdb[accession] = {}
-                if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) == 0): # only add alphafold if no PDB structures are found
-                # if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) < number_of_pdb): # only add alphafold if not enough PDB structures are found
-                    ligand_uniprot_targets_with_pdb[accession][f"alphafold-{accession}_A"] = None # value currently required for consistency  
-
-            # replace ligand_targets variable
-            ligand_targets = ligand_uniprot_targets_with_pdb
-
-            # overwrite targets with pdb targets
-            ligands_to_targets[ligand_id]["targets"] = ligand_targets
-
-        elif map_uniprot_to_pdb == 0:
-            # change to accession -> PDB ID format
-            ligand_uniprot_to_pdb = {}
-            # ligand targets is a list of PDB IDs
-            for pdb_id in ligand_targets:
-                
-                pdb_id = pdb_id.upper()
-
-                # select only pdb_id (remove chain)
-                pdb_id = pdb_id[:4]
-                
-                if pdb_id in pdb_id_to_uniprot_accession:
-                    accessions = pdb_id_to_uniprot_accession[pdb_id]
-                    for accession, pdb_chains in accessions.items():
-                        # initialise accession for current ligand
-                        if accession not in ligand_uniprot_to_pdb:
-                            ligand_uniprot_to_pdb[accession] = []
-                        # get chain(s) of current pdb corresponding to current accession
-                        for pdb_chain in pdb_chains:
-                            chain_id = pdb_chain["chain_id"]
-                            ligand_uniprot_to_pdb[accession].append(f"{pdb_id}_{chain_id}")
-
-                else:
-                    # print ("not in mapping")
-                    # pdb ID cannot be mapped to accession number 
-                    accession = pdb_id # use submitted name
-                    # add all chains 
-                    # initialise accession for current ligand
-                    if accession not in ligand_uniprot_to_pdb:
-                        ligand_uniprot_to_pdb[accession] = []
-                    ligand_uniprot_to_pdb[accession].append(pdb_id)
-                    
-            ligands_to_targets[ligand_id]["targets"] = ligand_uniprot_to_pdb
-
-        else: # np mapping
+            selected_pdb_ids_for_uniprot_id = dict()
             
-            ligands_to_targets[ligand_id]["targets"] = {
-                f"preprocessed-{target}" : {target} for target in ligand_targets
+            # check that PDB structures exist in PDB database for current accession
+            if accession in pdb_id_ranks_for_all_uniprot_accessions: 
+
+                # sort PDB structures for current accession using `reranked_rank`
+                sorted_pdb_ids_for_current_uniprot_id = sorted(
+                    pdb_id_ranks_for_all_uniprot_accessions[accession],
+                    key=lambda pdb_id: pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
+                ) 
+                for pdb_id in sorted_pdb_ids_for_current_uniprot_id:
+                    
+                    # break out of loop if enough pdb ids have been found
+                    if number_of_pdb is not None and len(selected_pdb_ids_for_uniprot_id) >= number_of_pdb:
+                        break 
+                    selected_pdb_ids_for_uniprot_id[pdb_id] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]
+
+            # update ligand_uniprot_targets_with_pdb with PDB IDs selected for current accession
+            ligand_uniprot_targets_with_pdb[accession] = selected_pdb_ids_for_uniprot_id
+
+        # add alphafold-predicted crystal structures
+        for accession in ligand_targets:
+            if use_alphafold == 0:
+                continue
+            # only use alphafold if no structures are found?
+            if accession not in ligand_uniprot_targets_with_pdb: # should not be missing
+                ligand_uniprot_targets_with_pdb[accession] = {}
+            # only add alphafold if no PDB structures are found
+            # if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) == 0):
+            # only add alphafold if not enough PDB structures are found
+            if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) < number_of_pdb): 
+                ligand_uniprot_targets_with_pdb[accession][f"alphafold-{accession}_A"] = None # value currently required for consistency  
+
+        # replace ligand_targets variable
+        ligand_targets = ligand_uniprot_targets_with_pdb
+
+        # overwrite targets with pdb targets
+        ligand_data["targets"] = ligand_targets
+
+    return ligands_to_targets
+
+def predocking_target_preparation_pdb_target_input(
+    ligands_to_targets: dict,
+    max_num_chains: int = 2, # max number of chains to keep in a single crystal structure
+    verbose: bool = True,
+    ):
+
+    # all targets in ligands to targets
+    all_targets = {
+        accession
+        for ligand_id, ligand_data in ligands_to_targets.items()
+        for accession in ligand_data["targets"]
+    }
+
+    # get accessions for all requested chains of given PDB structures
+    # can accept PDB ID and PDB ID_chain forms
+    pdb_id_to_uniprot_accession = map_pdb_id_to_uniprot_accession(
+        pdb_ids=all_targets, # keyed by PDB ID only
+        verbose=verbose,
+    )
+
+    # extract accessions from pdb_id_to_uniprot_accession and consider chain combinations if necessary
+    for pdb_id, all_chains_for_pdb_id in pdb_id_to_uniprot_accession.items():
+
+        # include all single chains and combinations (upto max_num_chains)
+        all_chain_combinations_to_keep = {
+            "".join(sorted(c))
+            for i in range(max_num_chains)
+            for c in combinations(all_chains_for_pdb_id, i+1)
+        }
+
+        # otherwise, remove unnecessary chains
+        accessions_to_keep = {}
+
+        # iterate over chains to keep and select uniprot accessions
+        for chain_combination_to_keep in all_chain_combinations_to_keep:
+
+            # get accessions for each chain in chain_combination_to_keep
+            chain_to_keep_accessions = {
+                accession
+                for c in chain_combination_to_keep
+                for accession in all_chains_for_pdb_id[c]
             }
 
+            accession_key = "-".join(sorted(chain_to_keep_accessions))
+            if accession_key not in accessions_to_keep:
+                accessions_to_keep[accession_key] = set()
 
+            accessions_to_keep[accession_key].add(chain_combination_to_keep)
+
+        # update pdb_id_to_uniprot_accession
+        pdb_id_to_uniprot_accession[pdb_id] = accessions_to_keep
+
+    # iterate ovver ligands and  update "targets"
+    for ligand_id, ligand_data in ligands_to_targets.items():
+        
+        # original target list
+        ligand_targets = ligand_data["targets"]
+        
+        # convert original list to accession -> pdb id
+        ligand_uniprot_to_pdb_map = {}
+
+        # ligand targets is a list of PDB IDs
+        for pdb_id in ligand_targets:
+            
+            pdb_id = pdb_id.upper()
+            
+            if pdb_id in pdb_id_to_uniprot_accession:
+
+                
+                # get accessions for current PDB ID
+                accessions_for_pdb_id = pdb_id_to_uniprot_accession[pdb_id]
+
+                # remove _chain_id
+                if "_" in pdb_id:
+                    pdb_id = pdb_id.split("_")[0]
+
+                # iterate over accessions and corresponding chains 
+                for accession, pdb_chains in accessions_for_pdb_id.items():
+                    # initialise accession for current ligand
+                    if accession not in ligand_uniprot_to_pdb_map:
+                        ligand_uniprot_to_pdb_map[accession] = set()
+                    # get chain(s) of current pdb corresponding to current accession(s)
+                    for chain_id in pdb_chains:
+
+                        ligand_uniprot_to_pdb_map[accession].add(f"{pdb_id}_{chain_id}")
+
+            else:
+                # pdb ID cannot be mapped to accession number 
+                accession = pdb_id # use submitted name
+                # add all chains 
+                # initialise accession for current ligand
+                if accession not in ligand_uniprot_to_pdb_map:
+                    ligand_uniprot_to_pdb_map[accession] = set()
+                ligand_uniprot_to_pdb_map[accession].add(pdb_id)
+                
+        ligands_to_targets[ligand_id]["targets"] = ligand_uniprot_to_pdb_map
+
+        # raise Exception(ligand_uniprot_to_pdb_map)
+
+    return ligands_to_targets
+
+def predocking_target_preparation_preprocessed_target_input(
+    ligands_to_targets: dict,
+    verbose: bool = True,
+    ):
+
+    for ligand_id, ligand_data in ligands_to_targets.items():
+
+        ligand_data["targets"] = {
+            f"preprocessed-{target}": target 
+            for target in ligand_data["targets"]
+        }
+
+    return ligands_to_targets 
+
+def predocking_preparation(
+    ligands_to_targets: dict,
+    output_dir: str,
+    submitted_ligand_structure_files: dict = {}, # mapping from ligand name to .pdb file
+    submitted_target_pdb_files: dict = {}, # mapping from target name to .pdb file
+    map_uniprot_to_pdb: bool = False, 
+    number_of_pdb: int = 1,
+    allow_mutant: bool = True, # mutant pdb file targets 
+    allow_engineered: bool = True, # engineered pdb file targets  
+    bounding_box_scale: float = 1., 
+    max_bounding_box_size: float = None,
+    prefix_size: int = 3,
+    consider_prefix_in_reranking: bool = True,
+    compute_voxel_locations: bool = False,
+    fill_pdb_list_with_similar_targets: bool = False,
+    determine_natural_ligands: bool = True,
+    target_pH: float = 7.4,
+    ligand_pH: float = 7.4,
+    run_fpocket: bool = True,
+    run_fpocket_old: bool = False,
+    run_p2rank: bool = True,
+    use_alphafold: bool = False,
+    max_pockets_to_keep: int = 1,
+    keep_cofactors: bool = False,
+    molecule_identifier_key: str = "molecule_id",
+    smiles_key: str = "smiles",
+    verbose: bool = True,
+    ):
+
+    if not isinstance(ligands_to_targets, dict):
+        print ("ligands_to_targets is not a dictionary, returning", {})
+        return {}
+
+    if submitted_ligand_structure_files is None:
+        submitted_ligand_structure_files = {}
+
+    if verbose:
+        print ("Beginning all pre-docking preparation")
+        print ("Making output directory", output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+
+    ligand_structure_output_dir = os.path.join(output_dir, "ligand_structures")
+    os.makedirs(ligand_structure_output_dir, exist_ok=True)
+
+    # cleanup and prepare ligands 
+    ligands_to_targets = predocking_ligand_preparation(
+        ligands_to_targets=ligands_to_targets,
+        submitted_ligand_structure_files=submitted_ligand_structure_files,
+        ligand_structure_output_dir=ligand_structure_output_dir,
+        ligand_pH=ligand_pH,
+        molecule_identifier_key=molecule_identifier_key,
+        smiles_key=smiles_key,
+        verbose=verbose,
+    )
+
+    # handle target preparation
+    if map_uniprot_to_pdb == 1:
+        # uniprot target input
+        ligands_to_targets = predocking_target_preparation_uniprot_target_input(
+            ligands_to_targets=ligands_to_targets,
+            output_dir=output_dir,
+            number_of_pdb=number_of_pdb,
+            use_alphafold=use_alphafold,
+            allow_mutant=allow_mutant,
+            allow_engineered=allow_engineered,
+            prefix_size=prefix_size,
+            consider_prefix_in_reranking=consider_prefix_in_reranking,
+            verbose=verbose,
+        )
+    elif map_uniprot_to_pdb == 0:
+        # PDB target input
+        ligands_to_targets = predocking_target_preparation_pdb_target_input(
+            ligands_to_targets=ligands_to_targets,
+            max_num_chains=2,
+            verbose=verbose,
+        )
+    else:
+        # prepared targets 
+        ligands_to_targets = predocking_target_preparation_preprocessed_target_input(
+            ligands_to_targets=ligands_to_targets,
+            verbose=verbose,
+        )
+
+    # extract targets to prepare from ligands_to_targets
+    all_targets_to_prepare = {}
+
+    # iterate over all ligands and add targets to set of all_targets_to_prepare
+    for ligand_id, ligand_data in ligands_to_targets.items():
         # update all_targets_to_prepare with targets of current ligand
-        for accession, accession_targets in ligands_to_targets[ligand_id]["targets"].items():
+        for accession, accession_targets in ligand_data["targets"].items():
             if accession not in all_targets_to_prepare:
                 all_targets_to_prepare[accession] = set()
             for pdb_id in accession_targets:
@@ -598,16 +666,24 @@ def predocking_preparation(
         verbose=verbose,
     )
 
+    # for accession, accession_data in prepared_targets.items():
+    #     for pdb_id, pdb_id_data in accession_data.items():
+    #         if "natural_ligands" in pdb_id_data:
+    #             del pdb_id_data["natural_ligands"]
+
+    # write_json(prepared_targets, "prepared_targets.json")
+    # raise Exception
+
     # add pdb id ranks if map_uniprot_to_pdb
-    if map_uniprot_to_pdb == 1:
-        for accession in prepared_targets:
-            if accession not in pdb_id_ranks_for_all_uniprot_accessions:
-                continue
-            for pdb_id, pdb_id_data in prepared_targets[accession].items():
-                if pdb_id not in pdb_id_ranks_for_all_uniprot_accessions[accession]:
-                    continue
-                # add rank of PDB ID for current accession
-                pdb_id_data["pdb_id_rank_for_accession"] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
+    # if map_uniprot_to_pdb == 1:
+    #     for accession in prepared_targets:
+    #         if accession not in pdb_id_ranks_for_all_uniprot_accessions:
+    #             continue
+    #         for pdb_id, pdb_id_data in prepared_targets[accession].items():
+    #             if pdb_id not in pdb_id_ranks_for_all_uniprot_accessions[accession]:
+    #                 continue
+    #             # add rank of PDB ID for current accession
+    #             pdb_id_data["pdb_id_rank_for_accession"] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
             
     # update ligand_to_targets with target data
     for ligand_id, ligand_data in ligands_to_targets.items():
@@ -651,8 +727,587 @@ def predocking_preparation(
         # delete "targets" key to save memory
         del ligand_data["targets"]
 
+    # write_json(ligands_to_targets, "ligands_to_targets.json")
+    # raise Exception
 
     return ligands_to_targets, prepared_targets_dir, ligand_structure_output_dir
+
+
+# def predocking_preparation(
+#     ligands_to_targets: dict,
+#     output_dir: str,
+#     submitted_ligand_structure_files: dict ={}, # mapping from ligand name to .pdb file
+#     submitted_target_pdb_files: dict ={}, # mapping from target name to .pdb file
+#     map_uniprot_to_pdb: bool = False, 
+#     number_of_pdb: int = 1,
+#     allow_mutant: bool = True, # mutant pdb file targets 
+#     allow_engineered: bool = True, # engineered pdb file targets  
+#     bounding_box_scale: float = 1., 
+#     max_bounding_box_size: float = None,
+#     prefix_size: int = 3,
+#     consider_prefix_in_reranking: bool = True,
+#     compute_voxel_locations: bool = False,
+#     fill_pdb_list_with_similar_targets: bool = False,
+#     determine_natural_ligands: bool = True,
+#     target_pH: float = 7.4,
+#     ligand_pH: float = 7.4,
+#     run_fpocket: bool = True,
+#     run_fpocket_old: bool = False,
+#     run_p2rank: bool = True,
+#     use_alphafold: bool = False,
+#     max_pockets_to_keep: int = 1,
+#     keep_cofactors: bool = False,
+#     molecule_identifier_key: str = "molecule_id",
+#     smiles_key: str = "smiles",
+#     verbose: bool = True,
+#     ):
+
+#     if not isinstance(ligands_to_targets, dict):
+#         print ("ligands_to_targets is not a dictionary, returning", {})
+#         return {}
+
+#     if submitted_ligand_structure_files is None:
+#         submitted_ligand_structure_files = {}
+
+#     if verbose:
+#         print ("Beginning all pre-docking preparation")
+#         print ("Making output directory", output_dir)
+#     os.makedirs(output_dir, exist_ok=True)
+
+#     ligand_structure_output_dir = os.path.join(output_dir, "ligand_structures")
+#     os.makedirs(ligand_structure_output_dir, exist_ok=True)
+
+#     # clean up supplied ligand names
+#     ligands_to_targets = {
+#         sanitise_filename(ligand_id): ligand_data
+#         for ligand_id, ligand_data in ligands_to_targets.items()
+#     }
+
+#     ligand_structure_filename_keys = ("structure_filename", "pdb_filename", )
+
+#     # add/update location of structure files (only required when files are received from client)
+#     if isinstance(submitted_ligand_structure_files, dict) and len(submitted_ligand_structure_files) > 0:
+
+#         submitted_ligand_structure_files = {
+#             sanitise_filename(ligand_id): ligand_filename
+#             for ligand_id, ligand_filename in submitted_ligand_structure_files.items()
+#         }
+
+#         for ligand_id, ligand_data in ligands_to_targets.items():
+#             if verbose:
+#                 print ("Processing filename for ligand", ligand_id)
+#             # ligand_id_sanitised = sanitise_filename(ligand_id)
+#             if ligand_id in submitted_ligand_structure_files:
+#                 # update structure file location 
+#                 ligand_data[ligand_structure_filename_keys[0]] = submitted_ligand_structure_files[ligand_id]
+
+#     # process any ligands that have SMILES strings under the "smiles" key in ligands_to_targets
+#     # by generating a separate PDB file for each one
+#     all_ligand_smiles = []
+#     for ligand_id, ligand_data in ligands_to_targets.items():
+        
+#         # skip ligand if no "smiles" key exists
+#         if "smiles" not in ligand_data:
+#             continue
+
+#         # skip ligand if it already has a structure
+#         has_ligand_structure_filename_key = False
+#         for ligand_structure_filename_key in ligand_structure_filename_keys:
+#             if ligand_structure_filename_key in ligand_data:
+#                 has_ligand_structure_filename_key = True
+#                 break
+#         if has_ligand_structure_filename_key:
+#             continue
+
+#         # add SMILES to all_ligand_smiles 
+#         ligand_smiles = ligand_data["smiles"]
+#         all_ligand_smiles.append({
+#             molecule_identifier_key: ligand_id, 
+#             smiles_key: ligand_smiles,
+#         })
+
+#     if len(all_ligand_smiles) > 0:
+#         # map smiles to PDB files
+#         ligand_pdb_filenames = smiles_to_3D(
+#             supplied_molecules=all_ligand_smiles,
+#             output_dir=ligand_structure_output_dir,
+#             output_format="pdb",
+#             smiles_key=smiles_key,
+#             molecule_identifier_key=molecule_identifier_key,
+#             pH=ligand_pH,
+#             verbose=verbose,
+#         )
+#         # update ligands_to_targets with pdb_filenames
+#         for ligand_id, ligand_pdb_filename in ligand_pdb_filenames.items():
+#             if ligand_id in ligands_to_targets:
+#                 ligands_to_targets[ligand_id]["pdb_filename"] = ligand_pdb_filename
+
+
+#     # ensure all ligands have a PDB file and convert other filetypes if necessary
+#     if verbose:
+#         print ("Ensuring all ligands are described in the PDB format and removing any ligands unsuitable for run")
+
+#     # maintain a list of ligands that have issues, to remove before the run begins
+#     ligands_to_drop = set()
+
+#     # prepare ligand structures
+#     for ligand_id, ligand_data in ligands_to_targets.items():
+        
+#         has_ligand_structure_filename_key = False
+#         for filename_key in ligand_structure_filename_keys:
+#             if filename_key in ligand_data:
+#                 ligand_structure_filename = ligand_data[filename_key] 
+#                 if ligand_structure_filename is not None:
+#                     has_ligand_structure_filename_key = True
+#                     break
+#         if not has_ligand_structure_filename_key:
+#             if verbose:
+#                 print ("Structure filename missing for ligand", ligand_id)
+#             ligands_to_drop.add(ligand_id)
+#             continue
+
+#         # some simple attempt at file format conversion to PDB
+#         stem, ext = os.path.splitext(ligand_structure_filename)
+#         # drop .
+#         ext = ext.replace(".", "")
+
+#         # handle conversion to SMILES
+#         if "smiles" not in ligand_data:
+#             ligand_smiles_filename = os.path.join(ligand_structure_output_dir, f"{ligand_id}.smi")
+#             if ext not in {"smi", "smiles", "txt"}:
+#                 # convert from 3D to 2D
+#                 ligand_smiles_filename = obabel_convert(
+#                     input_format=ext,
+#                     input_filename=ligand_structure_filename,
+#                     output_format="smi",
+#                     output_filename=ligand_smiles_filename,
+#                     title=ligand_id,
+#                     add_hydrogen=True,
+#                     verbose=verbose,
+#                 )
+#             else:
+#                 # already in smiles format, copy it
+#                 ligand_smiles_filename = copy_file(
+#                     ligand_structure_filename,
+#                     ligand_smiles_filename,
+#                     verbose=verbose,
+#                 )
+#             ligand_smiles = read_smiles(
+#                 ligand_smiles_filename,
+#                 remove_invalid_molecules=True,
+#                 return_list=True, 
+#                 molecule_identifier_key=molecule_identifier_key,
+#                 smiles_key=smiles_key,
+#                 verbose=verbose)
+#             if len(ligand_smiles) > 0:
+#                 ligand_data["smiles"] = ligand_smiles[0][smiles_key]
+
+#         # handle conversion to PDB
+#         ligand_pdb_filename = os.path.join(ligand_structure_output_dir, f"{ligand_id}.pdb")
+#         if not os.path.exists(ligand_pdb_filename):
+#             if ext in {"mol", "mol2", "sdf", "pdb", }:
+#                 ligand_pdb_filename = obabel_convert(
+#                     input_format=ext,
+#                     input_filename=ligand_structure_filename,
+#                     output_format="pdb",
+#                     output_filename=ligand_pdb_filename,
+#                     pH=ligand_pH,
+#                     gen_3d=ext == "sdf", # ensure 3D
+#                     title=ligand_id,
+#                     verbose=verbose,
+#                 )
+#             elif ext in {"txt", "smi", "smiles"}:
+#                 ligand_pdb_filename_map = smiles_to_3D(
+#                     supplied_molecules=ligand_structure_filename,
+#                     output_dir=ligand_structure_output_dir,
+#                     desired_output_filename=ligand_pdb_filename,
+#                     output_format="pdb",
+#                     add_hydrogen=True,
+#                     pH=ligand_pH,
+#                     overwrite=True,
+#                     verbose=verbose,
+#                 )
+#                 # index into dict using key
+#                 key = list(ligand_pdb_filename_map)[0]
+#                 ligand_pdb_filename = ligand_pdb_filename_map[key]
+#             else:
+#                 ligand_pdb_filename = None
+        
+#         if ligand_pdb_filename is None: # no value for file
+#             if verbose:
+#                 print ("ligand_pdb_filename is None for ligand", ligand_id)
+#             ligands_to_drop.add(ligand_id)
+#         elif not os.path.exists(ligand_pdb_filename): # file does not exist
+#             if verbose:
+#                 print (ligand_pdb_filename, "does not exist")
+#             ligands_to_drop.add(ligand_id)
+#         elif os.stat(ligand_pdb_filename).st_size == 0: # empty file
+#             if verbose:
+#                 print (ligand_pdb_filename, "is empty")
+#             ligands_to_drop.add(ligand_id)
+#         else:
+#             # update pdb filename
+            
+#             # ensure all residues are labelled as UNL
+#             ligand_pdb_filename = convert_to_ligand(
+#                 input_filename=ligand_pdb_filename,
+#                 output_filename=ligand_pdb_filename,
+#                 verbose=verbose,
+#             )
+
+#             ligand_data["pdb_filename"] = ligand_pdb_filename
+
+#     # delete ligands with no structures or invalid for other reasons
+#     for ligand_to_drop in ligands_to_drop:
+#         if verbose:
+#             print ("Dropping ligand", ligand_to_drop)
+#         del ligands_to_targets[ligand_to_drop]
+
+#     # build set of unique targets 
+#     # may be either PDB IDs or Uniprot accessions
+#     all_targets = set()
+
+#     for ligand_id in ligands_to_targets:
+#         # uniprot targets for the ligand
+#         ligand_targets = ligands_to_targets[ligand_id]["targets"]
+#         all_targets.update(ligand_targets)
+
+
+#     if map_uniprot_to_pdb == 1:
+
+#         # map from accession to pdb id using file (also includes chains)
+#         # format is accession -> pdb_id -> list of chains
+#         uniprot_to_pdb_id_data = map_uniprot_accession_to_pdb_id(
+#             accessions=all_targets,
+#             # return_single_chain_only=True, # take first chain only?
+#             return_single_chain_only=False, 
+#             verbose=verbose,
+#         )
+
+#         # can handle multiple chains from same PDB if needed
+#         # convert to upper case because there is duplication (P25025/6KVA_B, P25025/6KVA_b)
+#         uniprot_to_pdb_id_chains = {
+#             accession: {
+#                 f"{pdb_id}_{chain['chain_id']}".upper(): [chain["chain_id"].upper()]
+#                 for pdb_id, pdb_chains in accession_data.items()
+#                 for chain in pdb_chains # all chains 
+#                 # for chain in sorted(pdb_chains, key=lambda chain: (chain["sequence_length"], chain["chain_id"]))[:1] # first chain
+#             }
+#             for accession, accession_data in uniprot_to_pdb_id_data.items()
+#         }
+#         # sequence lengths 
+#         uniprot_to_pdb_sequence_lengths = {
+#             accession: {
+#                f"{pdb_id}_{chain['chain_id']}".upper() : chain["sequence_length"]
+#                 for pdb_id, pdb_chains in accession_data.items()
+#                 for chain in pdb_chains # all chains 
+#                 # for chain in sorted(pdb_chains, key=lambda chain: (chain["sequence_length"], chain["chain_id"]))[:1] # first chain
+#             }
+#             for accession, accession_data in uniprot_to_pdb_id_data.items()
+#         }
+
+#         # write ranks to file
+#         pdb_id_ranks_for_all_uniprot_accessions_filename = os.path.join(
+#             output_dir, 
+#             "pdb_id_ranks_for_all_uniprot_accessions.pkl.gz")
+#         if os.path.exists(pdb_id_ranks_for_all_uniprot_accessions_filename):
+#             pdb_id_ranks_for_all_uniprot_accessions = load_compressed_pickle(pdb_id_ranks_for_all_uniprot_accessions_filename, verbose=verbose)
+#         else:
+
+#             pdb_id_ranks_for_all_uniprot_accessions = {}
+
+#         accessions_to_rank_structures_for = {
+#             accession
+#             for accession in uniprot_to_pdb_id_chains
+#             if accession not in pdb_id_ranks_for_all_uniprot_accessions
+#         }
+
+#         if len(accessions_to_rank_structures_for) > 0:
+
+#             uniprot_to_pdb_id_chains_to_rank = {
+#                 accession: pdb_id_chain 
+#                 for accession, pdb_id_chain in uniprot_to_pdb_id_chains.items()
+#                 if accession in accessions_to_rank_structures_for
+#             }
+
+#             # filter and rank PDB IDS for each unique Uniprot accession
+#             pdb_id_ranks_for_all_uniprot_accessions_new = rank_all_pdb_structures_for_uniprot_accessions(
+#                 uniprot_to_pdb_id=uniprot_to_pdb_id_chains_to_rank,
+#                 sequence_lengths=uniprot_to_pdb_sequence_lengths,
+#                 allow_multi_model=True, # ?
+#                 allow_mutant=allow_mutant,
+#                 allow_engineered=allow_engineered,
+#                 prefix_size=prefix_size,
+#                 consider_prefix_in_reranking=consider_prefix_in_reranking,
+#                 verbose=verbose,
+#             )
+
+#             # add chains and update pdb_id_ranks_for_all_uniprot_accessions
+#             for accession in pdb_id_ranks_for_all_uniprot_accessions_new:
+#                 if accession not in uniprot_to_pdb_id_chains:
+#                     continue
+
+#                 # add access to pdb_id_ranks_for_all_uniprot_accessions
+#                 if accession not in pdb_id_ranks_for_all_uniprot_accessions:
+#                     pdb_id_ranks_for_all_uniprot_accessions[accession] = {}
+
+#                 # iterate over PDB IDs and separate chains
+#                 for pdb_id, pdb_id_data in pdb_id_ranks_for_all_uniprot_accessions_new[accession].items():
+
+#                     if pdb_id not in uniprot_to_pdb_id_chains[accession]:
+#                         continue
+#                     pdb_id_data["chains"] = uniprot_to_pdb_id_chains[accession][pdb_id]
+
+#             # update pdb_id_ranks_for_all_uniprot_accessions
+#             pdb_id_ranks_for_all_uniprot_accessions.update(pdb_id_ranks_for_all_uniprot_accessions_new)
+
+#             # write pdb_id_ranks_for_all_uniprot_accessions to file 
+#             write_compressed_pickle(pdb_id_ranks_for_all_uniprot_accessions, pdb_id_ranks_for_all_uniprot_accessions_filename, verbose=verbose)
+
+#     # map PDB -> uniprot for screening down the line
+#     elif map_uniprot_to_pdb == 0:
+
+#         # no mapping from accession to pdb
+#         pdb_id_ranks_for_all_uniprot_accessions = {}
+
+#         # all PDB IDs in all_targets
+#         # map PDB ID to chain set to keep
+#         pdb_id_to_chain_id = {}
+
+#         # delete other chains if chains have been specified
+#         for pdb_id in all_targets:
+
+#             chain_id = None # keep all
+
+#             if pdb_id.count("_") == 1:
+#                 pdb_id, chain_id = pdb_id.split("_")
+#             if pdb_id not in pdb_id_to_chain_id:
+#                 pdb_id_to_chain_id[pdb_id] = set()
+#             if chain_id is not None:
+#                 pdb_id_to_chain_id[pdb_id].add(chain_id)
+        
+#         pdb_id_to_uniprot_accession = map_pdb_id_to_uniprot_accession(
+#             pdb_ids=pdb_id_to_chain_id, # keyed by PDB ID only
+#             verbose=verbose,
+#         )
+
+#         for pdb_id, existing_accessions_for_pdb_id in pdb_id_to_uniprot_accession.items():
+
+#             chains_to_keep = pdb_id_to_chain_id[pdb_id]
+#             if len(chains_to_keep) == 0: 
+#                 # keep all, no need to delete chains 
+#                 continue
+
+#             # otherwise, remove unnecessary chains
+#             accessions_to_keep = {}
+
+#             for accession, accession_chains in existing_accessions_for_pdb_id.items():
+#                 accession_chains = [ 
+#                     accession_chain 
+#                     for accession_chain in accession_chains
+#                     if accession_chain["chain_id"] in chains_to_keep
+#                 ]
+#                 if len(accession_chains) > 0:
+#                     accessions_to_keep[accession] = accession_chains
+
+#             # update pdb_id_to_uniprot_accession
+#             pdb_id_to_uniprot_accession[pdb_id] = accessions_to_keep
+
+#     # else:
+#     #     # no mapping 
+#     #     target_mapping = {
+#     #         target: target for target in all_targets
+#     #     }
+
+#     # identify all PDB targets
+#     # change to uniprot -> pdb
+#     all_targets_to_prepare = {}
+
+#     # construct uniprot -> pdb map for preparation
+#     for ligand_id in ligands_to_targets:
+
+#         ligand_targets = ligands_to_targets[ligand_id]["targets"]
+
+#         if map_uniprot_to_pdb == 1:
+
+#             if verbose:
+#                 print ("Selecting", number_of_pdb, "best PDB structures for each target for ligand", ligand_id)
+
+#             # select top ranked pdb ids
+#             # update ligand target list
+#             ligand_uniprot_targets_with_pdb = dict()
+
+#             # iterate over uniprot targets and select pdb ids
+#             for accession in ligand_targets:
+
+#                 if verbose:
+#                     print ("Processing UniProt target", accession, "for ligand", ligand_id)
+
+#                 selected_pdb_ids_for_uniprot_id = dict()
+                
+#                 # check that PDB structures exist in PDB database for current accession
+#                 if accession in pdb_id_ranks_for_all_uniprot_accessions: 
+
+#                     # sort PDB structures for current accession using `reranked_rank`
+#                     sorted_pdb_ids_for_current_uniprot_id = sorted(
+#                         pdb_id_ranks_for_all_uniprot_accessions[accession],
+#                         key=lambda pdb_id: pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
+#                     ) 
+#                     for pdb_id in sorted_pdb_ids_for_current_uniprot_id:
+                        
+#                         # break out of loop if enough pdb ids have been found
+#                         if number_of_pdb is not None and len(selected_pdb_ids_for_uniprot_id) >= number_of_pdb:
+#                             break 
+#                         selected_pdb_ids_for_uniprot_id[pdb_id] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]
+
+#                 # update ligand_uniprot_targets_with_pdb with PDB IDs selected for current accession
+#                 ligand_uniprot_targets_with_pdb[accession] = selected_pdb_ids_for_uniprot_id
+
+#             # add alphafold-predicted crystal structures
+#             # if use_alphafold:
+                
+#             for accession in ligand_targets:
+#                 if use_alphafold == 0:
+#                     continue
+#                 # only use alphafold if no structures are found?
+#                 if accession not in ligand_uniprot_targets_with_pdb: # should not be missing
+#                     ligand_uniprot_targets_with_pdb[accession] = {}
+#                 if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) == 0): # only add alphafold if no PDB structures are found
+#                 # if use_alphafold == 1 or (use_alphafold == 2 and len(ligand_uniprot_targets_with_pdb[accession]) < number_of_pdb): # only add alphafold if not enough PDB structures are found
+#                     ligand_uniprot_targets_with_pdb[accession][f"alphafold-{accession}_A"] = None # value currently required for consistency  
+
+#             # replace ligand_targets variable
+#             ligand_targets = ligand_uniprot_targets_with_pdb
+
+#             # overwrite targets with pdb targets
+#             ligands_to_targets[ligand_id]["targets"] = ligand_targets
+
+#         elif map_uniprot_to_pdb == 0:
+#             # change to accession -> PDB ID format
+#             ligand_uniprot_to_pdb = {}
+#             # ligand targets is a list of PDB IDs
+#             for pdb_id in ligand_targets:
+                
+#                 pdb_id = pdb_id.upper()
+
+#                 # select only pdb_id (remove chain)
+#                 pdb_id = pdb_id[:4]
+                
+#                 if pdb_id in pdb_id_to_uniprot_accession:
+#                     accessions = pdb_id_to_uniprot_accession[pdb_id]
+#                     for accession, pdb_chains in accessions.items():
+#                         # initialise accession for current ligand
+#                         if accession not in ligand_uniprot_to_pdb:
+#                             ligand_uniprot_to_pdb[accession] = []
+#                         # get chain(s) of current pdb corresponding to current accession
+#                         for pdb_chain in pdb_chains:
+#                             chain_id = pdb_chain["chain_id"]
+#                             ligand_uniprot_to_pdb[accession].append(f"{pdb_id}_{chain_id}")
+
+#                 else:
+#                     # print ("not in mapping")
+#                     # pdb ID cannot be mapped to accession number 
+#                     accession = pdb_id # use submitted name
+#                     # add all chains 
+#                     # initialise accession for current ligand
+#                     if accession not in ligand_uniprot_to_pdb:
+#                         ligand_uniprot_to_pdb[accession] = []
+#                     ligand_uniprot_to_pdb[accession].append(pdb_id)
+                    
+#             ligands_to_targets[ligand_id]["targets"] = ligand_uniprot_to_pdb
+
+#         else: # np mapping
+            
+#             ligands_to_targets[ligand_id]["targets"] = {
+#                 f"preprocessed-{target}" : {target} for target in ligand_targets
+#             }
+
+
+#         # update all_targets_to_prepare with targets of current ligand
+#         for accession, accession_targets in ligands_to_targets[ligand_id]["targets"].items():
+#             if accession not in all_targets_to_prepare:
+#                 all_targets_to_prepare[accession] = set()
+#             for pdb_id in accession_targets:
+#                 all_targets_to_prepare[accession].add(pdb_id)
+
+#     # base directory to write decompressed prepared targets to
+#     prepared_targets_dir = os.path.join(output_dir, "prepared_targets")
+
+#     # prepare all targets in all_pdb_targets set (loads data if exists)
+#     prepared_targets = prepare_all_targets(
+#         accession_to_pdb=all_targets_to_prepare,
+#         decompress_to_directory=prepared_targets_dir,
+#         existing_target_filenames=submitted_target_pdb_files, # pass in any submitted targets
+#         bounding_box_scale=bounding_box_scale,
+#         max_bounding_box_size=max_bounding_box_size,
+#         allow_multi_model=True, # ?
+#         allow_mutant=allow_mutant,
+#         allow_engineered=allow_engineered,
+#         protonate_to_pH=target_pH,
+#         run_fpocket=run_fpocket,
+#         run_fpocket_old=run_fpocket_old,
+#         run_p2rank=run_p2rank,
+#         compute_voxel_locations=compute_voxel_locations,
+#         max_pockets_to_keep=max_pockets_to_keep,
+#         keep_cofactors=keep_cofactors,
+#         verbose=verbose,
+#     )
+
+#     # add pdb id ranks if map_uniprot_to_pdb
+#     if map_uniprot_to_pdb == 1:
+#         for accession in prepared_targets:
+#             if accession not in pdb_id_ranks_for_all_uniprot_accessions:
+#                 continue
+#             for pdb_id, pdb_id_data in prepared_targets[accession].items():
+#                 if pdb_id not in pdb_id_ranks_for_all_uniprot_accessions[accession]:
+#                     continue
+#                 # add rank of PDB ID for current accession
+#                 pdb_id_data["pdb_id_rank_for_accession"] = pdb_id_ranks_for_all_uniprot_accessions[accession][pdb_id]["reranked_rank"]
+            
+#     # update ligand_to_targets with target data
+#     for ligand_id, ligand_data in ligands_to_targets.items():
+#         if verbose:
+#             print ("Adding prepared_targets for ligand", ligand_id)
+
+#         # initialise prepared_targets dict for current ligand
+#         ligand_prepared_targets = {}
+#         for accession, ligand_accession_pdb_ids in ligand_data["targets"].items():
+#             # skip accession if it could not be prepared
+#             if accession not in prepared_targets:
+#                 continue
+#             prepared_targets_for_accession = prepared_targets[accession]
+#             ligand_accession_pdb_ids = sorted(ligand_accession_pdb_ids)
+            
+#             # check for accession=pdb_id
+#             if accession == ligand_accession_pdb_ids[0]:
+#                 # add all chains
+#                 ligand_prepared_targets[accession] = prepared_targets_for_accession
+#             else:
+#                 ligand_prepared_targets_for_accession = {}
+
+#                 for ligand_accession_pdb_id in ligand_accession_pdb_ids:
+#                     # if ligand_accession_pdb_id.startswith("alphafold-"):
+#                     #     # append chain
+#                     #     ligand_accession_pdb_id += "_A"
+#                     ligand_accession_pdb_id = ligand_accession_pdb_id.upper()
+#                     # if ligand_accession_pdb_id in prepared_targets_for_accession:
+#                     # account for potential appending of chain(s)
+
+#                     for prepared_target_for_accession in prepared_targets_for_accession:
+#                         if prepared_target_for_accession.startswith(ligand_accession_pdb_id):
+#                             ligand_prepared_targets_for_accession[prepared_target_for_accession] = prepared_targets_for_accession[prepared_target_for_accession]
+#                 # add all prepared pdb IDs for accession to ligand_prepared_targets
+#                 ligand_prepared_targets[accession] = ligand_prepared_targets_for_accession
+
+#         # add "prepared_targets" key to ligand_data
+#         # ensure copy
+#         ligand_data["prepared_targets"] = copy.deepcopy(ligand_prepared_targets)
+
+#         # delete "targets" key to save memory
+#         del ligand_data["targets"]
+
+
+#     return ligands_to_targets, prepared_targets_dir, ligand_structure_output_dir
 
 def map_pdb_id_to_uniprot_accession(
     pdb_ids,
@@ -679,9 +1334,12 @@ def map_pdb_id_to_uniprot_accession(
 
     return mapping
 
+
 def map_uniprot_accession_to_pdb_id(
-    accessions,
+    accessions: list,
+    minimum_sequence_length: int = 150,
     return_single_chain_only: bool = True,
+    keep_maximum_sequence_length_only: bool = False,
     uniprot_to_pdb_filename: str = "data/databases/pdb/uniprot_to_pdb.pkl.gz",
     verbose: bool = False,
     ):
@@ -706,15 +1364,63 @@ def map_uniprot_accession_to_pdb_id(
         else:
             accession_pdb_ids = {}
 
+        # new format: pdb_id -> chain -> {"sequence_length"}
+
+        # filter by minimum sequence length
+        if minimum_sequence_length is not None:
+            accession_pdb_ids = {
+                pdb_id: {
+                    chain: chain_data 
+                    for chain, chain_data in pdb_id_chain_data.items()
+                    if chain_data["sequence_length"] >= minimum_sequence_length
+                }
+                for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+            }
+            # remove PDB IDs with no chains
+            accession_pdb_ids = {
+                pdb_id: pdb_id_chain_data
+                for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+                if len(pdb_id_chain_data) > 0
+            }
+        
+
+        # filter for maximum sequence length only
+        sequence_lengths = [
+            chain_data["sequence_length"]
+            for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+            for chain, chain_data in pdb_id_chain_data.items()  
+        ]
+        if keep_maximum_sequence_length_only and len(sequence_lengths) > 0:
+            # store maximum lengths
+            maximum_sequence_length = max(sequence_lengths)
+
+            # keep only max sequence length
+            accession_pdb_ids = {
+                pdb_id: {
+                    chain: chain_data 
+                    for chain, chain_data in pdb_id_chain_data.items()
+                    if chain_data["sequence_length"] == maximum_sequence_length
+                }
+                for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+            }
+            # remove PDB IDs with no chains
+            accession_pdb_ids = {
+                pdb_id: pdb_id_chain_data
+                for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+                if len(pdb_id_chain_data) > 0
+            }
+
         # select only single chain
         if return_single_chain_only:
-            accession_pdb_ids = {
-                pdb_id: [ # sort by sequence length (DESC), then chain_id (ASC)
-                    min(pdb_id_chains, key=lambda chain: (-chain["sequence_length"], chain["chain_id"]))
-                ]
-                for pdb_id, pdb_id_chains in accession_pdb_ids.items()
-            }
             
+            accession_pdb_ids = {
+                pdb_id: {
+                    chain: chain_data 
+                    for i, (chain, chain_data) in enumerate(pdb_id_chain_data.items())
+                    if i < 1
+                }
+                for pdb_id, pdb_id_chain_data in accession_pdb_ids.items()
+            }
         
         accession_to_pdb_mapping[accession] = accession_pdb_ids
 
@@ -1363,7 +2069,7 @@ def prepare_single_target(
                 )
 
             # dict containing center and size properties
-            target_center_of_mass_and_bounding_box = define_target_binding_site_using_biopython(
+            target_center_of_mass_and_bounding_box = define_target_bounding_box_using_biopython(
                 pdb_filename=prepared_target_filename,
                 scale=1,
                 precision=3,

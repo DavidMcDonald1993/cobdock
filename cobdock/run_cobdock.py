@@ -127,6 +127,7 @@ def execute_cobdock(
             num_top_pockets=num_top_pockets,
             num_poses=num_poses,
             num_complexes=num_complexes,
+            local_docking_program="vina",
             top_pocket_distance_threshold=top_pocket_distance_threshold,
             verbose=verbose,
         )
@@ -165,13 +166,12 @@ if __name__ == "__main__":
         # }
     }
 
-    output_dir = "test_output"
+    output_dir = "test_output_2"
 
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,
         output_dir=output_dir,
         map_uniprot_to_pdb=True,
-        # map_uniprot_to_pdb=False,
         number_of_pdb=1,
         num_top_pockets=5,
         num_poses=1,

@@ -134,10 +134,12 @@ if __name__ == "__main__":
 
     # output_filename = f"testdir/alphafold-{tuberculosis_accession}"
 
-    accession = "Q13451-1"
+    # accession = "P09874"
+    # accession = "J7MDH3"
+    accession = "B1MC30"
 
     download_alphafold_structure(
         accession,
-        f"AF-{accession}-F1-model_v3.pdb",
+        output_filename=f"AF-{accession}-test.pdb",
         verbose=True,
     )

@@ -22,6 +22,7 @@ import sys
 import logging
 
 import rdkit
+from rdkit.Chem.MolStandardize import rdMolStandardize
 from rdkit import Chem, SimDivFilters
 from rdkit.Chem import ChemicalFeatures, AllChem, PandasTools
 from rdkit.Chem.Descriptors import *
@@ -45,6 +46,8 @@ from rdkit.Chem.BRICS import BRICSDecompose
 
 from rdkit.Chem.EnumerateStereoisomers import EnumerateStereoisomers, StereoEnumerationOptions
 
+from rdkit.Chem.Scaffolds.MurckoScaffold import GetScaffoldForMol
+
 # filtering 
 from rdkit.Chem.FilterCatalog import *
 
@@ -57,6 +60,123 @@ else:
     FEATURE_FACTORY = None
 
 log = logging.getLogger(__name__)
+
+LIPINSKI_THRESHOLDS = {
+    "molecular_weight": {
+        "lte": 500,
+    },
+    "log_p": {
+        "lte": 5,
+    },
+    "num_hydrogen_donors": {
+        "lte": 5,
+    },
+    "num_hydrogen_acceptors": {
+        "lte": 10,
+    },
+}
+
+GHOSE_THRESHOLDS = {
+    "molecular_weight": {
+        "gte": 160, "lte": 480,
+    },
+    "log_p": {
+        "gte": -0.4, "lte": 5.6,
+    },
+    "num_atoms": {
+        "gte": 20, "lte": 70,
+    },
+    "molar_refractivity": {
+        "gte": 40, "lte": 130,
+    },
+}
+
+VERBER_THRESHOLDS = {
+    "num_rotatable_bonds": {
+        "lte": 10,
+    }, 
+    "polar_surface_area": {
+        "lte": 140,
+    }
+}
+
+REOS_THRESHOLDS = {
+    "molecular_weight": {
+        "gte": 200, "lte": 500,
+    },
+    "log_p": {
+        "gte": -5, "lte": 5,
+    },
+    "num_hydrogen_donors": {
+        "gte": 0, "lte": 5,
+    },
+    "num_hydrogen_acceptors": {
+        "gte": 0, "lte": 10,
+    },
+    "charge": {
+        "gte": -2, "lte": 2,
+    },
+    "num_rotatable_bonds": {
+        "gte": 0, "lte": 8,
+    },
+    "num_heavy_atoms": {
+        "gte": 15, "lte": 50,
+    },
+}
+
+RULE_OF_THREE_THRESHOLDS = {
+    "molecular_weight": {
+        "lte": 300,
+    },
+    "log_p": {
+        "lte": 3,
+    },
+    "num_hydrogen_donors": {
+        "lte": 3,
+    },
+    "num_hydrogen_acceptors": {
+        "lte": 3,
+    },
+    "num_rotatable_bonds": {
+        "lte": 3,
+    }
+}
+
+DRUG_LIKE_THRESHOLDS = {
+    "molecular_weight": {
+        "lte": 400,
+    },
+    "number_of_rings": {
+        "gte": 1, # > 0
+    },
+    "num_rotatable_bonds": {
+        "lte": 4, # < 5
+    },
+    "num_hydrogen_donors": {
+        "lte": 5,
+    },
+    "num_hydrogen_acceptors": {
+        "lte": 10,
+    },
+    "log_p": {
+        "lte": 5,
+    },
+}
+
+def build_rdkit_mol(
+    smiles: str,
+    largest_fragment: bool = True,
+    ):
+
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None or not largest_fragment:
+        return mol
+
+    # determine largest fragment
+    largest_fragment_chooser = rdMolStandardize.LargestFragmentChooser()
+
+    return largest_fragment_chooser.choose(mol)
+
 
 def MolSupplier(
     mol_filename: str = None, 
@@ -266,7 +386,8 @@ def smiles_to_SDF_3D_rdkit_single_molecule(
     if verbose:
         print ("Writing molecule to SDF file", sdf_filename)
     if not os.path.exists(sdf_filename) or overwrite:
-        mol = Chem.MolFromSmiles(smi)
+        # mol = Chem.MolFromSmiles(smi)
+        mol = build_rdkit_mol(smi)
         mol.SetProp("_Name", molecule_identifier)
         if add_hydrogen:
             if verbose:
@@ -333,7 +454,8 @@ def BRICS_decompose_smiles(
     generator
         Generator containing all fragments
     """
-    mol = Chem.MolFromSmiles(smi)
+    # mol = Chem.MolFromSmiles(smi)
+    mol = build_rdkit_mol(smi)
     if mol is None:
         return None
     return BRICSDecompose(
@@ -347,7 +469,7 @@ def BRICS_decompose_smiles_using_RDKit(
     smiles,
     keep_original_molecule_in_output: bool = True,
     min_fragment_size: int = 3,
-    keep_non_leaf_nodes: bool = True,
+    keep_non_leaf_nodes: bool = False,
     smiles_key: str ="smiles",
     molecule_identifier_key: str = "molecule_id",
     verbose: bool = True,
@@ -396,7 +518,8 @@ def BRICS_decompose_smiles_using_RDKit(
         fragment_mols = BRICS_decompose_smiles(
             smi,
             min_fragment_size=min_fragment_size,
-            keep_non_leaf_nodes=keep_non_leaf_nodes)
+            keep_non_leaf_nodes=keep_non_leaf_nodes,
+        )
         if fragment_mols is None:
             continue
         for i, fragment_mol in enumerate(fragment_mols, start=1):
@@ -418,7 +541,8 @@ def BRICS_decompose_smiles_using_RDKit(
             fragment_smiles = Chem.MolToSmiles(fragment_mol, isomericSmiles=True)
 
             # some sanity check
-            fragment_mol = Chem.MolFromSmiles(fragment_smiles)
+            # fragment_mol = Chem.MolFromSmiles(fragment_smiles)
+            fragment_mol = build_rdkit_mol(fragment_smiles)
             if fragment_mol is None:
                 continue
 
@@ -447,6 +571,8 @@ def map_molecule_property_string_to_function(
 
     if property_string == "smiles": # isomeric?
         return lambda mol: Chem.MolToSmiles(mol, isomericSmiles=True)
+    elif property_string == "inchi":
+        return Chem.MolToInchi
     elif property_string == "inchikey":
         return Chem.MolToInchiKey
     elif property_string == "molecular_formula":
@@ -469,7 +595,7 @@ def map_molecule_property_string_to_function(
         return CalcNumHeterocycles
     elif property_string == "log_p":
         return lambda mol: round(MolLogP(mol), precision)
-    elif property_string == "mr":
+    elif property_string == "molar_refractivity":
         return lambda mol: round(MolMR(mol), precision)
     elif property_string == "num_rotatable_bonds":
         return CalcNumRotatableBonds
@@ -477,6 +603,8 @@ def map_molecule_property_string_to_function(
         return NumHAcceptors
     elif property_string == "num_hydrogen_donors":
         return NumHDonors
+    elif property_string == "num_atoms":
+        return Chem.rdchem.Mol.GetNumAtoms
     elif property_string == "num_heavy_atoms":
         return HeavyAtomCount        
     elif property_string == "polar_surface_area":
@@ -485,6 +613,8 @@ def map_molecule_property_string_to_function(
         return CalcNumAromaticRings
     elif property_string == "charge":
         return Chem.GetFormalCharge
+    elif property_string == "scaffold_smiles":
+        return lambda mol: Chem.MolToSmiles(GetScaffoldForMol(mol))
     else:
         return None # property not implemented
 
@@ -498,14 +628,18 @@ def compute_molecule_properties(
         "num_hydrogen_acceptors",
         "num_hydrogen_donors",
         "num_rotatable_bonds",
+        "num_atoms",
         "num_heavy_atoms",
         "polar_surface_area",
         "num_aromatic_rings",
         "bond_count",
         "number_of_rings",
+        "molar_refractivity",
         "charge",
+        "scaffold_smiles",
     ],
     precision: int = 4,
+    largest_fragment: bool = True,
     verbose: bool = False,
     ):
     """Compute a set molecule properties from the molecule described either by `smi` or `mol`.
@@ -533,7 +667,7 @@ def compute_molecule_properties(
     properties_dict = {}
     for property_string in properties:
         property_function = map_molecule_property_string_to_function(property_string, precision=precision)
-        if property_string is None:
+        if property_function is None:
             continue
         properties_dict[property_string] = property_function
 
@@ -542,18 +676,19 @@ def compute_molecule_properties(
 
     if mol is None:
         if smi is not None:
-            mol = Chem.MolFromSmiles(smi)
+            # mol = Chem.MolFromSmiles(smi)
+            mol = build_rdkit_mol(smi, largest_fragment=largest_fragment)
 
-    if mol is None:
+    if mol is None: # mol failed to generate for whatever reason
         return {
             property_name: None
             for property_name in properties_dict
         }
-    else:
-        return {
-            property_name: property_function(mol)
-            for property_name, property_function in properties_dict.items()
-        }
+    
+    return {
+        property_name: property_function(mol)
+        for property_name, property_function in properties_dict.items()
+    }
 
 def diversity_molecule_selection(
     smiles, # list of smiles
@@ -592,7 +727,8 @@ def diversity_molecule_selection(
 
     fps = []
     for smi in smiles:
-        mol = Chem.MolFromSmiles(smi)
+        # mol = Chem.MolFromSmiles(smi)
+        mol = build_rdkit_mol(smi)
         if mol is None: # TODO
             raise Exception("INVALID MOLECULE IN DIVERSITY SELECTION")
         fps.append(rdMolDescriptors.GetMorganFingerprintAsBitVect(mol, radius, ))
@@ -632,7 +768,8 @@ def smi_to_inchikey(
     str
         INCHIKEY of molecule
     """
-    mol = Chem.MolFromSmiles(smi)
+    # mol = Chem.MolFromSmiles(smi)
+    mol = build_rdkit_mol(smi)
     if mol is None:
         return None
     return Chem.MolToInchiKey(mol)
@@ -828,7 +965,11 @@ def generate_cf_images(
         return [], []
 
     # get aligned images
-    ms = [Chem.MolFromSmiles(counterfactual[smiles_key]) for counterfactual in counterfactual_list]
+    ms = [
+        # Chem.MolFromSmiles(counterfactual[smiles_key]) 
+        build_rdkit_mol(counterfactual[smiles_key])
+        for counterfactual in counterfactual_list
+    ]
     dos = rdkit.Chem.Draw.MolDrawOptions()
     dos.useBWAtomPalette()
     dos.minFontSize = fontsize
@@ -969,7 +1110,8 @@ def enumerate_stereoisomers(
             continue
         molecule_smiles = molecule[smiles_key]
 
-        mol = Chem.MolFromSmiles(molecule_smiles)
+        # mol = Chem.MolFromSmiles(molecule_smiles)
+        mol = build_rdkit_mol(molecule_smiles)
 
         for i, isomer in enumerate( EnumerateStereoisomers(mol, options=opts), start=1):
 
@@ -1002,7 +1144,10 @@ def list_violations(
         if smi is None:
             print ("Missing smiles!")
             return all_violations
-        mol = Chem.MolFromSmiles(smi)
+        # mol = Chem.MolFromSmiles(smi)
+        
+        mol = build_rdkit_mol(smi)
+
     if mol is None:
         print ("Failed to sanitise molecule")
         return all_violations
@@ -1069,19 +1214,15 @@ def list_lipinski_violations(
     #     H-Bond Donor Count <= 5
     #     H-Bond Acceptor Count <= 10
 
-    lipinski_thresholds = (
-        ("molecular_weight", 500),
-        ("log_p", 5),
-        ("num_hydrogen_donors", 5),
-        ("num_hydrogen_acceptors", 10),
-    )
 
     all_violations = []
 
-    for property_name, max_value in lipinski_thresholds:
+    for property_name, property_data in LIPINSKI_THRESHOLDS.items():
         if property_name not in molecule_properties:
             continue
         property_value = molecule_properties[property_name]
+
+        max_value = property_data["lte"]
         if property_value > max_value:
 
             all_violations.append({
@@ -1093,10 +1234,19 @@ def list_lipinski_violations(
 
     return all_violations
 
+def compute_maccs_fp(smi):
+    return MACCSkeys.GenMACCSKeys(Chem.MolFromSmiles(smi)) 
+
+def compute_morg3_fp(smi):
+    return AllChem.GetMorganFingerprintAsBitVect(Chem.MolFromSmiles(smi), radius=3, nBits=1024 )
 
 
 
 if __name__ == "__main__":
+
+    # mol = build_rdkit_mol("CC1=CC=CC([C@@H]2CC[C@H](N3CCN(C4=CN=CC=C4)CC3)CC2)=C1.OC(C(F)(F)F)=O.OC(C(F)(F)F)=O")
+
+    # raise Exception(Chem.MolToSmiles(mol, isomericSmiles=True))
 
     # smiles = "C[C@H](NC(=O)Cc1cc(F)cc(F)c1)C(=O)N[C@@H](C(=O)OC(C)(C)C)c2ccccc2"
 
@@ -1191,16 +1341,27 @@ if __name__ == "__main__":
 
     # print (fragments)
 
-    smiles = "O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
+    # smiles = "O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
 
-    molecule_properties = compute_molecule_properties(smi=smiles)
+    # molecule_properties = compute_molecule_properties(smi=smiles)
 
-    print (molecule_properties)
+    # print (molecule_properties)
 
-    print (list_lipinski_violations(molecule_properties))
+    # print (list_lipinski_violations(molecule_properties))
 
-    pains_violations = list_BRENK_violations(
-        smi="O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
-    )
+    # pains_violations = list_BRENK_violations(
+    #     smi="O=C(Cn1cnc2c1c(=O)n(C)c(=O)n2C)N/N=C/c1c(O)ccc2c1cccc2"
+    # )
 
-    print (pains_violations)
+    # print (pains_violations)
+    
+    from rdkit.Chem.rdmolfiles import MolFromPDBFile
+
+    from rdkit.Chem.rdMolAlign import GetBestRMS
+
+    mol1 = MolFromPDBFile("aspirin.pdb")
+    mol2 = MolFromPDBFile("aspirin_2.pdb")
+    assert mol2 is not None
+
+    print (GetBestRMS(mol1, mol2))
+

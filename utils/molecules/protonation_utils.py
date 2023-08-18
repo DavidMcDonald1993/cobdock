@@ -8,23 +8,22 @@ if __name__ == "__main__":
         os.path.pardir,
         )))
 
-
 import os
+
 from utils.io.io_utils import delete_directory, delete_file
 from utils.molecules.openbabel_utils import obabel_convert 
 
 from utils.sys_utils import execute_system_command
-# from utils.molecules.openbabel_utils import pqr_to_pdb
 
 def protonate_pdb(
     input_filename: str,
     pqr_output_filename: str = None,
     pdb_output_filename: str = None,
     pH: float = 7.4,
-    ff: str = "PARSE",
+    # ff: str = "PARSE",
+    ff: str = "AMBER", # ?
     drop_water: bool = True,
     titration_state_method: str = "propka",
-    # titration_state_method: str = None,
     return_as_pdb: bool = True,
     overwrite: bool = False,
     main_job_id: int = None,
@@ -95,11 +94,11 @@ def protonate_pdb(
 
     apbs_input_filename = f"{base}.in"
 
-    cmd = f"pdb2pqr30 {input_filename} {pqr_output_filename} --with-ph={pH} --ff={ff} --apbs-input={apbs_input_filename} --pdb-output {pdb_output_filename}"
+    cmd = f"pdb2pqr30 {input_filename} {pqr_output_filename} --pH={pH} --ff={ff} --apbs-input={apbs_input_filename} --pdb-output {pdb_output_filename}"
     if drop_water:
         cmd += " --drop-water"
     if titration_state_method is not None:
-        cmd += f" --titration-state-method={titration_state_method}"
+        cmd += f" --titration-state-method={titration_state_method} --with-ph={pH}"
 
     try:
         execute_system_command(cmd, main_job_id=main_job_id, verbose=verbose)

@@ -7,7 +7,7 @@ if __name__ == "__main__":
         os.path.pardir)))
 
 
-import os, gzip, json, shutil, re
+import os, gzip, json, shutil, re, glob
 
 import pickle as pkl
 
@@ -22,7 +22,7 @@ from decimal import Decimal
 import secrets 
 
 from json import JSONDecodeError
-from xmltodict import parse
+# from xmltodict import parse
 
 from utils.sys_utils import execute_system_command, SUDO_PASSWORD
 
@@ -132,13 +132,47 @@ def sanitise_filename(
         return ""
     if not isinstance(filename, str):
         filename = str(filename)
-    return re.sub(r"[ |/(),']", "_", filename)[:max_length]
+    filename = re.sub(r"[ |/(),'\*]", "_", filename)[:max_length]
+    if filename.startswith("-"):
+        filename = "_" + filename[1:]
+
+    return filename
+
+def sanitise_molecule_name(
+    mol_name, 
+    max_length: int = 100,
+    ):
+    """Cleanup a string in order to make it a valid molecule name. Avoids jQuery selector characters.
+    
+    Parameters
+    ----------
+    mol_name : str
+        The input string.
+    max_length : int, optional
+        Maximum number of characters to use, by default 100
+
+    Returns
+    -------
+    str
+        Cleaned molecule name
+    """
+
+    if pd.isnull(mol_name):
+        return ""
+    if not isinstance(mol_name, str):
+        mol_name = str(mol_name)
+    mol_name = re.sub(r"[ |/(),'!\"#$&'.:;<=>?@\[\]\\^`{}~]", "_", mol_name)[:max_length]
+    mol_name = re.sub(r"[+]", "_plus_", mol_name)
+    mol_name = re.sub(r"[*]", "_star_", mol_name)
+
+    return mol_name
 
 # pickle data
 
 def write_pickle(
     obj: object,
     pickle_filename: str,
+    verbose: bool = False,
     ):
     """Write `obj` to file using `pickle`
 
@@ -156,14 +190,16 @@ def write_pickle(
     """
     if not pickle_filename.endswith(".pkl"):
         pickle_filename += ".pkl"
-    print ("writing pickle to", pickle_filename)
-    with open(pickle_filename, "rb") as f:
+    if verbose:
+        print ("Writing pickle to", pickle_filename)
+    with open(pickle_filename, "wb") as f:
         pkl.dump(obj, f, pkl.HIGHEST_PROTOCOL)
 
     return pickle_filename
 
 def load_pickle(
     pickle_filename: str,
+    verbose: bool = False,
     ):
     """Load an object from a file using the pickle module.
 
@@ -180,7 +216,8 @@ def load_pickle(
     # assert pickle_filename.endswith(".pkl")
     # if not pickle_filename.endswith(".pkl"):
     #     pickle_filename += ".pkl"
-    print ("loading pickle from", pickle_filename)
+    if verbose:
+        print ("Loading pickle from", pickle_filename)
     with open(pickle_filename, "rb") as f:
         obj = pkl.load(f)
     return obj
@@ -245,7 +282,6 @@ def load_compressed_pickle(
         return default
 
 # JSON data
-
 def recursively_convert_json_to_object(
     json_data: object,
     ):
@@ -269,13 +305,39 @@ def recursively_convert_json_to_object(
                 json_data = recursively_convert_json_to_object(json_data_loaded)
         except json.JSONDecodeError:
             pass
+
+    # integers
     elif isinstance(json_data, np.int32) or isinstance(json_data, np.int64) or isinstance(json_data, np.uint8):
         return int(json_data)
-    elif isinstance(json_data, Decimal) or isinstance(json_data, np.float32) or isinstance(json_data, np.float64):
-        return float(json_data)
+    # floats
+    elif isinstance(json_data, float) or isinstance(json_data, Decimal) or isinstance(json_data, np.float32) or isinstance(json_data, np.float64):
+        # return float(json_data)
+        if "e" in str(json_data):
+            json_data = float("{:.4e}".format(json_data))
+        else:
+            json_data = float("{:.4f}".format(json_data))
+    # dictionaries
     elif isinstance(json_data, dict):
+        list_keys = []
+        non_list_keys = []
         for k, v in json_data.items():
-            json_data[k] = recursively_convert_json_to_object(v)
+            if isinstance(v, list):
+                list_keys.append(k)
+            else:
+                non_list_keys.append(k)
+
+        # move list keys to end of dictionary
+        json_data = {
+            # clean up keys
+            (
+                k.lower().replace(" ", "_")
+                if isinstance(k, str)
+                else k
+            ): recursively_convert_json_to_object(json_data[k])
+            for k in non_list_keys + list_keys
+        }
+    
+    # list
     elif isinstance(json_data, list):
         for i, json_record in enumerate(json_data):
             json_data[i] = recursively_convert_json_to_object(json_record)
@@ -379,11 +441,11 @@ def write_json(
             print ("COULD NOT CONVERT", e)
             pass
 
-    if clean:
-        data = recursively_convert_json_to_object(data)
+    # if clean:
+    #     data = recursively_convert_json_to_object(data)
 
     with open(json_filename, "w", encoding=encoding) as f:
-        json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii)
+        json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii, default=str)
 
     if verbose:
         print ("wrote json to", json_filename)
@@ -691,7 +753,6 @@ def read_smiles(
             print ("SMILES file is a csv file")
         smiles_df = pd.read_csv(smiles_filename, index_col=0)
 
-
     elif assume_clean_input:
         if verbose:
             print ("Assuming smiles file is well formatted using delimiter", delimiter)
@@ -716,13 +777,16 @@ def read_smiles(
         )
         
     smiles_df = smiles_df.loc[~pd.isnull(smiles_df[smiles_key])]
+    
     if verbose:
         print ("read", smiles_df.shape[0], "SMILES from file", smiles_filename)
+    
     if remove_invalid_molecules:
         if verbose:
             print ("removing invalid smiles")
         valid_idx = smiles_df[smiles_key].map(is_valid_smiles)
         smiles_df = smiles_df.loc[valid_idx]
+    
     if clean_molecules_with_rdkit:
         if verbose:
             print ("Cleaning molecules using RDKit")
@@ -745,89 +809,18 @@ def read_smiles(
         for mol, smi in smiles_df.items()
     ]
 
-def load_sparse_labels(
-    labels_filename: str,
+def move_contents_of_directory(
+    directory: str,
+    output_directory: str,
+    verbose: bool = False,
     ):
-    """Loads a matrix saved in npz format.
 
-    Parameters
-    ----------
-    labels_filename : str
-        The filename of the matrix to load
+    if verbose:
+        print ("Moving contents of directory", directory, "to directory", output_directory)
 
-    Returns
-    -------
-    scipy.sparse.csr_matrix
-        The matrix describing the labels.
-    """
-    print ("loading sparse labels from", labels_filename)
-    Y = sp.load_npz(labels_filename)
-    print ("labels shape is", Y.shape)
-    return Y # sparse format
+    for directory_contents in glob.iglob(os.path.join(directory, "*")):
+        move_file(directory_contents, output_directory, verbose=verbose)
 
-# def standardise_smi(smi, return_smiles=False):
-#     mol = Chem.MolFromSmiles(smi)
-#     if mol is None:
-#         if return_smiles:
-#             return smi 
-#         else:
-#             return mol
-#     try:
-#         from standardiser import standardise
-#         mol = standardise.run(mol)
-#     except standardise.StandardiseException as e:
-#         pass
-#     if return_smiles:
-#         return Chem.MolToSmiles(mol)
-#     else:
-#         return mol
-
-# def embed_2D_mol_in_3D(smi):
-#     assert smi is not None
-#     mol = Chem.MolFromSmiles(smi)
-#     mol_with_H = Chem.AddHs(mol)
-
-#     try:
-#         AllChem.EmbedMolecule(mol_with_H, useRandomCoords=False)
-#         AllChem.MMFFOptimizeMolecule(mol_with_H)
-#     except ValueError:
-#         AllChem.EmbedMolecule(mol_with_H,useRandomCoords=True)
-#         AllChem.MMFFOptimizeMolecule(mol_with_H)
-
-
-#     embedded_mol = Chem.RemoveHs(mol_with_H)
-#     return embedded_mol
-
-# def smiles_to_sdf(
-#     smiles_filename, 
-#     sdf_filename,
-#     filter_valid=False,
-#     standardise=True,
-#     embed=False):
-#     print ("converting smiles from", smiles_filename, 
-#         "to SDF file", sdf_filename)
-#     smiles_df = read_smiles(smiles_filename, remove_invalid_molecules=filter_valid)
-
-#     print ("num smiles:", smiles_df.shape[0])
-
-#     AddMoleculeColumnToFrame(smiles_df, 'SMILES', 'Molecule')
-#     molColName = "Molecule"
-
-#     if standardise:
-#         print ("standardising SMILES")
-#         smiles_df["MoleculeStandard"] = smiles_df["SMILES"].map(standardise_smi, na_action="ignore")
-#         smiles_df["SMILESStandard"] = smiles_df["MoleculeStandard"].map(Chem.MolToSmiles, na_action="ignore")
-#         molColName = "MoleculeStandard"
-
-#     if embed:
-#         print ("embedding SMILES into 3D")
-#         smiles_df["MoleculeEmbedded"] = smiles_df["SMILES"].map(embed_2D_mol_in_3D, na_action="ignore")
-#         molColName = "MoleculeEmbedded"
-
-#     smiles_df = smiles_df.loc[~pd.isnull(smiles_df[molColName])] # drop missing values
-#     print ("num SMILES remaining:", smiles_df.shape[0])
-#     WriteSDF(smiles_df, sdf_filename, molColName=molColName,
-#         idName="RowID", properties=list(smiles_df.columns))
 
 def copy_file(
     input_filename: str, 
@@ -927,7 +920,7 @@ def copy_directory(
         directory_to_copy_basename = os.path.basename(directory_to_copy)
         copy_to = os.path.join(copy_to, directory_to_copy_basename)
 
-    if not os.path.exists(copy_to): 
+    if os.path.isdir(directory_to_copy) and not os.path.exists(copy_to): 
         if verbose:
             print ("Copying directory", directory_to_copy, "to", copy_to)
         shutil.copytree(directory_to_copy, copy_to)   
@@ -1156,41 +1149,47 @@ def clean_up_molecule_names(
 
 #     return output_filename
 
-def read_xml_file_and_covert_to_dict(
-    xml_filename: str,
-    verbose: bool = False,
-    ):
-    """Use `xmltodict` library to parse xml file as dictionary.
+# def read_xml_file_and_covert_to_dict(
+#     xml_filename: str,
+#     verbose: bool = False,
+#     ):
+#     """Use `xmltodict` library to parse xml file as dictionary.
 
-    Parameters
-    ----------
-    xml_filename : str
-        Path of XML file to read
-    verbose : bool, optional
-        Flag to print updates to the console, by default False
+#     Parameters
+#     ----------
+#     xml_filename : str
+#         Path of XML file to read
+#     verbose : bool, optional
+#         Flag to print updates to the console, by default False
 
-    Returns
-    -------
-    dict
-        The data in the XML file, in dictionary form
-    """
-    if verbose:
-        print ("Reading xml file", xml_filename)
-    with open(xml_filename, "r",) as f:
-        xml_data = parse(f.read())
-    return xml_data
+#     Returns
+#     -------
+#     dict
+#         The data in the XML file, in dictionary form
+#     """
+#     if verbose:
+#         print ("Reading xml file", xml_filename)
+#     if xml_filename.endswith(".gz"):
+#         f = gzip.open(xml_filename)
+#     else:
+#         f = open(xml_filename)
+#     xml_data = parse(f.read())
+#     f.close()
+#     return xml_data
 
 if __name__ == "__main__":
     
     
-    smiles = read_smiles(
-        smiles_filename="checkme.smi",
-        return_list=True,
-        smiles_key="smiles",
-        molecule_identifier_key="molecule_id",
-    )
+    # smiles = read_smiles(
+    #     smiles_filename="checkme.smi",
+    #     return_list=True,
+    #     smiles_key="smiles",
+    #     molecule_identifier_key="molecule_id",
+    # )
 
-    print (smiles)
+    # print (smiles)
+
+    print (sanitise_filename("-*****.pdb"))
 
     # print (load_json("tnjogr"))
 

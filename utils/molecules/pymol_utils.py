@@ -128,7 +128,7 @@ def create_complex_with_pymol(
     cmd.reinitialize()
 
     if verbose:
-        print ("Writing complex containing", len(input_pdb_files), "structure(s)")
+        print ("Writing complex containing", len(input_pdb_files), "structure(s) to", output_pdb_filename)
 
     for input_pdb_file in input_pdb_files:
         if verbose:
@@ -152,7 +152,7 @@ def calculate_RMSD_pymol(
     model_filename: str,
     precision: int = 3,
     align: bool = False,
-    ensure_same_residues: bool = True,
+    ensure_same_residues: bool = False,
     remove_string: str = None,
     return_if_fail: float = None,
     verbose: bool = False,
@@ -483,7 +483,10 @@ if __name__ == "__main__":
     #         verbose=True
     #     )
 
-    create_complex_with_pymol(
-        ["multigrow_test_dir/preparation/prepared_targets/P49327/6NNA_A/6NNA_A_prepared_protonated_7.4.pdb", "docking_result.pdbqt"],
-        "my_complex.pdb",
-    )
+    # create_complex_with_pymol(
+    #     ["multigrow_test_dir/preparation/prepared_targets/P49327/6NNA_A/6NNA_A_prepared_protonated_7.4.pdb", "docking_result.pdbqt"],
+    #     "my_complex.pdb",
+    # )
+
+    print (calculate_RMSD_pymol("aspirin.pdb", "aspirin_2.pdb", align=False))
+    print (calculate_RMSD_pymol("aspirin.pdb", "aspirin_2.pdb", align=True))

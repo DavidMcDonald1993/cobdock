@@ -18,6 +18,7 @@ import signal
 from timeit import default_timer
 
 SUDO_PASSWORD = os.environ.get("SUDO_PASSWORD", "") 
+SHELL_EXECUTABLE = os.environ.get("SHELL_EXECUTABLE", "/bin/bash") 
 
 PROCESS_DIR = os.path.join(
     PROJECT_ROOT, 
@@ -145,15 +146,15 @@ def execute_system_command(
 
     if as_subprocess:
 
-        p = subprocess.Popen(cmd, shell=True, executable="/bin/bash", )
+        p = subprocess.Popen(cmd, shell=True, executable=SHELL_EXECUTABLE, )
         if verbose:
             print("Adding process ID", p.pid , "to running procs")
         running_procs.add(p)
         if main_job_id is not None:
             save_process_id(main_job_id, p.pid)
 
-        return_code = p.wait() # wait on completion of subprocess+
-        if verbose:
+        return_code = p.wait() # wait on completion of subprocess
+        if verbose: 
             print("Removing process ID", p.pid , "from running procs")
         running_procs.remove(p)    
         if main_job_id is not None:

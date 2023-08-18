@@ -503,6 +503,57 @@ def download_pdb_structure_using_pdb_fetch(
         return None 
     return pdb_filename
 
+def create_complex_with_pdb_merge(
+    input_pdb_files: list,
+    output_pdb_filename: str,
+    verbose: bool = False,
+    ):
+    """Use pdb-tools to combine multiple PDB files into one complex file.
+
+    Parameters
+    ----------
+    input_pdb_files : list
+        A list of PDB files to combine into a complex
+    output_pdb_filename : str
+        The path to save the resulting complex to
+    verbose : bool, optional
+        Flag to print updates to the console, by default False
+
+    Returns
+    -------
+    str
+        Path of the resulting complex
+    """
+    if verbose:
+        print ("Writing complex containing", len(input_pdb_files), "structure(s) to", output_pdb_filename)
+
+    # ensure all input files are pdb format (check extension)
+    input_pdb_files = [
+        input_pdb_file
+        if input_pdb_file.endswith(".pdb")
+        else obabel_convert(
+            input_filename=input_pdb_file,
+            output_format="pdb",
+            verbose=verbose,
+        )
+        for input_pdb_file in input_pdb_files
+    ]
+    
+    # convert to string 
+    input_pdb_files = " ".join(input_pdb_files)
+
+    # sorting causes some issue
+    # cmd = f"pdb_merge {input_pdb_files} | pdb_sort | pdb_tidy -strict > {output_pdb_filename}"
+    cmd = f"pdb_merge {input_pdb_files} | pdb_tidy -strict > {output_pdb_filename}"
+    try:
+        # 1 minute timeout
+        execute_system_command(cmd, timeout="1m", verbose=verbose)
+    except Exception as e:
+        print ("pdb_merge exception", e)
+        return None 
+    
+    return output_pdb_filename
+
 def download_pdb_file_using_biopython(
     pdb_id: str, 
     download_dir: str,
@@ -1448,7 +1499,8 @@ def get_all_natural_ligands_from_pdb_file(
                         mol_path=ligand_filename, 
                         geometric=True,
                         precision=3,
-                        verbose=verbose)
+                        verbose=verbose,
+                    )
                 except Exception as e:
                     center_x, center_y, center_z = None, None, None 
 
@@ -1456,7 +1508,7 @@ def get_all_natural_ligands_from_pdb_file(
                     ligand_filename, 
                     allowance=None,
                     verbose=verbose,
-                    )
+                )
 
                 # determine location of atoms 
                 atom_centers = []
@@ -1608,7 +1660,7 @@ def load_scoria_molecule(
 
     return scoria.Molecule(mol_path)
     
-def define_target_binding_site_using_biopython(
+def define_target_bounding_box_using_biopython(
     pdb_filename: str,
     scale: float = 1.0,
     precision: int = 3,
@@ -2223,6 +2275,21 @@ def download_all_pdbs(
 
 
 if __name__ == "__main__":
+
+    create_complex_with_pdb_merge(
+        # ["../aiengine/6nna_clean.pdb", "test_compounds/aspirin.pdb"],
+        # ["../aiengine/6nna_clean.pdb", "test_compounds/aspirin.pdbqt"][::-1],
+        [
+            "hit_optimisation_test/4f22dcda9f0c17922ed32ea48918e636_230817083421/poses/6NNA_A/baicalein.pdb", 
+            "hit_optimisation_test/4f22dcda9f0c17922ed32ea48918e636_230817083421/receptors/6NNA_A.pdb",
+        ],
+        # ["../aiengine/1htp.pdb", "test_compounds/aspirin.pdb"],
+        output_pdb_filename="checkme_6nna.pdb",
+        # output_pdb_filename="checkme_1htp.pdb",
+        verbose=True,
+    )
+
+    raise Exception
 
 
     # download_all_pdbs()

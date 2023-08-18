@@ -223,9 +223,15 @@ def execute_reverse_docking_vina(
             ligand_pdb_filename = task_data["ligand_pdb_filename"]
             prepared_target_filename = task_data["prepared_target_filename"]
 
-            output_filename, log_json_filename = running_task.result()
+            output_filename_log_json_filename = running_task.result()
 
             del running_tasks[running_task]
+
+            # handle missing vina / task fail
+            if output_filename_log_json_filename is None:
+                continue
+
+            output_filename, log_json_filename = output_filename_log_json_filename
 
             # begin collation of poses
             # check that Vina ran for target

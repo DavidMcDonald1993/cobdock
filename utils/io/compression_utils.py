@@ -112,14 +112,19 @@ def make_zip_archive(
 
 if __name__ == "__main__":
 
-    make_compressed_tarball(
-        compressed_tarball_path="checkme.tar.gz",
-        source_dir="utils/io",
-        exclude=["pose_ranking","pockets"],
-    )
+    # make_compressed_tarball(
+    #     compressed_tarball_path="checkme.tar.gz",
+    #     source_dir="utils/io",
+    #     exclude=["pose_ranking","pockets"],
+    # )
 
     # make_zip_archive(
     #     "checkme",
     #     source_dir="utils/io/",
     #     verbose=True,
     # )
+
+    # test gzip
+    extract_compressed_tarball(
+        
+    )

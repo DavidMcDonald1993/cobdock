@@ -19,10 +19,10 @@ from utils.io.io_utils import sanitise_filename, read_smiles, delete_file, write
 from utils.molecules.rdkit_utils import smiles_to_SDF_3D_rdkit_single_molecule
 
 def obabel_convert(
-    input_format: str,
     input_filename: str, 
-    output_format: str,
+    input_format: str = None,
     output_filename: str = None,
+    output_format: str = None,
     multiple: bool = False,
     output_dir: str = None,
     gen_3d: bool = False,
@@ -539,7 +539,10 @@ def convert_3D_to_smiles(
 #     if output_filename is not None:
 #         cmd += f" > {output_filename}"
 
-#     execute_system_command(cmd)
+#     try:
+#         os.system(cmd)
+#     except:
+#         pass 
 
 #     rmsd = return_if_fail
 #     if output_filename is not None:
@@ -560,7 +563,6 @@ def convert_3D_to_smiles(
 #     rmsd = min(return_if_fail, rmsd)
 #     print ("OBTAINED RMSD", rmsd)
 #     return rmsd
-
 
 if __name__ == "__main__":
 
@@ -606,13 +608,16 @@ if __name__ == "__main__":
     #     desired_output_filename="test_compounds/DB03403.mol2"
     # )
 
-    import glob
-    input_poses = glob.glob("drug_safety_MRGPRX1_ensemble_new/psovina/4/0/True/local_docking/Q96LB2/8DWC/binding_site_1/*/psovina/poses/pose_1.pdb")
+    # import glob
+    # input_poses = glob.glob("drug_safety_MRGPRX1_ensemble_new/psovina/4/0/True/local_docking/Q96LB2/8DWC/binding_site_1/*/psovina/poses/pose_1.pdb")
 
-    obabel_convert(
-        input_format=None,
-        input_filename=input_poses,
-        output_format="mol2",
-        output_filename="checkme.mol2",
-        verbose=True,
-    )
+    # obabel_convert(
+    #     input_format=None,
+    #     input_filename=input_poses,
+    #     output_format="mol2",
+    #     output_filename="checkme.mol2",
+    #     verbose=True,
+    # )
+
+
+    print (calculate_RMSD_obabel("aspirin_2.pdb", "aspirin.pdb"))

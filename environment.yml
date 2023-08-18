@@ -17,4 +17,5 @@ dependencies:
   - python-dotenv
   - pyarrow
   - fpocket
+  - pdbfixer
 prefix: /home/david/miniconda3/envs/cobdock-env

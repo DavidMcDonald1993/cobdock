@@ -28,7 +28,8 @@ def prepare_data_for_ajax(
 
 def get_request_handle(
     request,
-    copy: bool = False
+    copy: bool = False,
+    as_dict: bool = False,
     ):
     """Obtain the handle of a request
     Parameters
@@ -57,6 +58,11 @@ def get_request_handle(
 
     if copy:
         return request_handle.copy()
+    if as_dict:
+        return {
+            k: v
+            for k, v in request_handle.items()
+        }
     return request_handle
 
 def handle_json_request(
@@ -226,7 +232,7 @@ def make_get_request(
     stream: bool = False,
     max_retries: int = 5,
     sleep_duration: int = 100,
-    allowed_status_codes: set = {200},
+    allowed_status_codes: set = {200,},
     verbose: bool = False,
     ):
     """A simple function to make a GET request, with retrying if an error is encountered.
@@ -259,7 +265,7 @@ def make_get_request(
             if retry_num > 0:
                 sleep(sleep_duration)
             if verbose:
-                print ("Making GET request to URL", url, "and params", params)
+                print ("Making GET request to URL", url, "and params", list(params))
             response = requests.get(url, params=params, stream=stream, headers=headers)
             status_code = response.status_code
             if verbose:
@@ -409,7 +415,7 @@ def make_http_request(
 
     method = method.upper()
     if verbose:
-        print ("Making", method, "request to URL", url, "with params", params)
+        print ("Making", method, "request to URL", url, "with params", list(params))
     if isinstance(params, dict):
         # json encode any lists or dicts?
         for param_name in params:
@@ -601,13 +607,15 @@ if __name__ == "__main__":
 
 
     # response = make_get_request(
-    #     url="http://localhost:8000/pdb/rank",
+    #     url="http://localhost:8000/natural_products/families",
     #     params={
     #         "accessions": json.dumps(["P09874", ]),
     #     },
     #     max_retries=1,
     #     verbose=True,
     # )
+
+    # raise Exception(response.text)
 
     molecule_smiles  = [ 
         {
@@ -622,7 +630,7 @@ if __name__ == "__main__":
             "molecule_id": "Olaparib",
             "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
         }
-    ][:1]
+    ]
 
     pdb_targets = ["1htp"]
 
@@ -634,42 +642,116 @@ if __name__ == "__main__":
         # url="http://47.102.129.50:80/natural_products/gene_ontology_enrichment",
         # url="http://localhost:8080/natural_products/gene_ontology_enrichment",
         # url="http://localhost:8000/hit-optimisation",
+        # url="http://localhost:8080/target-text-mining",
+        # url="http://localhost:8080/bioavailability-predict/",
+        # url="http://localhost:8080/natural_products/api/compounds/all_species",
+        # url="http://localhost:8080/drug-synergy-prediction/",
+        # url="http://47.102.129.50:80/natural_products/superkingdoms",
         # url="http://localhost:8000/natural_products/superkingdoms",
+        # url="http://localhost:8000/natural_products/chembl_targets",
+        # url="http://localhost:8000/natural_products/search",
+        # url="http://localhost:8000/natural_products/single_protein_targets",
+        # url="http://localhost:8000/natural_products/chembl_targets",
+        # url="http://localhost:8000/natural_products/pathways",
+        # url="http://localhost:8000/natural_products/drugs",
+        # url="http://localhost:8000/natural_products/diseases",
         # url="http://localhost:8000/natural_products/species",
         # url="http://localhost:8000/natural_products/organisms",
         # url="http://localhost:8000/natural_products/search",
         # url="http://localhost:8000/natural_products/species_names",
         # url="http://localhost:8000/natural_products/scaffolds",
         # url="http://localhost:8000/natural_products/cluster",
+        # url="http://localhost:8080/natural_products/np_pathways",
         # url="http://localhost:8000/natural_products/single_protein_targets/all",
         # url="http://localhost:8000/natural_products/single_protein_targets/info",
-        url="http://localhost:8000/natural_products/single_protein_targets/screen",
+        # url="http://localhost:8000/natural_products/single_protein_targets/screen",
+        # url="http://localhost:8000/natural_products/single_protein_targets/pathways",
+        # url="http://localhost:8000/natural_products/single_protein_targets/drugs",
+        # url="http://localhost:8000/natural_products/single_protein_targets/diseases",
+        # url="http://localhost:8000/natural_products/diseases/all",
+        # url="http://localhost:8080/natural_products/diseases/screen",
+        # url="http://localhost:8080/natural_products/diseases/screen_species",
+        url="http://localhost:8080/natural_products/diseases/screen_food",
+        # url="http://localhost:8000/natural_products/diseases/drugs",
+        # url="http://localhost:8000/natural_products/diseases/pathways",
+        # url="http://localhost:8000/natural_products/drugs/all",
+        # url="http://localhost:8000/natural_products/drugs/classes",
+        # url="http://localhost:8000/natural_products/drugs/screen",
+        # url="http://localhost:8000/natural_products/drugs/single_protein_targets",
+        # url="http://localhost:8000/natural_products/drugs/diseases",
+        # url="http://localhost:8000/natural_products/pathways/all",
+        # url="http://localhost:8000/natural_products/pathways/single_protein_targets",
+        # url="http://localhost:8000/natural_products/pathways/drugs",
+        # url="http://localhost:8000/natural_products/pathways/diseases",
+        # url="http://localhost:8000/natural_products/reactions/all",
+        # url="http://localhost:8000/natural_products/reactions/screen",
+        # url="http://localhost:8080/natural_products/herb_analysis",
+        # url="http://localhost:8080/molecule/properties",
+        # url="http://47.102.129.50:80/natural_products/herb_analysis",
+        # url="http://47.102.129.50:80/np-classify/",
         # url="http://localhost:8000/natural_products/pathway_enrichment",
         # url="http://localhost:8000/natural_products/cancer_enrichment",
         # url="http://localhost:8000/natural_products/reactions/all",
         # url="http://localhost:8000/natural_products/pathway_enrichment",
         # url="http://localhost:8000/toxicity-predict/",
+        # url="http://localhost:5000/prediction/",
         params={
             # "small_molecule_ids": [14060, 20239],
             # "log_p_lt": 3,
             # "log_p_gt": 2.9,
             # "molecular_weight_lt": 300,
             # "molecular_weight_gt": 295,
-            "gene-list": gene_names,
-            "genus": "Homo",
+            # "gene-list": gene_names,
+            # # "genus": "Homo",
             # "genus": "Aconitum",
+            # "species": ["Aconitum carmichaelii", "Aconitum napellus", "Isodon serra"],
+            # "small_molecule_filter": "lipinski_filter",
+            "disease_names": ["Heart failure", "Neoplasms"],
+            # "return_format": "graph",
+            # "return_format": "cytoscape",
+            # "return_format": "table",
             # "chinese_species_name": "乌头",
-            "chinese_only": True,
-            # "columns": ["small_molecule_id", "smiles"],
-            # "natural_product_ids": ["CNP0114535", ],
+            # "molecule_ids": ["aspirin"],
+            # "drug_pairs": [
+            #     [
+            #         {
+            #             "molecule_id": "aspirin",
+            #             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
+            #         },
+            #         {
+            #             "molecule_id": "ibuprofen",
+            #             "smiles": "CC(C)CC1=CC=C(C=C1)C(C)C(=O)O",
+            #         }
+            #     ],
+            # ],
+            # "text": [
+            #     "Withaferin-A is a withanolide, predominantly present in Ashwagandha (Withania somnifera). It has been shown to possess anticancer activity in a variety of human cancer cells in vitro and in vivo. Molecular mechanism of such cytotoxicity has not yet been completely understood. Withaferin-A and Withanone were earlier shown to activate p53 tumor suppressor and oxidative stress pathways in cancer cells. 2,3-dihydro-3beta-methoxy analogue of Withaferin-A (3betamWi-A) was shown to lack cytotoxicity and well tolerated at higher concentrations. It, on the other hand, protected normal cells against oxidative, chemical and UV stresses through induction of anti-stress and pro-survival signaling. We, in the present study, investigated the effect of Wi-A and 3betamWi-A on cell migration and metastasis signaling. Whereas Wi-A binds to vimentin and heterogeneous nuclear ribonucleoprotein K (hnRNP-K) with high efficacy and downregulates its effector proteins, MMPs and VEGF, involved in cancer cell metastasis, 3betamWi-A was ineffective. Consistently, Wi-A, and not 3betamWi-A, caused reduction in cytoskeleton proteins (Vimentin, N-Cadherin) and active protease (u-PA) that are essential for three key steps of cancer cell metastasis (EMT, increase in cell migration and invasion).",
+            #     "Withaferin-A is a withanolide, predominantly present in Ashwagandha (Withania somnifera). It has been shown to possess anticancer activity in a variety of human cancer cells in vitro and in vivo. Molecular mechanism of such cytotoxicity has not yet been completely understood. Withaferin-A and Withanone were earlier shown to activate p53 tumor suppressor and oxidative stress pathways in cancer cells. 2,3-dihydro-3beta-methoxy analogue of Withaferin-A (3betamWi-A) was shown to lack cytotoxicity and well tolerated at higher concentrations. It, on the other hand, protected normal cells against oxidative, chemical and UV stresses through induction of anti-stress and pro-survival signaling. We, in the present study, investigated the effect of Wi-A and 3betamWi-A on cell migration and metastasis signaling. Whereas Wi-A binds to vimentin and heterogeneous nuclear ribonucleoprotein K (hnRNP-K) with high efficacy and downregulates its effector proteins, MMPs and VEGF, involved in cancer cell metastasis, 3betamWi-A was ineffective. Consistently, Wi-A, and not 3betamWi-A, caused reduction in cytoskeleton proteins (Vimentin, N-Cadherin) and active protease (u-PA) that are essential for three key steps of cancer cell metastasis (EMT, increase in cell migration and invasion).",
+            #     "Withaferin-A is a withanolide, predominantly present in Ashwagandha (Withania somnifera). It has been shown to possess anticancer activity in a variety of human cancer cells in vitro and in vivo. Molecular mechanism of such cytotoxicity has not yet been completely understood. Withaferin-A and Withanone were earlier shown to activate p53 tumor suppressor and oxidative stress pathways in cancer cells. 2,3-dihydro-3beta-methoxy analogue of Withaferin-A (3betamWi-A) was shown to lack cytotoxicity and well tolerated at higher concentrations. It, on the other hand, protected normal cells against oxidative, chemical and UV stresses through induction of anti-stress and pro-survival signaling. We, in the present study, investigated the effect of Wi-A and 3betamWi-A on cell migration and metastasis signaling. Whereas Wi-A binds to vimentin and heterogeneous nuclear ribonucleoprotein K (hnRNP-K) with high efficacy and downregulates its effector proteins, MMPs and VEGF, involved in cancer cell metastasis, 3betamWi-A was ineffective. Consistently, Wi-A, and not 3betamWi-A, caused reduction in cytoskeleton proteins (Vimentin, N-Cadherin) and active protease (u-PA) that are essential for three key steps of cancer cell metastasis (EMT, increase in cell migration and invasion).",
+            # ],
+            # "molecules": molecule_smiles,
+            # "chinese_only": True,
+            # # "columns": ["small_molecule_id", "smiles"],
+            # # "natural_product_ids": ["CNP0114535", ],
             # "diseases": ["Retinoblastoma", ],
-            # "language_code": "zh_Hans",
-            "accession": ["P09874"],
-            # "pathways": ["G1 Phase"],
-            # "drug_ids": ["D00AAN", ],
+            # # "language_code": "zh_Hans",
+            # "accession": ["P09874"],
+            # "herb_species_names": [
+            #     # "Aconitum Carmichaelii", 
+            #     "Aconitum Ferox", "Aconitum Taipeicum", "",
+            # ],
+            # # "herb_chinese_species_names": ["乌头", ],
+            # "cluster_small_molecules_in_analysis_network": True,
+            # "keep_entire_cluster_predictions_only": True,
+            # # "target_types": "OTHER TARGET TYPES",
+            # "target_types": ["PROTEIN COMPLEX", "CELL-LINE"],
+            # # "pathways": ["G1 Phase"],
+            # "drug_ids": ["D0C9XA", ], # legacy handling
+            # "pathways": ["Respiratory electron transport",],
+            # "reactions": ["β3-agonists bind ADRB3",],
             # "name_like": "gink",
             # "summarise": True,
-            # "supplied_mols": json.dumps(molecule_smiles),
+            # "molecules": json.dumps(molecule_smiles),
             # "pdb_targets": json.dumps(pdb_targets),
             # "population_size": 50,
             # "number_of_generations": 2,
@@ -680,4 +762,4 @@ if __name__ == "__main__":
         verbose=True,
     )
 
-    write_json(json.dumps(response.text), "checkme.json", verbose=True)
+    write_json(json.loads(response.text), "checkme.json", verbose=True)

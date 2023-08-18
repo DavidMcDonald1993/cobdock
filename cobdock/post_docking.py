@@ -182,7 +182,6 @@ def execute_all_final_local_docking(
             accession = task_data["accession"]
             pdb_id = task_data["pdb_id"]
             pocket_num = task_data["pocket_num"]
-            # ligand_pdb_filename = task_data["ligand_pdb_filename"]
             prepared_target_filename = task_data["prepared_target_filename"]
 
             # prepare all_local_docking_collated_data
@@ -195,9 +194,15 @@ def execute_all_final_local_docking(
             if pocket_num not in all_local_docking_collated_data[ligand_id][accession][pdb_id]:
                 all_local_docking_collated_data[ligand_id][accession][pdb_id][pocket_num] = {}
 
-            output_filename, log_json_filename = running_task.result()
+            output_filename_log_json_filename = running_task.result()
 
             del running_tasks[running_task]
+            
+            # handle missing vina / task fail
+            if output_filename_log_json_filename is None:
+                continue
+
+            output_filename, log_json_filename = output_filename_log_json_filename
 
             # begin collation of poses
             # check that Vina ran for target
@@ -291,6 +296,7 @@ def execute_post_docking(
     num_poses: int = 10,
     num_complexes: int = 1,
     top_pocket_distance_threshold: float = 3,
+    local_docking_program: str = "vina",
     local_docking_n_proc: int = 5, 
     verbose: bool = True,
     ):
@@ -423,6 +429,7 @@ def execute_post_docking(
         output_directory=local_docking_output_dir,
         num_poses=num_poses,
         num_complexes=num_complexes,
+        local_docking_program=local_docking_program,
         n_proc=local_docking_n_proc,
         verbose=verbose,
     )
