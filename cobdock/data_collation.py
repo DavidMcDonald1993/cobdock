@@ -86,7 +86,7 @@ def compute_closest_pockets(
                     selected_target_pose_id = sorted_target_pose_ids[0]
 
                     closest_pocket_data = {
-                        "closest_pose_id": selected_target_pose_id,
+                        "min_pose_id": selected_target_pose_id,
                         "distance": np.nan,
                         **target_data_ligand_accession_pdb_id[selected_target_pose_id] # return all data
                     }
@@ -134,12 +134,12 @@ def compute_closest_pockets(
                     
                     for i, (source_pose_id, min_dist_id) in enumerate(zip(sorted_source_pose_ids, min_dist_ids)):
                         min_dist = dists[i, min_dist_id]
-                        closest_pose_id = sorted_target_pose_ids[min_dist_id]
+                        min_pose_id = sorted_target_pose_ids[min_dist_id]
                         
                         closest_pocket_data = {
-                            "closest_pose_id": closest_pose_id,
+                            "min_pose_id": min_pose_id,
                             "distance": min_dist,
-                            **target_data_ligand_accession_pdb_id[closest_pose_id] # return all data
+                            **target_data_ligand_accession_pdb_id[min_pose_id] # return all data
                         }
 
                         pocket_minimum_pairwise_distances[ligand_id][accession][pdb_id][source_pose_id] = closest_pocket_data
@@ -155,6 +155,9 @@ def assign_pose_pocket_to_closest_voxel(
     ):
 
     count_attribute_name = f"number_{attribute_name}"
+
+    attribute_name = "sampled_pose_" + attribute_name
+    count_attribute_name = "sampled_pose_" + count_attribute_name
 
     # return this 
     voxel_pose_pockets = {}
@@ -341,6 +344,9 @@ def extract_target_data_from_ligands_to_targets_data_structure(
 def collate_all_data(
     ligands_to_targets: dict,
     output_dir: str,
+
+    commercial_use_only: bool,
+
     all_target_natural_ligands_filename: str,
     fpocket_data_filename: str,
     p2rank_data_filename: str,
@@ -348,6 +354,7 @@ def collate_all_data(
     galaxydock_data_filename: str,
     plants_data_filename: str,
     zdock_data_filename: str,
+
     maximum_bounding_box_volume: float = 100**3,
     skip_if_complete: bool = True,
     delete_output_directory: bool = False,
@@ -415,43 +422,48 @@ def collate_all_data(
         verbose=verbose,
     )
 
+    if not commercial_use_only:
 
-    galaxydock_data = execute_reverse_docking_galaxydock(
-        ligands_to_targets=ligands_to_targets,
-        output_dir=output_dir,
-        collated_data_filename=galaxydock_data_filename,
-        maximum_bounding_box_volume=maximum_bounding_box_volume,
-        skip_if_complete=skip_if_complete,
-        delete_output_directory=delete_output_directory,
-        compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
-        num_complexes=num_complexes,
-        verbose=verbose,
-    )
+        galaxydock_data = execute_reverse_docking_galaxydock(
+            ligands_to_targets=ligands_to_targets,
+            output_dir=output_dir,
+            collated_data_filename=galaxydock_data_filename,
+            maximum_bounding_box_volume=maximum_bounding_box_volume,
+            skip_if_complete=skip_if_complete,
+            delete_output_directory=delete_output_directory,
+            compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
+            num_complexes=num_complexes,
+            verbose=verbose,
+        )
 
-    plants_data = execute_reverse_docking_plants(
-        ligands_to_targets=ligands_to_targets,
-        output_dir=output_dir,
-        collated_data_filename=plants_data_filename,
-        maximum_bounding_box_volume=maximum_bounding_box_volume,
-        skip_if_complete=skip_if_complete,
-        delete_output_directory=delete_output_directory,
-        compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
-        num_complexes=num_complexes,
-        verbose=verbose,
-    )
+        plants_data = execute_reverse_docking_plants(
+            ligands_to_targets=ligands_to_targets,
+            output_dir=output_dir,
+            collated_data_filename=plants_data_filename,
+            maximum_bounding_box_volume=maximum_bounding_box_volume,
+            skip_if_complete=skip_if_complete,
+            delete_output_directory=delete_output_directory,
+            compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
+            num_complexes=num_complexes,
+            verbose=verbose,
+        )
 
-    zdock_data = execute_reverse_docking_zdock(
-        ligands_to_targets=ligands_to_targets,
-        output_dir=output_dir,
-        collated_data_filename=zdock_data_filename,
-        maximum_bounding_box_volume=maximum_bounding_box_volume,
-        skip_if_complete=skip_if_complete,
-        delete_output_directory=delete_output_directory,
-        compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
-        num_complexes=num_complexes,
-        verbose=verbose,
-    )
+        zdock_data = execute_reverse_docking_zdock(
+            ligands_to_targets=ligands_to_targets,
+            output_dir=output_dir,
+            collated_data_filename=zdock_data_filename,
+            maximum_bounding_box_volume=maximum_bounding_box_volume,
+            skip_if_complete=skip_if_complete,
+            delete_output_directory=delete_output_directory,
+            compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
+            num_complexes=num_complexes,
+            verbose=verbose,
+        )
 
+    else:
+        galaxydock_data = {}
+        plants_data = {}
+        zdock_data = {}
 
     #######################################################################
     
@@ -480,20 +492,6 @@ def collate_all_data(
         ):
             is_molecular_docking_program = algorithm_name not in {"fpocket", "p2rank", "natural_ligand"}
 
-            # if verbose:
-            #     print ("Collating data for algorithm:", algorithm_name)
-            #     print ("Is molecular docking program", is_molecular_docking_program)
-            
-            # assign closest pose/pocket to all voxel
-
-            # compute_closest_pockets(
-            #     algorithm_name=algorithm_name,
-            #     source_data=all_ligand_target_voxels,
-            #     target_data=algorithm_pockets_poses,
-            #     is_molecular_docking_program=is_molecular_docking_program,
-            #     verbose=verbose,
-            # )
-
             task = p.submit(
                 compute_closest_pockets,
                 algorithm_name=algorithm_name,
@@ -507,14 +505,6 @@ def collate_all_data(
                 "algorithm_name": algorithm_name,
                 "task_name": "closest",
             }
-
-            # assign_pose_pocket_to_closest_voxel(
-            #     all_ligand_target_voxels=all_ligand_target_voxels,
-            #     computed_poses=algorithm_pockets_poses,
-            #     attribute_name=f"{algorithm_name}_poses_at_location",
-            #     is_molecule_docking_program=is_molecular_docking_program,
-            #     verbose=verbose,
-            # )
 
             # also update voxels with counts of all poses/pockets inside the voxel
             task = p.submit(
@@ -630,7 +620,7 @@ def collate_all_data(
                     if pd.isnull(fpocket_distance) and pd.isnull(p2rank_distance):
                         # use voxel location 
                         selected_pocket_program = "voxel"
-                        selected_pocket_closest_pose_id = np.nan
+                        selected_pocket_min_pose_id = np.nan
                         selected_pocket_distance = np.nan
                     else:
                         # missing fpocket or p2rank is closer
@@ -639,13 +629,13 @@ def collate_all_data(
                             selected_pocket_program = "p2rank"
                         else:
                             selected_pocket_program = "fpocket"
-                        selected_pocket_closest_pose_id = int(all_aggregated_voxel_data[f"{selected_pocket_program}_closest_pose_id"])
+                        selected_pocket_min_pose_id = int(all_aggregated_voxel_data[f"{selected_pocket_program}_min_pose_id"])
                         selected_pocket_distance = all_aggregated_voxel_data[f"{selected_pocket_program}_distance"]
 
 
                     selected_pocket_program_data = {
                         "selected_pocket_program": selected_pocket_program,
-                        "selected_pocket_closest_pose_id": selected_pocket_closest_pose_id,
+                        "selected_pocket_min_pose_id": selected_pocket_min_pose_id,
                         "selected_pocket_distance": selected_pocket_distance,
                         # add location of selected pocket
                         **{

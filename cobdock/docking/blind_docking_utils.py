@@ -16,7 +16,6 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from itertools import product
 
 # from utils.molecules.openbabel_utils import obabel_convert
-from utils.molecules.pymol_utils import create_complex_with_pymol
 from utils.molecules.pdb_utils import (
     get_number_of_models_in_pdb_file,
     # identify_centre_of_mass, 
@@ -38,7 +37,7 @@ from utils.molecules.pdb_utils import (
     define_target_bounding_box_using_biopython
     )
 from utils.molecules.openbabel_utils import obabel_convert, smiles_to_3D
-from utils.molecules.pymol_utils import convert_to_ligand, create_complex_with_pymol
+from utils.molecules.pymol_utils import convert_to_ligand, create_complex_with_pymol, cleanup_with_pymol
 from utils.io.io_utils import (
     copy_file, 
     delete_directory, 
@@ -54,15 +53,9 @@ from utils.io.io_utils import (
     read_smiles,
     )
 from utils.rank_aggregation import perform_rank_aggregation
-# from utils.uniprot_utils import map_PDB_ID_to_uniprot_accession
-from utils.molecules.pymol_utils import cleanup_with_pymol
 from utils.molecules.protonation_utils import protonate_pdb
 from utils.alphafold_utils import download_alphafold_structure
-# from utils.oddt_utils import compute_ifp_using_oddt, read_protein
 
-# from ai_blind_docking.alphafold_utils import download_alphafold_structure
-
-# from ai_blind_docking.docking_utils.foldx_utils import run_foldx
 from cobdock.binding_site_identification.fpocket.fpocket_utils import run_fpocket_and_collate_single_target
 from cobdock.binding_site_identification.p2rank.p2rank_utils import run_p2rank_and_collate_single_target
 
@@ -2161,7 +2154,7 @@ def prepare_single_target(
                     continue
                 pocket_ids_to_delete = []
                 for pocket_id in target_data[pocket_location_key]:
-                    if pocket_id is None or pocket_id is "null":
+                    if pocket_id is None or pocket_id == "null":
                         continue
                     pocket_id_int = int(pocket_id)
                     if pocket_id_int > max_pockets_to_keep:

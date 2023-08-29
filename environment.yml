@@ -1,21 +1,18 @@
-name: cobdock-env
+name: cobdock-autogluon-env-mamba
 channels:
   - conda-forge
   - schrodinger
 dependencies:
   - pymol-bundle
+  - autogluon=0.8.0
+  - scikit-learn=1.1.2
+  - python=3
   - pandas
-  - python=3.7
-  - xmltodict
-  - numpy
-  - openbabel
-  - scipy
-  - rdkit
-  - scikit-learn=1.0.2
-  - biopython
-  - matplotlib
-  - python-dotenv
   - pyarrow
+  - openbabel
+  - biopython
+  - python-dotenv
   - fpocket
   - pdbfixer
-prefix: /home/david/miniconda3/envs/cobdock-env
+  - rdkit
+prefix: /home/david/miniconda3/envs/cobdock-autogluon-env-mamba

@@ -24,7 +24,7 @@ def fix_pdb_file_with_pdbfixer(
     keep_heterogens: str = "none", # all/water/none
     replace_nonstandard_residues: bool = True,
     add_missing_residues: bool = True,
-    pH: float = 7.0,
+    pH: float = 7.4,
     # check out the documentation for waterbox options (for MD)
     verbose: bool = True,
     ):

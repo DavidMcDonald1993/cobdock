@@ -1,0 +1,4 @@
+scoria==1.0.5
+pdb-tools==2.5.0
+kbutil @ git+https://github.com/thelahunginjeet/kbutil
+pyrankagg @ git+https://github.com/thelahunginjeet/pyrankagg 

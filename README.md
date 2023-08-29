@@ -1,25 +1,31 @@
-# Reference Implementation of COBDock algorithm
-This readme file documents all of the required steps to run COBDock.
+# Reference Implementation of CoBDock algorithm
+This readme file documents all of the required steps to run CoBDock.
 
 Note that code was implemented and tested on a Linux operating system only.
 
 ## How to set up environment
 We have provided an Anaconda environment file for easy set up.
 If you do not have Anaconda installed, you can get Miniconda from [here](https://docs.conda.io/en/latest/miniconda.html).
+
+Then, install `mamba`:
+```bash
+conda install -c conda-forge mamba
+```
 Create the `cobdock-env` environment using the following command:
 ```bash
-conda env create -n cobdock-env -f environment.yml
-conda activate cobdock-env
+mamba env create -n cobdock-env -f environment.yml
+mamba activate cobdock-env
 ```
 Then, install additional packages with pip using the following command:
 ```bash
-pip install pdb-tools scoria
-pip install git+https://github.com/thelahunginjeet/kbutil
-pip install git+https://github.com/thelahunginjeet/pyrankagg 
+pip install -r requirements.txt
 ```
 
 ## Required external programs
-Before running COBDock, one will first need to download and prepare all of the molecular docking and pocket identification algorithms.
+Before running CoBDock, one will first need to download and prepare all of the molecular docking and pocket identification algorithms.
+
+Please note that if any programs are missing, then the corresponding values will be filled using mean value imputation. 
+
 Before downloading, prepare a `./bin` folder using the following commands:
 
 ```bash
@@ -87,33 +93,40 @@ To set the timeout to 30 minutes, change the timeout to "30m".
 To set the timeout to 10 seconds, change the timeout to "10s".
 
 
-### Running the COBDock pipeline
+### Running the CoBDock pipeline
 Run the following command:
 
 ```bash
 python cobdock/run_cobdock.py
 ```
-to execute COBDock for aspirin and Uniprot target P23219. Crystal structures will be selected and prepared automatically. 
-If the run is successful, ``COBDock successfully completed`` will be printed to the console.
+to execute CoBDock for aspirin and Uniprot target P23219. Crystal structures will be selected and prepared automatically. 
+If the run is successful, ``CoBDock successfully completed`` will be printed to the console.
 Please allow some time for a run to complete as some molecular docking algoritms can take some time. 
 
 
 ### All input arguments explained
-The primary function to run COBDock is `execute_cobdock` in the file `./cobdock/run_cobdock.py`.
+The primary function to run CoBDock is `execute_cobdock` in the file `./cobdock/run_cobdock.py`.
 This function has the following input arguments:
 
     * ligands_to_targets: a data structure mapping ligand IDs and structures to target lists.  
-    * output_dir: directory to execute COBDock in. 
+    * output_dir: directory to execute CoBDock in. 
     * map_uniprot_to_pdb: boolean flag to indicate that the targets given in the ligands_to_targets data structure are Uniprot accession IDs. Must be set to `False` if the input targets are given as PDB IDs.
     * number_of_pdb: the number of crystal structures to select for each Uniprot target. Has no effect when map_uniprot_to_pdb is set to `False`.
     * num_top_pockets: the number of top-ranked pockets to dock into.
     * num_poses: the number of poses to generate at each of the top ranked pockets. The total number of poses will be num_top_pockets * num_poses.
     * num_complexes: the number of top poses to convert into complexes by combining with the structure of the target.
 
+### Running the `commercial_use` model
+Set 
+```python
+commercial_use_only = True 
+```
+in `./cobdock/run_cobdock.py` to run the `commercial_use` model from the article. 
+This model requires AutoDock Vina, Fpocket and P2rank only. 
 
 ### Configuring future runs
 
-Edit the `ligands_to_targets` data structure defined in `./cobdock/run_cobdock.py` to configure all of the pairs that will be input into COBDock.
+Edit the `ligands_to_targets` data structure defined in `./cobdock/run_cobdock.py` to configure all of the pairs that will be input into CoBDock.
 SMILES strings must be provided for all input ligands. 
 Targets must either be all:
 
@@ -163,7 +176,7 @@ pocket_locations/local_docking/LIGAND/ACCESSION/PDBID/POCKETNUM/complexes
 
 
 ## Acknowledgements
-We sincerely thank the authors of all of the software that comprises the COBDock pipeline.  
+We sincerely thank the authors of all of the software that comprises the CoBDock pipeline.  
 We thank the authors of CBDock [7] for sharing their data. 
 
 ## References

@@ -80,15 +80,23 @@ VALID_AUTODOCK_ATOMS = {
 }
 
 # gas constant
-R = 0.001987
+k = 0.001987
 # temperature in Kelvin
 T = 298
+
+
+# https://www.novoprolabs.com/tools/deltag2kd
+def convert_vina_energy_to_Kd(
+    vina_energy: float,
+    ):
+
+    return np.exp(vina_energy / (k * T))
 
 def convert_vina_energy_to_pKd(
     vina_energy: float,
     ):
 
-    return -np.log10(np.exp(vina_energy / (R * T)))
+    return -np.log10(np.exp(vina_energy / (k * T)))
 
 def contains_only_valid_autodock_atoms(
     mol,

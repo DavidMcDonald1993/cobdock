@@ -3,7 +3,9 @@
 /data/prepared_targets
 
 /notes.txt
-/environment_broken.yml
+/environment_old.yml
 /test_output
+
+/models/model_old.pkl.gz
 
 *.pyc

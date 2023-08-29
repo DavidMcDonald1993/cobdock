@@ -295,6 +295,9 @@ def execute_post_docking(
     num_top_pockets: int = 5,
     num_poses: int = 10,
     num_complexes: int = 1,
+
+    commercial_use_only: bool = False,
+    
     top_pocket_distance_threshold: float = 3,
     local_docking_program: str = "vina",
     local_docking_n_proc: int = 5, 
@@ -303,17 +306,19 @@ def execute_post_docking(
 
     os.makedirs(output_dir, exist_ok=True,)
 
-
     if verbose:
         print ("Beginning scoring of pockets with machine learning")
         print ("Idenifying top", num_top_pockets, "pocket(s) and writing to directory", output_dir)
 
     # load model 
-    model = load_model(verbose=verbose)
+    model = load_model(
+        commercial_use_only=commercial_use_only,
+        verbose=verbose,
+    )
     assert model is not None 
 
-    # which column to select probabilities for 
-    label_index = model.classes_ == 1
+    # name of positive class
+    positive_class = model.positive_class
 
     # for pair_id, data_filename in all_pair_data_filenames.items():
     for ligand_id, ligand_data in ligands_to_targets.items():
@@ -338,8 +343,15 @@ def execute_post_docking(
                     raise NotImplementedError
 
                 # make predictions using POCKET_PREDICTION_MODEL_FEATURES
-                ml_input_data = prepare_for_model_prediction(collated_data)
-                collated_data["voxel_pocket_probability"] = model.predict_proba(ml_input_data)[:, label_index]
+                ml_input_data = prepare_for_model_prediction(collated_data, commercial_use_only=commercial_use_only, verbose=verbose)
+
+                # compute probabilities
+                probs =  model.predict_proba(ml_input_data)
+                
+                # store predicted probability for each voxel
+                collated_data["voxel_pocket_probability"] = probs[positive_class]
+
+                # rank voxels by probability
                 collated_data["voxel_rank"] = collated_data["voxel_pocket_probability"].rank(ascending=False, method="dense").astype(int)
 
                 # sort voxels by rank
@@ -366,7 +378,7 @@ def execute_post_docking(
 
                     # pocket data
                     selected_pocket_program = best_voxel["selected_pocket_program"]
-                    selected_pocket_id = best_voxel["selected_pocket_closest_pose_id"]
+                    selected_pocket_id = best_voxel["selected_pocket_min_pose_id"]
 
                     top_pockets.append({
                         "pocket_rank": pocket_num + 1,
@@ -386,9 +398,7 @@ def execute_post_docking(
                         }
                     })
 
-                    # remove all voxels mapped to this location (alternatively remove all voxels close to this location?)
-                    # select using exact pocket id
-                    # collated_data = collated_data.loc[(collated_data["selected_pocket_program"]!=selected_pocket_program) | (collated_data["selected_pocket_closest_pose_id"]!=selected_pocket_id)]
+                    # remove all voxels within top_pocket_distance_threshold Angstrom
                     # select using distance 
                     selected_pocket_location = np.array([ 
                         best_voxel[f"selected_pocket_center_{k}"]

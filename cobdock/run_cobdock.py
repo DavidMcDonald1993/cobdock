@@ -42,6 +42,8 @@ def execute_cobdock(
     delete_prepared_targets_directory: bool = False,
 
     run_post_docking_analysis: bool = True, 
+
+    commercial_use_only: bool = False,
     
     # final output
     num_poses: int = 10,
@@ -95,6 +97,9 @@ def execute_cobdock(
     ligands_to_targets = collate_all_data(
         ligands_to_targets=ligands_to_targets,
         output_dir=docking_root_output_dir,
+
+        commercial_use_only=commercial_use_only,
+        
         all_target_natural_ligands_filename=all_natural_ligands_filename,
         fpocket_data_filename=fpocket_data_filename,
         p2rank_data_filename=p2rank_data_filename,
@@ -102,6 +107,7 @@ def execute_cobdock(
         galaxydock_data_filename=galaxydock_data_filename,
         plants_data_filename=plants_data_filename,
         zdock_data_filename=zdock_data_filename,
+
         delete_output_directory=delete_output_directory,
         compute_rmsd_with_submitted_ligand=compute_rmsd_with_submitted_ligand,
         num_complexes=0, # complexes are generated in post_docking 
@@ -127,6 +133,7 @@ def execute_cobdock(
             num_top_pockets=num_top_pockets,
             num_poses=num_poses,
             num_complexes=num_complexes,
+            commercial_use_only=commercial_use_only,
             local_docking_program="vina",
             top_pocket_distance_threshold=top_pocket_distance_threshold,
             verbose=verbose,
@@ -156,23 +163,28 @@ if __name__ == "__main__":
             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
             "targets": ["P23219", ],
         },
-        # "ibuprofen": {
-        #     "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
-        #     "targets": ["P23219", ],
-        # },
-        # "olaparib": {
-        #     "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
-        #     "targets": ["P23219", "P09874"]
-        # }
+        "ibuprofen": {
+            "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
+            "targets": ["P23219", ],
+        },
+        "olaparib": {
+            "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
+            "targets": ["P23219", "P09874"]
+        }
     }
 
-    output_dir = "test_output_2"
+    output_dir = "test_output"
+
+    commercial_use_only = False
 
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,
         output_dir=output_dir,
         map_uniprot_to_pdb=True,
         number_of_pdb=1,
+
+        commercial_use_only=commercial_use_only,
+
         num_top_pockets=5,
         num_poses=1,
         num_complexes=1,
