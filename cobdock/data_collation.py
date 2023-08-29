@@ -422,6 +422,16 @@ def collate_all_data(
         verbose=verbose,
     )
 
+    data_to_collate = [
+        (fpocket_data, "fpocket", ),
+        (p2rank_data, "p2rank", ),
+        (all_target_natural_ligands_data, "natural_ligand", ),
+        (vina_data, "vina", ),
+        # (galaxydock_data, "galaxydock",),
+        # (plants_data, "plants", ),
+        # (zdock_data, "zdock", ),
+    ]
+
     if not commercial_use_only:
 
         galaxydock_data = execute_reverse_docking_galaxydock(
@@ -460,11 +470,15 @@ def collate_all_data(
             verbose=verbose,
         )
 
-    else:
-        galaxydock_data = {}
-        plants_data = {}
-        zdock_data = {}
+        data_to_collate.extend(
+            [
+                (galaxydock_data, "galaxydock",),
+                (plants_data, "plants", ),
+                (zdock_data, "zdock", ),
+            ]
+        )
 
+  
     #######################################################################
     
     # begin identification of closest pockets/poses for each voxel
@@ -477,19 +491,13 @@ def collate_all_data(
 
     collation_n_proc = 5
 
+
+
     with ProcessPoolExecutor(max_workers=collation_n_proc) as p:
 
         running_tasks = {}
 
-        for algorithm_pockets_poses, algorithm_name, in (
-            (fpocket_data, "fpocket", ),
-            (p2rank_data, "p2rank", ),
-            (all_target_natural_ligands_data, "natural_ligand", ),
-            (vina_data, "vina", ),
-            (galaxydock_data, "galaxydock",),
-            (plants_data, "plants", ),
-            (zdock_data, "zdock", ),
-        ):
+        for algorithm_pockets_poses, algorithm_name, in data_to_collate:
             is_molecular_docking_program = algorithm_name not in {"fpocket", "p2rank", "natural_ligand"}
 
             task = p.submit(
@@ -657,10 +665,8 @@ def collate_all_data(
                     # accept row if within max_pose_distance from ANY program
                     if max_pose_distance is not None:
                         within_max_pose_distance = False 
-                        for algorithm in (
-                            "vina", "galaxydock", "plants", "zdock", "fpocket", "p2rank",
-                            ):
-                            if all_aggregated_voxel_data[f"{algorithm}_distance"] <= max_pose_distance:
+                        for algorithm_name in closest_poses_pocket_for_each_voxel:
+                            if all_aggregated_voxel_data[f"{algorithm_name}_distance"] <= max_pose_distance:
                                 within_max_pose_distance = True 
                                 break
                         if not within_max_pose_distance:

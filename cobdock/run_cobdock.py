@@ -173,9 +173,10 @@ if __name__ == "__main__":
         }
     }
 
-    output_dir = "test_output"
+    output_dir = "output"
 
     commercial_use_only = False
+    # commercial_use_only = True
 
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,

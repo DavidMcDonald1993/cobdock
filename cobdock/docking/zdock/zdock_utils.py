@@ -48,10 +48,13 @@ def link_to_directory(
     os.makedirs(output_directory, exist_ok=True)
     file_to_link_basename = os.path.basename(file_to_link)
     output_filename = os.path.join(output_directory, file_to_link_basename)
-    if not os.path.exists(output_filename):
+    if os.path.exists(file_to_link) and not os.path.exists(output_filename):
         if verbose:
             print ("Linking file", file_to_link,  "to directory", output_directory)
-        os.symlink(file_to_link, output_filename)
+        try:
+            os.symlink(file_to_link, output_filename)
+        except:
+            pass 
     return output_filename
 
 
