@@ -1,0 +1,22 @@
+
+# scoring function and search settings
+scoring_function chemplp
+search_speed speed1
+
+# input
+protein_file 3P6H_A_SPORES.mol2
+ligand_file ibuprofen_SPORES.mol2
+
+# output
+output_dir 3P6H_A
+
+# write single mol2 files (e.g. for RMSD calculation)
+write_multi_mol2 0
+
+# binding site definition
+bindingsite_center 7.5329999923706055 10.154999732971191 14.378999710083008
+bindingsite_radius 48.0
+
+# cluster algorithm
+cluster_structures 100
+cluster_rmsd 2.0

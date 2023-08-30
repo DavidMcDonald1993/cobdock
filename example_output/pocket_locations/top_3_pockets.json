@@ -1,0 +1,128 @@
+{
+    "aspirin": {
+        "P60045": {
+            "1OXR_A": [
+                {
+                    "pocket_rank": 1,
+                    "pocket_score": 0.8344669342041016,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "1",
+                    "center_x": 10.81,
+                    "center_y": 15.147,
+                    "center_z": 1.947,
+                    "size_x": 13.0,
+                    "size_y": 13.0,
+                    "size_z": 13.0
+                },
+                {
+                    "pocket_rank": 2,
+                    "pocket_score": 0.07265967130661011,
+                    "selected_pocket_program": "p2rank",
+                    "selected_pocket_id": "2",
+                    "center_x": 13.006,
+                    "center_y": 27.5064,
+                    "center_z": -2.6526,
+                    "size_x": 11.281,
+                    "size_y": 7.305,
+                    "size_z": 6.284
+                },
+                {
+                    "pocket_rank": 3,
+                    "pocket_score": 0.06266380846500397,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "4",
+                    "center_x": 11.553,
+                    "center_y": 24.507,
+                    "center_z": 14.221,
+                    "size_x": 11.0,
+                    "size_y": 9.0,
+                    "size_z": 7.0
+                }
+            ]
+        }
+    },
+    "ibuprofen": {
+        "P15090": {
+            "3P6H_A": [
+                {
+                    "pocket_rank": 1,
+                    "pocket_score": 0.6820002794265747,
+                    "selected_pocket_program": "p2rank",
+                    "selected_pocket_id": "1",
+                    "center_x": 4.7631,
+                    "center_y": 8.1579,
+                    "center_z": 18.3399,
+                    "size_x": 25.529,
+                    "size_y": 30.987,
+                    "size_z": 32.35
+                },
+                {
+                    "pocket_rank": 2,
+                    "pocket_score": 0.08137120306491852,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "2",
+                    "center_x": 5.913,
+                    "center_y": 10.506,
+                    "center_z": 29.344,
+                    "size_x": 12.0,
+                    "size_y": 13.0,
+                    "size_z": 6.0
+                },
+                {
+                    "pocket_rank": 3,
+                    "pocket_score": 0.05226791650056839,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "7",
+                    "center_x": 17.101,
+                    "center_y": 6.762,
+                    "center_z": 10.707,
+                    "size_x": 9.0,
+                    "size_y": 9.0,
+                    "size_z": 10.0
+                }
+            ]
+        }
+    },
+    "Olaparib": {
+        "Q9UGN5": {
+            "4TVJ_A": [
+                {
+                    "pocket_rank": 1,
+                    "pocket_score": 0.6764346957206726,
+                    "selected_pocket_program": "p2rank",
+                    "selected_pocket_id": "1",
+                    "center_x": 19.7192,
+                    "center_y": -0.0692,
+                    "center_z": 16.191,
+                    "size_x": 19.322,
+                    "size_y": 17.847,
+                    "size_z": 17.514
+                },
+                {
+                    "pocket_rank": 2,
+                    "pocket_score": 0.4248528480529785,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "1",
+                    "center_x": 13.334,
+                    "center_y": -8.629,
+                    "center_z": 10.193,
+                    "size_x": 27.0,
+                    "size_y": 19.0,
+                    "size_z": 23.0
+                },
+                {
+                    "pocket_rank": 3,
+                    "pocket_score": 0.29487115144729614,
+                    "selected_pocket_program": "fpocket",
+                    "selected_pocket_id": "20",
+                    "center_x": 23.003,
+                    "center_y": 8.269,
+                    "center_z": 22.089,
+                    "size_x": 11.0,
+                    "size_y": 10.0,
+                    "size_z": 10.0
+                }
+            ]
+        }
+    }
+}

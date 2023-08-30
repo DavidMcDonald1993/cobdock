@@ -1,2413 +1,109 @@
 {
-    "P23219": {
-        "6Y3C_A": {
-            "14": {
-                "center_x": -27.64,
-                "center_y": -28.743,
-                "center_z": 11.01,
-                "size_x": 9.0,
-                "size_y": 9.0,
-                "size_z": 11.0,
-                "pocket_score": -0.0622,
-                "drug_score": 0.0077,
-                "number_of_alpha_spheres": 19.0,
-                "mean_alpha-sphere_radius": 3.8917,
-                "mean_alpha-sphere_solvent_acc": 0.6128,
-                "mean_b-factor_of_pocket_residues": 0.5831,
-                "hydrophobicity_score": 67.0,
-                "polarity_score": 2.0,
-                "amino_acid_based_volume_score": 5.0,
-                "pocket_volume_(monte_carlo)": 308.142,
-                "pocket_volume_(convex_hull)": 13.3831,
-                "charge_score": 1.0,
+    "P60045": {
+        "1OXR_A": {
+            "6": {
+                "center_x": 15.683,
+                "center_y": 19.555,
+                "center_z": 10.446,
+                "size_x": 7.0,
+                "size_y": 8.0,
+                "size_z": 10.0,
+                "pocket_score": -0.0093,
+                "drug_score": 0.0021,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.9207,
+                "mean_alpha-sphere_solvent_acc": 0.599,
+                "mean_b-factor_of_pocket_residues": 0.4316,
+                "hydrophobicity_score": 29.5,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 6.0,
+                "pocket_volume_(monte_carlo)": 243.3863,
+                "pocket_volume_(convex_hull)": 5.7194,
+                "charge_score": 0.0,
                 "local_hydrophobic_density_score": 12.0,
                 "number_of_apolar_alpha_sphere": 13.0,
-                "proportion_of_apolar_alpha_sphere": 0.6842,
+                "proportion_of_apolar_alpha_sphere": 0.8125,
                 "residue_ids": [
                     [
                         "A",
-                        "HIS",
-                        95
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        92
+                        "TYR",
+                        64
                     ],
                     [
                         "A",
                         "PHE",
-                        91
+                        65
                     ],
                     [
                         "A",
-                        "GLY",
-                        96
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        99
-                    ],
-                    [
-                        "A",
-                        "TRP",
-                        100
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "FLHGFW"
-                }
-            },
-            "17": {
-                "center_x": -30.742,
-                "center_y": -37.219,
-                "center_z": 15.305,
-                "size_x": 15.0,
-                "size_y": 10.0,
-                "size_z": 12.0,
-                "pocket_score": -0.077,
-                "drug_score": 0.0028,
-                "number_of_alpha_spheres": 47.0,
-                "mean_alpha-sphere_radius": 3.8899,
-                "mean_alpha-sphere_solvent_acc": 0.4604,
-                "mean_b-factor_of_pocket_residues": 0.68,
-                "hydrophobicity_score": 3.1667,
-                "polarity_score": 9.0,
-                "amino_acid_based_volume_score": 3.1667,
-                "pocket_volume_(monte_carlo)": 416.1734,
-                "pocket_volume_(convex_hull)": 43.1249,
-                "charge_score": 3.0,
-                "local_hydrophobic_density_score": 13.25,
-                "number_of_apolar_alpha_sphere": 16.0,
-                "proportion_of_apolar_alpha_sphere": 0.3404,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PRO",
-                        514
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        91
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        354
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        515
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        192
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        87
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        94
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        353
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        90
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        513
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        95
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        516
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "SHFTHQSGHPNS"
-                }
-            },
-            "6": {
-                "center_x": -38.701,
-                "center_y": -65.126,
-                "center_z": 21.399,
-                "size_x": 12.0,
-                "size_y": 14.0,
-                "size_z": 10.0,
-                "pocket_score": 0.0154,
-                "drug_score": 0.0003,
-                "number_of_alpha_spheres": 28.0,
-                "mean_alpha-sphere_radius": 3.9357,
-                "mean_alpha-sphere_solvent_acc": 0.5563,
-                "mean_b-factor_of_pocket_residues": 0.6274,
-                "hydrophobicity_score": 32.1111,
-                "polarity_score": 5.0,
-                "amino_acid_based_volume_score": 4.6667,
-                "pocket_volume_(monte_carlo)": 373.6174,
-                "pocket_volume_(convex_hull)": 49.3027,
-                "charge_score": 4.0,
-                "local_hydrophobic_density_score": 7.3333,
-                "number_of_apolar_alpha_sphere": 15.0,
-                "proportion_of_apolar_alpha_sphere": 0.5357,
-                "residue_ids": [
-                    [
-                        "A",
-                        "GLN",
-                        175
+                        "GLU",
+                        56
                     ],
                     [
                         "A",
                         "ARG",
-                        179
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        449
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        442
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        183
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        184
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        446
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        445
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        178
+                        62
                     ]
                 ],
                 "chain_ids": [
                     "A"
                 ],
                 "chain_to_sequence": {
-                    "A": "QARLRHLHV"
+                    "A": "ERYF"
                 }
             },
             "1": {
-                "center_x": -28.073,
-                "center_y": -42.059,
-                "center_z": 4.19,
-                "size_x": 24.0,
-                "size_y": 20.0,
-                "size_z": 20.0,
-                "pocket_score": 0.2007,
-                "drug_score": 0.9638,
-                "number_of_alpha_spheres": 174.0,
-                "mean_alpha-sphere_radius": 3.8776,
-                "mean_alpha-sphere_solvent_acc": 0.4864,
-                "mean_b-factor_of_pocket_residues": 0.398,
-                "hydrophobicity_score": 44.3514,
-                "polarity_score": 14.0,
-                "amino_acid_based_volume_score": 4.5135,
-                "pocket_volume_(monte_carlo)": 1382.6985,
-                "pocket_volume_(convex_hull)": 941.1543,
-                "charge_score": 2.0,
-                "local_hydrophobic_density_score": 46.4561,
-                "number_of_apolar_alpha_sphere": 114.0,
-                "proportion_of_apolar_alpha_sphere": 0.6552,
-                "residue_ids": [
-                    [
-                        "A",
-                        "VAL",
-                        119
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        115
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        84
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        89
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        527
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        531
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        120
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        353
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        355
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        523
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        524
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        83
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        471
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        470
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        86
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        90
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        352
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        116
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        113
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        359
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        357
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        123
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        122
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        513
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        520
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        93
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        528
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        530
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        348
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        349
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        526
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        518
-                    ],
-                    [
-                        "A",
-                        "TRP",
-                        387
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        384
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        381
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        522
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        385
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "RPPTHLMLVVRNLYVLSYLLFLYWFGHFEMIEGAPSL"
-                }
-            },
-            "26": {
-                "center_x": -14.875,
-                "center_y": -44.874,
-                "center_z": 6.961,
-                "size_x": 10.0,
-                "size_y": 16.0,
-                "size_z": 11.0,
-                "pocket_score": -0.2048,
-                "drug_score": 0.0005,
-                "number_of_alpha_spheres": 47.0,
-                "mean_alpha-sphere_radius": 4.1189,
-                "mean_alpha-sphere_solvent_acc": 0.5275,
-                "mean_b-factor_of_pocket_residues": 0.6659,
-                "hydrophobicity_score": -13.25,
-                "polarity_score": 7.0,
-                "amino_acid_based_volume_score": 3.9167,
-                "pocket_volume_(monte_carlo)": 526.6029,
-                "pocket_volume_(convex_hull)": 59.0326,
-                "charge_score": 4.0,
-                "local_hydrophobic_density_score": 6.6667,
-                "number_of_apolar_alpha_sphere": 9.0,
-                "proportion_of_apolar_alpha_sphere": 0.1915,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ARG",
-                        83
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        473
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        86
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        85
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        80
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        471
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        84
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        472
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        43
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        468
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        42
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        474
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "QHNRPSPKGMKP"
-                }
-            },
-            "5": {
-                "center_x": -32.259,
-                "center_y": -52.899,
-                "center_z": -12.219,
-                "size_x": 22.0,
-                "size_y": 20.0,
-                "size_z": 18.0,
-                "pocket_score": 0.0318,
-                "drug_score": 0.013,
-                "number_of_alpha_spheres": 110.0,
-                "mean_alpha-sphere_radius": 3.8813,
-                "mean_alpha-sphere_solvent_acc": 0.459,
-                "mean_b-factor_of_pocket_residues": 0.2822,
-                "hydrophobicity_score": 23.875,
-                "polarity_score": 13.0,
-                "amino_acid_based_volume_score": 3.9375,
-                "pocket_volume_(monte_carlo)": 1208.0291,
-                "pocket_volume_(convex_hull)": 778.6879,
-                "charge_score": 3.0,
-                "local_hydrophobic_density_score": 16.5556,
-                "number_of_apolar_alpha_sphere": 36.0,
-                "proportion_of_apolar_alpha_sphere": 0.3273,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ARG",
-                        376
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        226
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        375
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        145
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        374
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        372
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        225
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        224
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        125
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        128
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        127
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        142
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        124
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        149
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        151
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        378
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        537
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        538
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        229
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        227
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        533
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        337
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        536
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        228
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        143
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        539
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        544
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        334
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        373
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        371
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        126
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        532
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "IPSPPFSVTILGHGVDLIFQYRNRAKGGNPIY"
-                }
-            },
-            "11": {
-                "center_x": -20.383,
-                "center_y": -45.246,
-                "center_z": 14.913,
-                "size_x": 18.0,
-                "size_y": 11.0,
-                "size_z": 15.0,
-                "pocket_score": -0.0401,
-                "drug_score": 0.0007,
-                "number_of_alpha_spheres": 41.0,
-                "mean_alpha-sphere_radius": 4.1045,
-                "mean_alpha-sphere_solvent_acc": 0.5697,
-                "mean_b-factor_of_pocket_residues": 0.5277,
-                "hydrophobicity_score": 0.1765,
-                "polarity_score": 11.0,
-                "amino_acid_based_volume_score": 4.1765,
-                "pocket_volume_(monte_carlo)": 540.6071,
-                "pocket_volume_(convex_hull)": 113.892,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 4.2857,
-                "number_of_apolar_alpha_sphere": 7.0,
-                "proportion_of_apolar_alpha_sphere": 0.1707,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PRO",
-                        86
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        467
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        473
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        85
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        520
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        87
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        480
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        475
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        472
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        511
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        513
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        510
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        476
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        474
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        481
-                    ],
-                    [
-                        "A",
-                        "CYS",
-                        512
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        514
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "SPSRMKPYTELEKCHPE"
-                }
-            },
-            "24": {
-                "center_x": -53.274,
-                "center_y": -66.017,
-                "center_z": -11.74,
-                "size_x": 10.0,
-                "size_y": 7.0,
-                "size_z": 9.0,
-                "pocket_score": -0.1209,
-                "drug_score": 0.0001,
-                "number_of_alpha_spheres": 23.0,
-                "mean_alpha-sphere_radius": 4.0906,
-                "mean_alpha-sphere_solvent_acc": 0.628,
-                "mean_b-factor_of_pocket_residues": 0.4589,
-                "hydrophobicity_score": 6.2857,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 4.2857,
-                "pocket_volume_(monte_carlo)": 231.7322,
-                "pocket_volume_(convex_hull)": 6.8907,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 4.0,
-                "number_of_apolar_alpha_sphere": 5.0,
-                "proportion_of_apolar_alpha_sphere": 0.2174,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PRO",
-                        270
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        271
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        272
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        239
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        243
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        237
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        240
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "NERQPVL"
-                }
-            },
-            "20": {
-                "center_x": -12.674,
-                "center_y": -58.828,
-                "center_z": 10.73,
-                "size_x": 9.0,
-                "size_y": 15.0,
-                "size_z": 8.0,
-                "pocket_score": -0.0914,
-                "drug_score": 0.0006,
-                "number_of_alpha_spheres": 27.0,
-                "mean_alpha-sphere_radius": 3.85,
-                "mean_alpha-sphere_solvent_acc": 0.4159,
-                "mean_b-factor_of_pocket_residues": 0.4469,
-                "hydrophobicity_score": 0.7,
-                "polarity_score": 8.0,
-                "amino_acid_based_volume_score": 4.7,
-                "pocket_volume_(monte_carlo)": 296.9814,
-                "pocket_volume_(convex_hull)": 12.9259,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 5.0,
-                "number_of_apolar_alpha_sphere": 6.0,
-                "proportion_of_apolar_alpha_sphere": 0.2222,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ASN",
-                        464
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        468
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        474
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        499
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        465
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        39
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        166
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        165
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        38
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        163
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "YYMTKNEKPD"
-                }
-            },
-            "12": {
-                "center_x": -48.563,
-                "center_y": -50.845,
-                "center_z": 21.05,
-                "size_x": 10.0,
-                "size_y": 10.0,
-                "size_z": 7.0,
-                "pocket_score": -0.0432,
-                "drug_score": 0.0002,
-                "number_of_alpha_spheres": 17.0,
-                "mean_alpha-sphere_radius": 3.8917,
-                "mean_alpha-sphere_solvent_acc": 0.616,
-                "mean_b-factor_of_pocket_residues": 0.4319,
-                "hydrophobicity_score": 7.4286,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 3.8571,
-                "pocket_volume_(monte_carlo)": 230.5796,
-                "pocket_volume_(convex_hull)": 4.922,
-                "charge_score": -2.0,
-                "local_hydrophobic_density_score": 4.0,
-                "number_of_apolar_alpha_sphere": 5.0,
-                "proportion_of_apolar_alpha_sphere": 0.2941,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PHE",
-                        187
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        429
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        392
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        430
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        394
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        393
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        401
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "FPDSEQI"
-                }
-            },
-            "31": {
-                "center_x": -21.23,
-                "center_y": -45.019,
-                "center_z": -8.189,
-                "size_x": 19.0,
-                "size_y": 19.0,
-                "size_z": 14.0,
-                "pocket_score": -0.3812,
-                "drug_score": 0.0005,
-                "number_of_alpha_spheres": 64.0,
-                "mean_alpha-sphere_radius": 3.926,
-                "mean_alpha-sphere_solvent_acc": 0.4732,
-                "mean_b-factor_of_pocket_residues": 0.4792,
-                "hydrophobicity_score": 22.1579,
-                "polarity_score": 12.0,
-                "amino_acid_based_volume_score": 4.2105,
-                "pocket_volume_(monte_carlo)": 974.3768,
-                "pocket_volume_(convex_hull)": 286.9935,
-                "charge_score": 3.0,
-                "local_hydrophobic_density_score": 12.25,
-                "number_of_apolar_alpha_sphere": 16.0,
-                "proportion_of_apolar_alpha_sphere": 0.25,
-                "residue_ids": [
-                    [
-                        "A",
-                        "SER",
-                        126
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        124
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        61
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        60
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        44
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        46
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        79
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        119
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        122
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        370
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        62
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        118
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        372
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        532
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        121
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        369
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        125
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        371
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        366
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "QITRTRTVSNIPSLVQFQK"
-                }
-            },
-            "9": {
-                "center_x": -32.748,
-                "center_y": -63.049,
-                "center_z": 4.346,
-                "size_x": 12.0,
-                "size_y": 9.0,
-                "size_z": 12.0,
-                "pocket_score": -0.0132,
-                "drug_score": 0.0048,
-                "number_of_alpha_spheres": 49.0,
-                "mean_alpha-sphere_radius": 3.7966,
-                "mean_alpha-sphere_solvent_acc": 0.4698,
-                "mean_b-factor_of_pocket_residues": 0.4715,
-                "hydrophobicity_score": 25.25,
-                "polarity_score": 7.0,
-                "amino_acid_based_volume_score": 4.0833,
-                "pocket_volume_(monte_carlo)": 345.5984,
-                "pocket_volume_(convex_hull)": 52.5525,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 9.0,
-                "number_of_apolar_alpha_sphere": 10.0,
-                "proportion_of_apolar_alpha_sphere": 0.2041,
-                "residue_ids": [
-                    [
-                        "A",
-                        "MET",
-                        458
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        379
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        218
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        454
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        148
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        212
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        460
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        455
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        383
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        382
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        386
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        451
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "YTPMNHHVESML"
-                }
-            },
-            "21": {
-                "center_x": -23.32,
-                "center_y": -57.882,
-                "center_z": -14.399,
-                "size_x": 9.0,
-                "size_y": 15.0,
-                "size_z": 14.0,
-                "pocket_score": -0.0934,
-                "drug_score": 0.1001,
-                "number_of_alpha_spheres": 31.0,
-                "mean_alpha-sphere_radius": 3.9267,
-                "mean_alpha-sphere_solvent_acc": 0.614,
-                "mean_b-factor_of_pocket_residues": 0.2724,
-                "hydrophobicity_score": 17.8889,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 3.8889,
-                "pocket_volume_(monte_carlo)": 439.6038,
-                "pocket_volume_(convex_hull)": 58.6783,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 22.7692,
-                "number_of_apolar_alpha_sphere": 26.0,
-                "proportion_of_apolar_alpha_sphere": 0.8387,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PHE",
-                        142
-                    ],
-                    [
-                        "A",
-                        "TRP",
-                        139
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        127
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        137
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        129
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        125
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        126
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        128
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        138
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "PSPPTISWF"
-                }
-            },
-            "27": {
-                "center_x": -14.804,
-                "center_y": -60.267,
-                "center_z": -8.052,
-                "size_x": 12.0,
-                "size_y": 9.0,
-                "size_z": 8.0,
-                "pocket_score": -0.2135,
-                "drug_score": 0.0048,
-                "number_of_alpha_spheres": 16.0,
-                "mean_alpha-sphere_radius": 3.8368,
-                "mean_alpha-sphere_solvent_acc": 0.4295,
-                "mean_b-factor_of_pocket_residues": 0.2915,
-                "hydrophobicity_score": 39.1111,
-                "polarity_score": 5.0,
-                "amino_acid_based_volume_score": 4.4444,
-                "pocket_volume_(monte_carlo)": 272.7522,
-                "pocket_volume_(convex_hull)": 7.0694,
-                "charge_score": -2.0,
-                "local_hydrophobic_density_score": 13.7333,
-                "number_of_apolar_alpha_sphere": 15.0,
-                "proportion_of_apolar_alpha_sphere": 0.9375,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ILE",
-                        46
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        137
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        130
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        135
-                    ],
-                    [
-                        "A",
-                        "CYS",
-                        47
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        136
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        58
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        48
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        129
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "ICVDTYDYI"
-                }
-            },
-            "13": {
-                "center_x": -41.428,
-                "center_y": -36.801,
-                "center_z": 8.675,
-                "size_x": 16.0,
+                "center_x": 10.81,
+                "center_y": 15.147,
+                "center_z": 1.947,
+                "size_x": 13.0,
                 "size_y": 13.0,
                 "size_z": 13.0,
-                "pocket_score": -0.0531,
-                "drug_score": 0.001,
-                "number_of_alpha_spheres": 43.0,
-                "mean_alpha-sphere_radius": 3.9978,
-                "mean_alpha-sphere_solvent_acc": 0.6969,
-                "mean_b-factor_of_pocket_residues": 0.337,
-                "hydrophobicity_score": 15.7692,
-                "polarity_score": 10.0,
-                "amino_acid_based_volume_score": 4.6154,
-                "pocket_volume_(monte_carlo)": 634.7581,
-                "pocket_volume_(convex_hull)": 157.9889,
-                "charge_score": -1.0,
-                "local_hydrophobic_density_score": 6.2222,
-                "number_of_apolar_alpha_sphere": 9.0,
-                "proportion_of_apolar_alpha_sphere": 0.2093,
-                "residue_ids": [
-                    [
-                        "A",
-                        "GLN",
-                        350
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        355
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        579
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        581
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        577
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        351
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        354
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        192
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        356
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        358
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        347
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        346
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        580
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "QEEQQGYFQYSFR"
-                }
-            },
-            "22": {
-                "center_x": -50.339,
-                "center_y": -61.878,
-                "center_z": 6.67,
-                "size_x": 9.0,
-                "size_y": 9.0,
-                "size_z": 10.0,
-                "pocket_score": -0.0996,
-                "drug_score": 0.0033,
-                "number_of_alpha_spheres": 16.0,
-                "mean_alpha-sphere_radius": 4.0477,
-                "mean_alpha-sphere_solvent_acc": 0.5708,
-                "mean_b-factor_of_pocket_residues": 0.4412,
-                "hydrophobicity_score": 70.25,
-                "polarity_score": 2.0,
-                "amino_acid_based_volume_score": 4.75,
-                "pocket_volume_(monte_carlo)": 180.8393,
-                "pocket_volume_(convex_hull)": 2.5625,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 15.0,
-                "number_of_apolar_alpha_sphere": 16.0,
-                "proportion_of_apolar_alpha_sphere": 1.0,
-                "residue_ids": [
-                    [
-                        "A",
-                        "LEU",
-                        295
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        291
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        298
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        294
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        408
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        409
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        203
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        207
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "QHVLLLLF"
-                }
-            },
-            "3": {
-                "center_x": -55.05,
-                "center_y": -56.34,
-                "center_z": -6.185,
-                "size_x": 11.0,
-                "size_y": 9.0,
-                "size_z": 11.0,
-                "pocket_score": 0.1066,
-                "drug_score": 0.0251,
-                "number_of_alpha_spheres": 30.0,
-                "mean_alpha-sphere_radius": 3.6036,
-                "mean_alpha-sphere_solvent_acc": 0.4305,
-                "mean_b-factor_of_pocket_residues": 0.2084,
-                "hydrophobicity_score": 51.0,
-                "polarity_score": 1.0,
-                "amino_acid_based_volume_score": 3.6,
-                "pocket_volume_(monte_carlo)": 146.2514,
-                "pocket_volume_(convex_hull)": 5.1134,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 22.0,
-                "number_of_apolar_alpha_sphere": 23.0,
-                "proportion_of_apolar_alpha_sphere": 0.7667,
-                "residue_ids": [
-                    [
-                        "A",
-                        "LEU",
-                        306
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        233
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        252
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        287
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        288
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        302
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        232
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        244
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        286
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        264
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "HILLPAVGAL"
-                }
-            },
-            "16": {
-                "center_x": -32.576,
-                "center_y": -67.129,
-                "center_z": 23.515,
-                "size_x": 9.0,
-                "size_y": 9.0,
-                "size_z": 7.0,
-                "pocket_score": -0.0735,
-                "drug_score": 0.001,
-                "number_of_alpha_spheres": 22.0,
-                "mean_alpha-sphere_radius": 3.8505,
-                "mean_alpha-sphere_solvent_acc": 0.6276,
-                "mean_b-factor_of_pocket_residues": 0.5908,
-                "hydrophobicity_score": 0.8,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 5.2,
-                "pocket_volume_(monte_carlo)": 247.6327,
-                "pocket_volume_(convex_hull)": 4.5998,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 11.0,
-                "number_of_apolar_alpha_sphere": 12.0,
-                "proportion_of_apolar_alpha_sphere": 0.5455,
-                "residue_ids": [
-                    [
-                        "A",
-                        "LEU",
-                        176
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        179
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        180
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        175
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        173
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "DQLRR"
-                }
-            },
-            "23": {
-                "center_x": -15.092,
-                "center_y": -56.929,
-                "center_z": 21.051,
-                "size_x": 6.0,
-                "size_y": 11.0,
-                "size_z": 8.0,
-                "pocket_score": -0.1035,
-                "drug_score": 0.0001,
-                "number_of_alpha_spheres": 18.0,
-                "mean_alpha-sphere_radius": 3.8887,
-                "mean_alpha-sphere_solvent_acc": 0.5159,
-                "mean_b-factor_of_pocket_residues": 0.7437,
-                "hydrophobicity_score": 17.2857,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 3.4286,
-                "pocket_volume_(monte_carlo)": 198.6312,
-                "pocket_volume_(convex_hull)": 2.1864,
-                "charge_score": -2.0,
-                "local_hydrophobic_density_score": 1.0,
-                "number_of_apolar_alpha_sphere": 2.0,
-                "proportion_of_apolar_alpha_sphere": 0.1111,
-                "residue_ids": [
-                    [
-                        "A",
-                        "SER",
-                        477
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        498
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        478
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        497
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        492
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        496
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        476
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "TSFEGDI"
-                }
-            },
-            "15": {
-                "center_x": -54.434,
-                "center_y": -46.503,
-                "center_z": 18.027,
-                "size_x": 14.0,
-                "size_y": 12.0,
-                "size_z": 11.0,
-                "pocket_score": -0.063,
-                "drug_score": 0.0054,
-                "number_of_alpha_spheres": 28.0,
-                "mean_alpha-sphere_radius": 3.8198,
-                "mean_alpha-sphere_solvent_acc": 0.5042,
-                "mean_b-factor_of_pocket_residues": 0.4325,
-                "hydrophobicity_score": 0.875,
-                "polarity_score": 5.0,
-                "amino_acid_based_volume_score": 4.0,
-                "pocket_volume_(monte_carlo)": 318.4862,
-                "pocket_volume_(convex_hull)": 19.7319,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 15.5556,
-                "number_of_apolar_alpha_sphere": 18.0,
-                "proportion_of_apolar_alpha_sphere": 0.6429,
-                "residue_ids": [
-                    [
-                        "A",
-                        "LYS",
-                        396
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        429
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        425
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        428
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        401
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        398
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        424
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        430
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "KGEDARQI"
-                }
-            },
-            "18": {
-                "center_x": -14.593,
-                "center_y": -58.148,
-                "center_z": -0.678,
-                "size_x": 16.0,
-                "size_y": 23.0,
-                "size_z": 16.0,
-                "pocket_score": -0.0816,
-                "drug_score": 0.0929,
-                "number_of_alpha_spheres": 123.0,
-                "mean_alpha-sphere_radius": 3.9155,
-                "mean_alpha-sphere_solvent_acc": 0.4825,
-                "mean_b-factor_of_pocket_residues": 0.3559,
-                "hydrophobicity_score": 10.1481,
-                "polarity_score": 15.0,
-                "amino_acid_based_volume_score": 4.0741,
-                "pocket_volume_(monte_carlo)": 926.735,
-                "pocket_volume_(convex_hull)": 416.8589,
+                "pocket_score": 0.3525,
+                "drug_score": 0.5258,
+                "number_of_alpha_spheres": 68.0,
+                "mean_alpha-sphere_radius": 3.9911,
+                "mean_alpha-sphere_solvent_acc": 0.4839,
+                "mean_b-factor_of_pocket_residues": 0.5282,
+                "hydrophobicity_score": 48.7059,
+                "polarity_score": 8.0,
+                "amino_acid_based_volume_score": 5.0,
+                "pocket_volume_(monte_carlo)": 525.0217,
+                "pocket_volume_(convex_hull)": 104.9368,
                 "charge_score": 2.0,
-                "local_hydrophobic_density_score": 15.6154,
-                "number_of_apolar_alpha_sphere": 26.0,
-                "proportion_of_apolar_alpha_sphere": 0.2114,
+                "local_hydrophobic_density_score": 32.0,
+                "number_of_apolar_alpha_sphere": 34.0,
+                "proportion_of_apolar_alpha_sphere": 0.5,
                 "residue_ids": [
-                    [
-                        "A",
-                        "GLN",
-                        44
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        468
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        465
-                    ],
-                    [
-                        "A",
-                        "CYS",
-                        41
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        469
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        46
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        130
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        151
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        45
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        39
-                    ],
-                    [
-                        "A",
-                        "CYS",
-                        47
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        129
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        125
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        152
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        461
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        153
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        42
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        43
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        40
-                    ],
-                    [
-                        "A",
-                        "CYS",
-                        36
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        122
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        123
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        135
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        154
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        156
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        49
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        34
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "NCYPCQHQGICRNLPTYDILPSPQEKR"
-                }
-            },
-            "19": {
-                "center_x": -65.407,
-                "center_y": -59.521,
-                "center_z": 4.221,
-                "size_x": 5.0,
-                "size_y": 10.0,
-                "size_z": 10.0,
-                "pocket_score": -0.0907,
-                "drug_score": 0.0003,
-                "number_of_alpha_spheres": 15.0,
-                "mean_alpha-sphere_radius": 4.1125,
-                "mean_alpha-sphere_solvent_acc": 0.571,
-                "mean_b-factor_of_pocket_residues": 0.6013,
-                "hydrophobicity_score": 23.125,
-                "polarity_score": 5.0,
-                "amino_acid_based_volume_score": 3.5,
-                "pocket_volume_(monte_carlo)": 213.6466,
-                "pocket_volume_(convex_hull)": 3.0606,
-                "charge_score": -1.0,
-                "local_hydrophobic_density_score": 6.0,
-                "number_of_apolar_alpha_sphere": 7.0,
-                "proportion_of_apolar_alpha_sphere": 0.4667,
-                "residue_ids": [
-                    [
-                        "A",
-                        "SER",
-                        283
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        285
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        282
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        415
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        412
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        416
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        257
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        411
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "LQSMTSVD"
-                }
-            },
-            "2": {
-                "center_x": -36.622,
-                "center_y": -48.783,
-                "center_z": -2.433,
-                "size_x": 9.0,
-                "size_y": 12.0,
-                "size_z": 12.0,
-                "pocket_score": 0.1132,
-                "drug_score": 0.2878,
-                "number_of_alpha_spheres": 43.0,
-                "mean_alpha-sphere_radius": 3.785,
-                "mean_alpha-sphere_solvent_acc": 0.4188,
-                "mean_b-factor_of_pocket_residues": 0.2073,
-                "hydrophobicity_score": 61.1333,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 4.4667,
-                "pocket_volume_(monte_carlo)": 178.4661,
-                "pocket_volume_(convex_hull)": 6.5277,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 35.8378,
-                "number_of_apolar_alpha_sphere": 37.0,
-                "proportion_of_apolar_alpha_sphere": 0.8605,
-                "residue_ids": [
-                    [
-                        "A",
-                        "GLY",
-                        227
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        209
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        375
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        533
-                    ],
-                    [
-                        "A",
-                        "ILE",
-                        377
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        530
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        534
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        348
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        344
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        349
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        205
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        381
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        529
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        228
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        385
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "FFGVVYVNIFYFSGL"
-                }
-            },
-            "25": {
-                "center_x": -27.11,
-                "center_y": -69.379,
-                "center_z": -0.93,
-                "size_x": 14.0,
-                "size_y": 8.0,
-                "size_z": 14.0,
-                "pocket_score": -0.133,
-                "drug_score": 0.0002,
-                "number_of_alpha_spheres": 29.0,
-                "mean_alpha-sphere_radius": 4.0083,
-                "mean_alpha-sphere_solvent_acc": 0.5589,
-                "mean_b-factor_of_pocket_residues": 0.5657,
-                "hydrophobicity_score": 8.25,
-                "polarity_score": 7.0,
-                "amino_acid_based_volume_score": 4.0,
-                "pocket_volume_(monte_carlo)": 404.3634,
-                "pocket_volume_(convex_hull)": 46.4669,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 11.0,
-                "number_of_apolar_alpha_sphere": 12.0,
-                "proportion_of_apolar_alpha_sphere": 0.4138,
-                "residue_ids": [
-                    [
-                        "A",
-                        "GLU",
-                        457
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        218
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        132
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        219
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        458
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        220
-                    ],
                     [
                         "A",
                         "ALA",
-                        133
+                        23
                     ],
                     [
                         "A",
-                        "TYR",
-                        147
+                        "GLY",
+                        30
                     ],
                     [
                         "A",
-                        "ARG",
-                        459
+                        "PHE",
+                        22
                     ],
                     [
                         "A",
-                        "LYS",
-                        157
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        154
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        135
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "SADYSKPGFEMR"
-                }
-            },
-            "4": {
-                "center_x": -61.567,
-                "center_y": -45.007,
-                "center_z": -9.312,
-                "size_x": 10.0,
-                "size_y": 15.0,
-                "size_z": 13.0,
-                "pocket_score": 0.0421,
-                "drug_score": 0.0026,
-                "number_of_alpha_spheres": 23.0,
-                "mean_alpha-sphere_radius": 3.7799,
-                "mean_alpha-sphere_solvent_acc": 0.6199,
-                "mean_b-factor_of_pocket_residues": 0.2592,
-                "hydrophobicity_score": 16.9,
-                "polarity_score": 7.0,
-                "amino_acid_based_volume_score": 5.1,
-                "pocket_volume_(monte_carlo)": 387.1066,
-                "pocket_volume_(convex_hull)": 47.6497,
-                "charge_score": 2.0,
-                "local_hydrophobic_density_score": 6.6,
-                "number_of_apolar_alpha_sphere": 10.0,
-                "proportion_of_apolar_alpha_sphere": 0.4348,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ARG",
-                        307
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        311
-                    ],
-                    [
-                        "A",
-                        "MET",
-                        261
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        310
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        314
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        251
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        571
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        254
+                        "PHE",
+                        5
                     ],
                     [
                         "A",
                         "LEU",
-                        570
+                        2
                     ],
                     [
                         "A",
-                        "LEU",
-                        315
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "KYMRNRDLLN"
-                }
-            },
-            "28": {
-                "center_x": -13.292,
-                "center_y": -45.021,
-                "center_z": -1.506,
-                "size_x": 13.0,
-                "size_y": 14.0,
-                "size_z": 13.0,
-                "pocket_score": -0.2246,
-                "drug_score": 0.0,
-                "number_of_alpha_spheres": 48.0,
-                "mean_alpha-sphere_radius": 4.0624,
-                "mean_alpha-sphere_solvent_acc": 0.5493,
-                "mean_b-factor_of_pocket_residues": 0.5236,
-                "hydrophobicity_score": 3.2667,
-                "polarity_score": 12.0,
-                "amino_acid_based_volume_score": 4.5333,
-                "pocket_volume_(monte_carlo)": 660.2319,
-                "pocket_volume_(convex_hull)": 114.523,
-                "charge_score": 6.0,
-                "local_hydrophobic_density_score": 3.6,
-                "number_of_apolar_alpha_sphere": 5.0,
-                "proportion_of_apolar_alpha_sphere": 0.1042,
-                "residue_ids": [
-                    [
-                        "A",
-                        "ARG",
-                        79
+                        "LYS",
+                        31
                     ],
                     [
                         "A",
@@ -2416,515 +112,2787 @@
                     ],
                     [
                         "A",
-                        "THR",
-                        76
+                        "TRP",
+                        19
                     ],
                     [
                         "A",
-                        "ASN",
-                        80
+                        "LYS",
+                        6
                     ],
                     [
                         "A",
-                        "ARG",
-                        83
+                        "PHE",
+                        101
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        45
                     ],
                     [
                         "A",
                         "HIS",
-                        43
+                        48
                     ],
                     [
                         "A",
-                        "ASN",
-                        122
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        61
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        44
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        62
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        63
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        468
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        469
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        471
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        123
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "HQRTGYTRNRNLKRG"
-                }
-            },
-            "10": {
-                "center_x": -16.505,
-                "center_y": -71.208,
-                "center_z": 19.095,
-                "size_x": 7.0,
-                "size_y": 9.0,
-                "size_z": 6.0,
-                "pocket_score": -0.0146,
-                "drug_score": 0.001,
-                "number_of_alpha_spheres": 18.0,
-                "mean_alpha-sphere_radius": 4.1153,
-                "mean_alpha-sphere_solvent_acc": 0.6654,
-                "mean_b-factor_of_pocket_residues": 0.7511,
-                "hydrophobicity_score": -14.0,
-                "polarity_score": 3.0,
-                "amino_acid_based_volume_score": 4.25,
-                "pocket_volume_(monte_carlo)": 335.0781,
-                "pocket_volume_(convex_hull)": 1.6582,
-                "charge_score": 2.0,
-                "local_hydrophobic_density_score": 11.0,
-                "number_of_apolar_alpha_sphere": 12.0,
-                "proportion_of_apolar_alpha_sphere": 0.6667,
-                "residue_ids": [
-                    [
-                        "A",
-                        "LYS",
-                        169
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        168
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        170
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        167
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "GKKQ"
-                }
-            },
-            "30": {
-                "center_x": -45.413,
-                "center_y": -66.025,
-                "center_z": -3.457,
-                "size_x": 13.0,
-                "size_y": 14.0,
-                "size_z": 15.0,
-                "pocket_score": -0.2763,
-                "drug_score": 0.0017,
-                "number_of_alpha_spheres": 42.0,
-                "mean_alpha-sphere_radius": 4.1508,
-                "mean_alpha-sphere_solvent_acc": 0.5677,
-                "mean_b-factor_of_pocket_residues": 0.6749,
-                "hydrophobicity_score": 5.625,
-                "polarity_score": 12.0,
-                "amino_acid_based_volume_score": 4.25,
-                "pocket_volume_(monte_carlo)": 758.5719,
-                "pocket_volume_(convex_hull)": 105.8326,
-                "charge_score": 4.0,
-                "local_hydrophobic_density_score": 12.375,
-                "number_of_apolar_alpha_sphere": 16.0,
-                "proportion_of_apolar_alpha_sphere": 0.381,
-                "residue_ids": [
-                    [
-                        "A",
-                        "HIS",
-                        274
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        222
-                    ],
-                    [
-                        "A",
-                        "LYS",
-                        215
-                    ],
-                    [
-                        "A",
-                        "LEU",
-                        272
-                    ],
-                    [
-                        "A",
-                        "SER",
-                        213
-                    ],
-                    [
-                        "A",
-                        "GLY",
-                        214
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        212
-                    ],
-                    [
-                        "A",
-                        "GLU",
-                        290
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        237
+                        "ILE",
+                        9
                     ],
                     [
                         "A",
                         "ASP",
+                        49
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        28
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        29
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        52
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "LFKIWFAYCGKCHDYYF"
+                }
+            },
+            "5": {
+                "center_x": 9.635,
+                "center_y": 14.385,
+                "center_z": -14.226,
+                "size_x": 9.0,
+                "size_y": 11.0,
+                "size_z": 4.0,
+                "pocket_score": 0.0546,
+                "drug_score": 0.0009,
+                "number_of_alpha_spheres": 19.0,
+                "mean_alpha-sphere_radius": 3.7912,
+                "mean_alpha-sphere_solvent_acc": 0.5933,
+                "mean_b-factor_of_pocket_residues": 0.7193,
+                "hydrophobicity_score": -24.2,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 3.8,
+                "pocket_volume_(monte_carlo)": 244.4139,
+                "pocket_volume_(convex_hull)": 8.1807,
+                "charge_score": -2.0,
+                "local_hydrophobic_density_score": 4.0,
+                "number_of_apolar_alpha_sphere": 5.0,
+                "proportion_of_apolar_alpha_sphere": 0.2632,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ASN",
+                        107
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        105
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        106
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        39
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        40
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "DDPYN"
+                }
+            },
+            "3": {
+                "center_x": 17.994,
+                "center_y": 18.646,
+                "center_z": 2.539,
+                "size_x": 9.0,
+                "size_y": 12.0,
+                "size_z": 12.0,
+                "pocket_score": 0.0886,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 30.0,
+                "mean_alpha-sphere_radius": 3.9393,
+                "mean_alpha-sphere_solvent_acc": 0.5639,
+                "mean_b-factor_of_pocket_residues": 0.461,
+                "hydrophobicity_score": -1.2222,
+                "polarity_score": 6.0,
+                "amino_acid_based_volume_score": 3.6667,
+                "pocket_volume_(monte_carlo)": 301.9957,
+                "pocket_volume_(convex_hull)": 24.0715,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 4.0,
+                "number_of_apolar_alpha_sphere": 5.0,
+                "proportion_of_apolar_alpha_sphere": 0.1667,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLY",
+                        33
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        53
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        31
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        32
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        49
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        52
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        64
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        56
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        30
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "GKGGDYNEY"
+                }
+            },
+            "2": {
+                "center_x": 11.73,
+                "center_y": 23.559,
+                "center_z": -4.715,
+                "size_x": 9.0,
+                "size_y": 11.0,
+                "size_z": 13.0,
+                "pocket_score": 0.1222,
+                "drug_score": 0.0514,
+                "number_of_alpha_spheres": 33.0,
+                "mean_alpha-sphere_radius": 3.6418,
+                "mean_alpha-sphere_solvent_acc": 0.4802,
+                "mean_b-factor_of_pocket_residues": 0.1222,
+                "hydrophobicity_score": 34.9,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 3.7,
+                "pocket_volume_(monte_carlo)": 266.9638,
+                "pocket_volume_(convex_hull)": 18.4851,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 13.6471,
+                "number_of_apolar_alpha_sphere": 17.0,
+                "proportion_of_apolar_alpha_sphere": 0.5152,
+                "residue_ids": [
+                    [
+                        "A",
+                        "CYS",
+                        51
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        96
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        47
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        93
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        100
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        43
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        44
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        48
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        97
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        40
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "DRCVHCCLAC"
+                }
+            },
+            "4": {
+                "center_x": 11.553,
+                "center_y": 24.507,
+                "center_z": 14.221,
+                "size_x": 11.0,
+                "size_y": 9.0,
+                "size_z": 7.0,
+                "pocket_score": 0.0675,
+                "drug_score": 0.0,
+                "number_of_alpha_spheres": 21.0,
+                "mean_alpha-sphere_radius": 3.7093,
+                "mean_alpha-sphere_solvent_acc": 0.5046,
+                "mean_b-factor_of_pocket_residues": 0.1108,
+                "hydrophobicity_score": 15.2,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 4.6,
+                "pocket_volume_(monte_carlo)": 217.606,
+                "pocket_volume_(convex_hull)": 5.3962,
+                "charge_score": 2.0,
+                "local_hydrophobic_density_score": 0.0,
+                "number_of_apolar_alpha_sphere": 1.0,
+                "proportion_of_apolar_alpha_sphere": 0.0476,
+                "residue_ids": [
+                    [
+                        "A",
+                        "LYS",
+                        66
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        62
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        67
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        65
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        60
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "GRFKT"
+                }
+            },
+            "7": {
+                "center_x": 17.626,
+                "center_y": 29.703,
+                "center_z": 5.332,
+                "size_x": 12.0,
+                "size_y": 6.0,
+                "size_z": 10.0,
+                "pocket_score": -0.0333,
+                "drug_score": 0.0019,
+                "number_of_alpha_spheres": 22.0,
+                "mean_alpha-sphere_radius": 3.9706,
+                "mean_alpha-sphere_solvent_acc": 0.5792,
+                "mean_b-factor_of_pocket_residues": 0.2109,
+                "hydrophobicity_score": 24.8571,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 3.1429,
+                "pocket_volume_(monte_carlo)": 315.4368,
+                "pocket_volume_(convex_hull)": 9.7702,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 5.75,
+                "number_of_apolar_alpha_sphere": 8.0,
+                "proportion_of_apolar_alpha_sphere": 0.3636,
+                "residue_ids": [
+                    [
+                        "A",
+                        "SER",
+                        89
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        51
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        93
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        54
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        58
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        55
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        57
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "CEANISC"
+                }
+            }
+        }
+    },
+    "P15090": {
+        "3P6H_A": {
+            "6": {
+                "center_x": 6.299,
+                "center_y": 9.546,
+                "center_z": 19.275,
+                "size_x": 12.0,
+                "size_y": 13.0,
+                "size_z": 12.0,
+                "pocket_score": 0.1096,
+                "drug_score": 0.0013,
+                "number_of_alpha_spheres": 21.0,
+                "mean_alpha-sphere_radius": 4.0942,
+                "mean_alpha-sphere_solvent_acc": 0.6043,
+                "mean_b-factor_of_pocket_residues": 0.3969,
+                "hydrophobicity_score": 25.2667,
+                "polarity_score": 10.0,
+                "amino_acid_based_volume_score": 4.8,
+                "pocket_volume_(monte_carlo)": 373.1133,
+                "pocket_volume_(convex_hull)": 29.7205,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 7.0,
+                "number_of_apolar_alpha_sphere": 8.0,
+                "proportion_of_apolar_alpha_sphere": 0.381,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ILE",
+                        104
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        16
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        117
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        78
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        95
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        126
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        76
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        75
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        74
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        72
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        60
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        19
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        115
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        128
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        106
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "FYTETADRQIRVCRY"
+                }
+            },
+            "1": {
+                "center_x": 3.312,
+                "center_y": 6.427,
+                "center_z": 21.661,
+                "size_x": 15.0,
+                "size_y": 11.0,
+                "size_z": 15.0,
+                "pocket_score": 0.4184,
+                "drug_score": 0.7033,
+                "number_of_alpha_spheres": 43.0,
+                "mean_alpha-sphere_radius": 3.9499,
+                "mean_alpha-sphere_solvent_acc": 0.4604,
+                "mean_b-factor_of_pocket_residues": 0.4212,
+                "hydrophobicity_score": 29.2222,
+                "polarity_score": 9.0,
+                "amino_acid_based_volume_score": 4.3333,
+                "pocket_volume_(monte_carlo)": 354.1621,
+                "pocket_volume_(convex_hull)": 45.0656,
+                "charge_score": 2.0,
+                "local_hydrophobic_density_score": 28.0667,
+                "number_of_apolar_alpha_sphere": 30.0,
+                "proportion_of_apolar_alpha_sphere": 0.6977,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ALA",
+                        33
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        126
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        57
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        16
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        38
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        36
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        55
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        75
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        58
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        53
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        60
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        128
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        76
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        20
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        25
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        19
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        78
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        23
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "FYMVVAAPSSFKTADRRY"
+                }
+            },
+            "5": {
+                "center_x": 6.08,
+                "center_y": 24.192,
+                "center_z": 10.617,
+                "size_x": 10.0,
+                "size_y": 8.0,
+                "size_z": 11.0,
+                "pocket_score": 0.1237,
+                "drug_score": 0.0008,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 4.0625,
+                "mean_alpha-sphere_solvent_acc": 0.74,
+                "mean_b-factor_of_pocket_residues": 0.0002,
+                "hydrophobicity_score": 47.0,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 4.4286,
+                "pocket_volume_(monte_carlo)": 228.9894,
+                "pocket_volume_(convex_hull)": 4.329,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 7.0,
+                "number_of_apolar_alpha_sphere": 8.0,
+                "proportion_of_apolar_alpha_sphere": 0.5,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLN",
+                        68
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        70
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        69
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        65
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        63
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        48
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        64
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "VSFIQEF"
+                }
+            },
+            "3": {
+                "center_x": 3.264,
+                "center_y": 11.358,
+                "center_z": 13.295,
+                "size_x": 7.0,
+                "size_y": 13.0,
+                "size_z": 9.0,
+                "pocket_score": 0.2009,
+                "drug_score": 0.0005,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.7496,
+                "mean_alpha-sphere_solvent_acc": 0.4155,
+                "mean_b-factor_of_pocket_residues": 0.5178,
+                "hydrophobicity_score": 37.25,
+                "polarity_score": 5.0,
+                "amino_acid_based_volume_score": 4.75,
+                "pocket_volume_(monte_carlo)": 159.5212,
+                "pocket_volume_(convex_hull)": 2.2161,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 4.0,
+                "number_of_apolar_alpha_sphere": 5.0,
+                "proportion_of_apolar_alpha_sphere": 0.3125,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ILE",
+                        51
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        40
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        106
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        53
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        128
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        60
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        62
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        72
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "MISTIERY"
+                }
+            },
+            "2": {
+                "center_x": 5.913,
+                "center_y": 10.506,
+                "center_z": 29.344,
+                "size_x": 12.0,
+                "size_y": 13.0,
+                "size_z": 6.0,
+                "pocket_score": 0.2443,
+                "drug_score": 0.0001,
+                "number_of_alpha_spheres": 20.0,
+                "mean_alpha-sphere_radius": 3.7604,
+                "mean_alpha-sphere_solvent_acc": 0.5195,
+                "mean_b-factor_of_pocket_residues": 0.5872,
+                "hydrophobicity_score": 8.3636,
+                "polarity_score": 7.0,
+                "amino_acid_based_volume_score": 4.1818,
+                "pocket_volume_(monte_carlo)": 301.2349,
+                "pocket_volume_(convex_hull)": 25.4082,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 0.0,
+                "number_of_apolar_alpha_sphere": 2.0,
+                "proportion_of_apolar_alpha_sphere": 0.1,
+                "residue_ids": [
+                    [
+                        "A",
+                        "THR",
+                        29
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        25
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        76
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        26
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        24
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        79
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        78
+                    ],
+                    [
+                        "A",
+                        "TRP",
+                        97
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        98
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        100
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        23
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "VGVGTDRKWDK"
+                }
+            },
+            "4": {
+                "center_x": 9.127,
+                "center_y": 21.66,
+                "center_z": 3.724,
+                "size_x": 7.0,
+                "size_y": 11.0,
+                "size_z": 11.0,
+                "pocket_score": 0.1284,
+                "drug_score": 0.0031,
+                "number_of_alpha_spheres": 25.0,
+                "mean_alpha-sphere_radius": 4.0495,
+                "mean_alpha-sphere_solvent_acc": 0.5699,
+                "mean_b-factor_of_pocket_residues": 0.6067,
+                "hydrophobicity_score": 45.0,
+                "polarity_score": 2.0,
+                "amino_acid_based_volume_score": 3.5,
+                "pocket_volume_(monte_carlo)": 231.7847,
+                "pocket_volume_(convex_hull)": 5.2684,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 10.0,
+                "number_of_apolar_alpha_sphere": 11.0,
+                "proportion_of_apolar_alpha_sphere": 0.44,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ASP",
+                        47
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        66
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        65
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        46
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        -1
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        49
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        1
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        44
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "SCVGDIIL"
+                }
+            },
+            "8": {
+                "center_x": 4.525,
+                "center_y": -2.901,
+                "center_z": 14.436,
+                "size_x": 8.0,
+                "size_y": 6.0,
+                "size_z": 10.0,
+                "pocket_score": 0.063,
+                "drug_score": 0.0036,
+                "number_of_alpha_spheres": 17.0,
+                "mean_alpha-sphere_radius": 3.8435,
+                "mean_alpha-sphere_solvent_acc": 0.4636,
+                "mean_b-factor_of_pocket_residues": 0.4982,
+                "hydrophobicity_score": 25.8571,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 3.1429,
+                "pocket_volume_(monte_carlo)": 166.8929,
+                "pocket_volume_(convex_hull)": 1.7555,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 12.0,
+                "number_of_apolar_alpha_sphere": 13.0,
+                "proportion_of_apolar_alpha_sphere": 0.7647,
+                "residue_ids": [
+                    [
+                        "A",
+                        "LYS",
+                        37
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        12
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        11
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        34
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        10
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        36
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        13
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "LVSSGAK"
+                }
+            },
+            "7": {
+                "center_x": 17.101,
+                "center_y": 6.762,
+                "center_z": 10.707,
+                "size_x": 9.0,
+                "size_y": 9.0,
+                "size_z": 10.0,
+                "pocket_score": 0.0665,
+                "drug_score": 0.0042,
+                "number_of_alpha_spheres": 22.0,
+                "mean_alpha-sphere_radius": 4.191,
+                "mean_alpha-sphere_solvent_acc": 0.5374,
+                "mean_b-factor_of_pocket_residues": 0.5928,
+                "hydrophobicity_score": 7.3333,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.6667,
+                "pocket_volume_(monte_carlo)": 279.6031,
+                "pocket_volume_(convex_hull)": 9.1948,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 16.0,
+                "number_of_apolar_alpha_sphere": 17.0,
+                "proportion_of_apolar_alpha_sphere": 0.7727,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLU",
+                        109
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        116
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        114
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        107
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        105
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        90
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "VKKEVE"
+                }
+            }
+        }
+    },
+    "Q9UGN5": {
+        "4TVJ_A": {
+            "14": {
+                "center_x": 14.433,
+                "center_y": 12.649,
+                "center_z": 15.205,
+                "size_x": 7.0,
+                "size_y": 9.0,
+                "size_z": 8.0,
+                "pocket_score": -0.032,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 18.0,
+                "mean_alpha-sphere_radius": 3.8355,
+                "mean_alpha-sphere_solvent_acc": 0.5224,
+                "mean_b-factor_of_pocket_residues": 0.0322,
+                "hydrophobicity_score": 45.25,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 4.375,
+                "pocket_volume_(monte_carlo)": 152.3746,
+                "pocket_volume_(convex_hull)": 1.5389,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 5.0,
+                "number_of_apolar_alpha_sphere": 6.0,
+                "proportion_of_apolar_alpha_sphere": 0.3333,
+                "residue_ids": [
+                    [
+                        "A",
+                        "TYR",
+                        397
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        396
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        579
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        476
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        472
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        471
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        475
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        577
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "DYANFAFF"
+                }
+            },
+            "17": {
+                "center_x": 27.326,
+                "center_y": 5.858,
+                "center_z": 1.074,
+                "size_x": 12.0,
+                "size_y": 9.0,
+                "size_z": 11.0,
+                "pocket_score": -0.0576,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 25.0,
+                "mean_alpha-sphere_radius": 3.9723,
+                "mean_alpha-sphere_solvent_acc": 0.5214,
+                "mean_b-factor_of_pocket_residues": 0.6538,
+                "hydrophobicity_score": 15.2727,
+                "polarity_score": 7.0,
+                "amino_acid_based_volume_score": 5.3636,
+                "pocket_volume_(monte_carlo)": 277.0467,
+                "pocket_volume_(convex_hull)": 23.9922,
+                "charge_score": 2.0,
+                "local_hydrophobic_density_score": 8.0,
+                "number_of_apolar_alpha_sphere": 9.0,
+                "proportion_of_apolar_alpha_sphere": 0.36,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLU",
+                        329
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        326
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        325
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        319
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        321
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        306
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        320
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        316
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        259
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        313
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        330
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "KYFRPLIKEEK"
+                }
+            },
+            "6": {
+                "center_x": 1.473,
+                "center_y": -12.883,
+                "center_z": 24.888,
+                "size_x": 10.0,
+                "size_y": 10.0,
+                "size_z": 9.0,
+                "pocket_score": 0.013,
+                "drug_score": 0.0001,
+                "number_of_alpha_spheres": 19.0,
+                "mean_alpha-sphere_radius": 3.8725,
+                "mean_alpha-sphere_solvent_acc": 0.5576,
+                "mean_b-factor_of_pocket_residues": 0.5834,
+                "hydrophobicity_score": -17.0,
+                "polarity_score": 6.0,
+                "amino_acid_based_volume_score": 4.125,
+                "pocket_volume_(monte_carlo)": 312.068,
+                "pocket_volume_(convex_hull)": 13.3826,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 1.0,
+                "number_of_apolar_alpha_sphere": 2.0,
+                "proportion_of_apolar_alpha_sphere": 0.1053,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLY",
+                        411
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        414
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        408
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        410
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        409
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        413
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        368
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        370
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "AREKDGKE"
+                }
+            },
+            "1": {
+                "center_x": 13.334,
+                "center_y": -8.629,
+                "center_z": 10.193,
+                "size_x": 27.0,
+                "size_y": 19.0,
+                "size_z": 23.0,
+                "pocket_score": 0.245,
+                "drug_score": 0.0156,
+                "number_of_alpha_spheres": 119.0,
+                "mean_alpha-sphere_radius": 4.0807,
+                "mean_alpha-sphere_solvent_acc": 0.5481,
+                "mean_b-factor_of_pocket_residues": 0.2239,
+                "hydrophobicity_score": 30.4444,
+                "polarity_score": 15.0,
+                "amino_acid_based_volume_score": 4.2963,
+                "pocket_volume_(monte_carlo)": 1409.359,
+                "pocket_volume_(convex_hull)": 785.2372,
+                "charge_score": 3.0,
+                "local_hydrophobic_density_score": 14.8095,
+                "number_of_apolar_alpha_sphere": 42.0,
+                "proportion_of_apolar_alpha_sphere": 0.3529,
+                "residue_ids": [
+                    [
+                        "A",
+                        "LYS",
+                        345
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        441
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        341
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        342
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        339
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        430
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        434
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        438
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        346
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        272
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        364
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        335
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        444
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        462
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        461
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        428
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        460
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        338
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        276
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        447
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        273
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        455
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        443
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        446
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        445
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        275
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        279
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "VAIKYEGDEIKLNHSNIHLRIAHYGIY"
+                }
+            },
+            "5": {
+                "center_x": -7.19,
+                "center_y": -3.225,
+                "center_z": 18.611,
+                "size_x": 7.0,
+                "size_y": 8.0,
+                "size_z": 12.0,
+                "pocket_score": 0.0166,
+                "drug_score": 0.0046,
+                "number_of_alpha_spheres": 22.0,
+                "mean_alpha-sphere_radius": 4.0247,
+                "mean_alpha-sphere_solvent_acc": 0.6516,
+                "mean_b-factor_of_pocket_residues": 0.3302,
+                "hydrophobicity_score": 17.5,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.625,
+                "pocket_volume_(monte_carlo)": 251.7441,
+                "pocket_volume_(convex_hull)": 3.4543,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 14.0,
+                "number_of_apolar_alpha_sphere": 15.0,
+                "proportion_of_apolar_alpha_sphere": 0.6818,
+                "residue_ids": [
+                    [
+                        "A",
+                        "VAL",
+                        238
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        362
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        234
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        235
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        369
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        370
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        371
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        359
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "MDVDYLRP"
+                }
+            },
+            "11": {
+                "center_x": 15.059,
+                "center_y": 5.078,
+                "center_z": -5.839,
+                "size_x": 9.0,
+                "size_y": 7.0,
+                "size_z": 9.0,
+                "pocket_score": -0.0125,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.7061,
+                "mean_alpha-sphere_solvent_acc": 0.4448,
+                "mean_b-factor_of_pocket_residues": 0.5904,
+                "hydrophobicity_score": 7.3333,
+                "polarity_score": 5.0,
+                "amino_acid_based_volume_score": 4.5,
+                "pocket_volume_(monte_carlo)": 141.5514,
+                "pocket_volume_(convex_hull)": 2.2013,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 0.0,
+                "number_of_apolar_alpha_sphere": 1.0,
+                "proportion_of_apolar_alpha_sphere": 0.0625,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ASP",
+                        312
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        256
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        262
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        263
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        261
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        260
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "MYNTKD"
+                }
+            },
+            "20": {
+                "center_x": 23.003,
+                "center_y": 8.269,
+                "center_z": 22.089,
+                "size_x": 11.0,
+                "size_y": 10.0,
+                "size_z": 10.0,
+                "pocket_score": -0.0875,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 22.0,
+                "mean_alpha-sphere_radius": 4.0408,
+                "mean_alpha-sphere_solvent_acc": 0.5843,
+                "mean_b-factor_of_pocket_residues": 0.2565,
+                "hydrophobicity_score": 21.6667,
+                "polarity_score": 7.0,
+                "amino_acid_based_volume_score": 4.8889,
+                "pocket_volume_(monte_carlo)": 262.4903,
+                "pocket_volume_(convex_hull)": 7.8856,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 5.0,
+                "number_of_apolar_alpha_sphere": 6.0,
+                "proportion_of_apolar_alpha_sphere": 0.2727,
+                "residue_ids": [
+                    [
+                        "A",
+                        "HIS",
+                        394
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        469
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        555
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        556
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        473
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        472
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        554
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        558
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        456
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "HMKNYLNYE"
+                }
+            },
+            "12": {
+                "center_x": -7.543,
+                "center_y": 5.751,
+                "center_z": 15.637,
+                "size_x": 14.0,
+                "size_y": 6.0,
+                "size_z": 10.0,
+                "pocket_score": -0.0138,
+                "drug_score": 0.0032,
+                "number_of_alpha_spheres": 18.0,
+                "mean_alpha-sphere_radius": 3.8705,
+                "mean_alpha-sphere_solvent_acc": 0.5056,
+                "mean_b-factor_of_pocket_residues": 0.472,
+                "hydrophobicity_score": 24.4286,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 5.1429,
+                "pocket_volume_(monte_carlo)": 271.7142,
+                "pocket_volume_(convex_hull)": 11.1437,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 9.0,
+                "number_of_apolar_alpha_sphere": 10.0,
+                "proportion_of_apolar_alpha_sphere": 0.5556,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ARG",
+                        237
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        240
+                    ],
+                    [
+                        "A",
+                        "LEU",
                         236
                     ],
                     [
                         "A",
                         "LYS",
-                        211
-                    ],
-                    [
-                        "A",
-                        "GLN",
-                        289
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        291
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        240
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        207
+                        574
                     ],
                     [
                         "A",
                         "PHE",
-                        210
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "HFKTSGKKDNRLHQEV"
-                }
-            },
-            "8": {
-                "center_x": -3.549,
-                "center_y": -65.868,
-                "center_z": 1.948,
-                "size_x": 9.0,
-                "size_y": 14.0,
-                "size_z": 11.0,
-                "pocket_score": 0.0102,
-                "drug_score": 0.0039,
-                "number_of_alpha_spheres": 23.0,
-                "mean_alpha-sphere_radius": 3.9474,
-                "mean_alpha-sphere_solvent_acc": 0.6479,
-                "mean_b-factor_of_pocket_residues": 0.4777,
-                "hydrophobicity_score": -0.625,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 4.625,
-                "pocket_volume_(monte_carlo)": 459.0455,
-                "pocket_volume_(convex_hull)": 51.2219,
-                "charge_score": 0.0,
-                "local_hydrophobic_density_score": 15.5294,
-                "number_of_apolar_alpha_sphere": 17.0,
-                "proportion_of_apolar_alpha_sphere": 0.7391,
-                "residue_ids": [
-                    [
-                        "A",
-                        "VAL",
-                        33
-                    ],
-                    [
-                        "A",
-                        "ASP",
-                        53
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        32
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        55
-                    ],
-                    [
-                        "A",
-                        "ARG",
-                        54
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        38
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        40
-                    ],
-                    [
-                        "A",
-                        "PRO",
-                        35
-                    ]
-                ],
-                "chain_ids": [
-                    "A"
-                ],
-                "chain_to_sequence": {
-                    "A": "PVPYPDRY"
-                }
-            },
-            "7": {
-                "center_x": -50.482,
-                "center_y": -63.23,
-                "center_z": 18.079,
-                "size_x": 12.0,
-                "size_y": 6.0,
-                "size_z": 13.0,
-                "pocket_score": 0.0121,
-                "drug_score": 0.0029,
-                "number_of_alpha_spheres": 18.0,
-                "mean_alpha-sphere_radius": 3.9115,
-                "mean_alpha-sphere_solvent_acc": 0.7073,
-                "mean_b-factor_of_pocket_residues": 0.6244,
-                "hydrophobicity_score": 40.8333,
-                "polarity_score": 4.0,
-                "amino_acid_based_volume_score": 5.0,
-                "pocket_volume_(monte_carlo)": 315.7887,
-                "pocket_volume_(convex_hull)": 16.5384,
-                "charge_score": 1.0,
-                "local_hydrophobic_density_score": 10.1667,
-                "number_of_apolar_alpha_sphere": 12.0,
-                "proportion_of_apolar_alpha_sphere": 0.6667,
-                "residue_ids": [
-                    [
-                        "A",
-                        "PHE",
-                        409
-                    ],
-                    [
-                        "A",
-                        "GLU",
                         405
                     ],
                     [
                         "A",
+                        "ASP",
+                        403
+                    ],
+                    [
+                        "A",
                         "LEU",
-                        408
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        404
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        443
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        442
+                        224
                     ]
                 ],
                 "chain_ids": [
                     "A"
                 ],
                 "chain_to_sequence": {
-                    "A": "YELFHH"
+                    "A": "LLREDFK"
                 }
             },
-            "29": {
-                "center_x": -43.422,
-                "center_y": -57.601,
-                "center_z": 8.84,
-                "size_x": 19.0,
-                "size_y": 17.0,
-                "size_z": 17.0,
-                "pocket_score": -0.249,
-                "drug_score": 0.2358,
-                "number_of_alpha_spheres": 95.0,
-                "mean_alpha-sphere_radius": 3.98,
-                "mean_alpha-sphere_solvent_acc": 0.4862,
-                "mean_b-factor_of_pocket_residues": 0.443,
-                "hydrophobicity_score": 51.0,
-                "polarity_score": 12.0,
-                "amino_acid_based_volume_score": 4.6087,
-                "pocket_volume_(monte_carlo)": 930.9322,
-                "pocket_volume_(convex_hull)": 199.3372,
-                "charge_score": 5.0,
-                "local_hydrophobic_density_score": 27.8182,
-                "number_of_apolar_alpha_sphere": 44.0,
-                "proportion_of_apolar_alpha_sphere": 0.4632,
+            "9": {
+                "center_x": 35.064,
+                "center_y": -2.581,
+                "center_z": 9.943,
+                "size_x": 10.0,
+                "size_y": 10.0,
+                "size_z": 13.0,
+                "pocket_score": -0.0044,
+                "drug_score": 0.0118,
+                "number_of_alpha_spheres": 27.0,
+                "mean_alpha-sphere_radius": 3.7968,
+                "mean_alpha-sphere_solvent_acc": 0.5348,
+                "mean_b-factor_of_pocket_residues": 0.5315,
+                "hydrophobicity_score": 15.4286,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.4286,
+                "pocket_volume_(monte_carlo)": 277.8623,
+                "pocket_volume_(convex_hull)": 19.904,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 20.0,
+                "number_of_apolar_alpha_sphere": 21.0,
+                "proportion_of_apolar_alpha_sphere": 0.7778,
                 "residue_ids": [
                     [
                         "A",
                         "LEU",
-                        295
+                        327
                     ],
                     [
                         "A",
-                        "GLN",
-                        203
+                        "THR",
+                        453
                     ],
                     [
                         "A",
                         "ILE",
-                        444
+                        289
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        324
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        290
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        286
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        503
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "EIRQLTP"
+                }
+            },
+            "21": {
+                "center_x": 8.62,
+                "center_y": 8.916,
+                "center_z": 6.564,
+                "size_x": 16.0,
+                "size_y": 15.0,
+                "size_z": 15.0,
+                "pocket_score": -0.1245,
+                "drug_score": 0.4035,
+                "number_of_alpha_spheres": 103.0,
+                "mean_alpha-sphere_radius": 3.8925,
+                "mean_alpha-sphere_solvent_acc": 0.4506,
+                "mean_b-factor_of_pocket_residues": 0.4495,
+                "hydrophobicity_score": 24.4706,
+                "polarity_score": 9.0,
+                "amino_acid_based_volume_score": 4.0588,
+                "pocket_volume_(monte_carlo)": 979.8887,
+                "pocket_volume_(convex_hull)": 509.19,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 46.3729,
+                "number_of_apolar_alpha_sphere": 59.0,
+                "proportion_of_apolar_alpha_sphere": 0.5728,
+                "residue_ids": [
+                    [
+                        "A",
+                        "LYS",
+                        480
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        257
                     ],
                     [
                         "A",
                         "LEU",
-                        408
+                        479
                     ],
                     [
                         "A",
-                        "MET",
-                        391
+                        "GLU",
+                        253
                     ],
                     [
                         "A",
                         "PHE",
+                        475
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        477
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        254
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        250
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        432
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        482
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        244
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        481
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        474
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        247
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        476
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        431
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        249
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "LNQAEMERMCFASLKNT"
+                }
+            },
+            "13": {
+                "center_x": 22.588,
+                "center_y": 0.249,
+                "center_z": 35.32,
+                "size_x": 13.0,
+                "size_y": 18.0,
+                "size_z": 9.0,
+                "pocket_score": -0.0252,
+                "drug_score": 0.0,
+                "number_of_alpha_spheres": 35.0,
+                "mean_alpha-sphere_radius": 3.897,
+                "mean_alpha-sphere_solvent_acc": 0.4999,
+                "mean_b-factor_of_pocket_residues": 0.6619,
+                "hydrophobicity_score": 19.0,
+                "polarity_score": 9.0,
+                "amino_acid_based_volume_score": 3.9412,
+                "pocket_volume_(monte_carlo)": 550.1503,
+                "pocket_volume_(convex_hull)": 131.8249,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 1.3333,
+                "number_of_apolar_alpha_sphere": 3.0,
+                "proportion_of_apolar_alpha_sphere": 0.0857,
+                "residue_ids": [
+                    [
+                        "A",
+                        "LYS",
+                        516
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        528
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        559
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        465
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        523
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        424
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        422
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        557
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        522
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        518
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        546
+                    ],
+                    [
+                        "A",
+                        "CYS",
+                        495
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        494
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        421
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        497
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        493
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        544
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "HNMDGQCEKLAPFTINY"
+                }
+            },
+            "3": {
+                "center_x": 16.901,
+                "center_y": -7.341,
+                "center_z": -5.007,
+                "size_x": 14.0,
+                "size_y": 9.0,
+                "size_z": 10.0,
+                "pocket_score": 0.039,
+                "drug_score": 0.0007,
+                "number_of_alpha_spheres": 32.0,
+                "mean_alpha-sphere_radius": 3.8339,
+                "mean_alpha-sphere_solvent_acc": 0.5137,
+                "mean_b-factor_of_pocket_residues": 0.7047,
+                "hydrophobicity_score": 8.4545,
+                "polarity_score": 6.0,
+                "amino_acid_based_volume_score": 4.3636,
+                "pocket_volume_(monte_carlo)": 360.9217,
+                "pocket_volume_(convex_hull)": 37.9918,
+                "charge_score": 3.0,
+                "local_hydrophobic_density_score": 7.2727,
+                "number_of_apolar_alpha_sphere": 11.0,
+                "proportion_of_apolar_alpha_sphere": 0.3438,
+                "residue_ids": [
+                    [
+                        "A",
+                        "PRO",
+                        266
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        269
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        274
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        308
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        307
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        265
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        260
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        264
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        270
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        277
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        310
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "YKAPKLQATRP"
+                }
+            },
+            "16": {
+                "center_x": -16.894,
+                "center_y": 1.391,
+                "center_z": 13.026,
+                "size_x": 10.0,
+                "size_y": 10.0,
+                "size_z": 6.0,
+                "pocket_score": -0.0553,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.9901,
+                "mean_alpha-sphere_solvent_acc": 0.6299,
+                "mean_b-factor_of_pocket_residues": 0.9135,
+                "hydrophobicity_score": 31.4286,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.1429,
+                "pocket_volume_(monte_carlo)": 171.9277,
+                "pocket_volume_(convex_hull)": 1.6617,
+                "charge_score": -1.0,
+                "local_hydrophobic_density_score": 6.0,
+                "number_of_apolar_alpha_sphere": 7.0,
+                "proportion_of_apolar_alpha_sphere": 0.4375,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLN",
+                        239
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        236
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        228
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        227
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        224
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        233
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        231
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "LENFSLQ"
+                }
+            },
+            "15": {
+                "center_x": -11.751,
+                "center_y": -2.453,
+                "center_z": 11.611,
+                "size_x": 9.0,
+                "size_y": 9.0,
+                "size_z": 8.0,
+                "pocket_score": -0.0401,
+                "drug_score": 0.0006,
+                "number_of_alpha_spheres": 18.0,
+                "mean_alpha-sphere_radius": 3.6345,
+                "mean_alpha-sphere_solvent_acc": 0.3979,
+                "mean_b-factor_of_pocket_residues": 0.5133,
+                "hydrophobicity_score": 18.1667,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 3.8333,
+                "pocket_volume_(monte_carlo)": 83.094,
+                "pocket_volume_(convex_hull)": 0.4129,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 7.0,
+                "number_of_apolar_alpha_sphere": 8.0,
+                "proportion_of_apolar_alpha_sphere": 0.4444,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLN",
+                        239
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        233
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        356
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        234
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        358
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        359
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "SMQHLD"
+                }
+            },
+            "18": {
+                "center_x": 25.695,
+                "center_y": 13.895,
+                "center_z": 27.224,
+                "size_x": 10.0,
+                "size_y": 7.0,
+                "size_z": 7.0,
+                "pocket_score": -0.0678,
+                "drug_score": 0.0002,
+                "number_of_alpha_spheres": 15.0,
+                "mean_alpha-sphere_radius": 3.7557,
+                "mean_alpha-sphere_solvent_acc": 0.5829,
+                "mean_b-factor_of_pocket_residues": 0.7347,
+                "hydrophobicity_score": 8.8333,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.5,
+                "pocket_volume_(monte_carlo)": 153.4007,
+                "pocket_volume_(convex_hull)": 2.2706,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 3.0,
+                "number_of_apolar_alpha_sphere": 4.0,
+                "proportion_of_apolar_alpha_sphere": 0.2667,
+                "residue_ids": [
+                    [
+                        "A",
+                        "TYR",
+                        556
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        521
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        555
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        393
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        520
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        392
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "PTKMNY"
+                }
+            },
+            "19": {
+                "center_x": 18.953,
+                "center_y": 7.117,
+                "center_z": 5.989,
+                "size_x": 14.0,
+                "size_y": 13.0,
+                "size_z": 13.0,
+                "pocket_score": -0.0775,
+                "drug_score": 0.0001,
+                "number_of_alpha_spheres": 34.0,
+                "mean_alpha-sphere_radius": 4.141,
+                "mean_alpha-sphere_solvent_acc": 0.5465,
+                "mean_b-factor_of_pocket_residues": 0.4084,
+                "hydrophobicity_score": 7.8,
+                "polarity_score": 7.0,
+                "amino_acid_based_volume_score": 4.6,
+                "pocket_volume_(monte_carlo)": 517.734,
+                "pocket_volume_(convex_hull)": 61.2041,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 8.0,
+                "number_of_apolar_alpha_sphere": 10.0,
+                "proportion_of_apolar_alpha_sphere": 0.2941,
+                "residue_ids": [
+                    [
+                        "A",
+                        "ALA",
+                        476
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        257
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        475
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        477
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        259
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        329
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        431
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        258
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        332
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        330
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "EMKEKQRFAS"
+                }
+            },
+            "2": {
+                "center_x": 9.376,
+                "center_y": 13.105,
+                "center_z": 33.354,
+                "size_x": 9.0,
+                "size_y": 6.0,
+                "size_z": 9.0,
+                "pocket_score": 0.1042,
+                "drug_score": 0.0013,
+                "number_of_alpha_spheres": 15.0,
+                "mean_alpha-sphere_radius": 3.7295,
+                "mean_alpha-sphere_solvent_acc": 0.649,
+                "mean_b-factor_of_pocket_residues": 0.3155,
+                "hydrophobicity_score": 14.4,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 3.2,
+                "pocket_volume_(monte_carlo)": 193.452,
+                "pocket_volume_(convex_hull)": 6.3103,
+                "charge_score": 0.0,
+                "local_hydrophobic_density_score": 9.0,
+                "number_of_apolar_alpha_sphere": 10.0,
+                "proportion_of_apolar_alpha_sphere": 0.6667,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLN",
+                        387
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        388
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        538
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        539
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        384
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "QQSLG"
+                }
+            },
+            "4": {
+                "center_x": 20.41,
+                "center_y": 1.797,
+                "center_z": 17.058,
+                "size_x": 18.0,
+                "size_y": 13.0,
+                "size_z": 19.0,
+                "pocket_score": 0.0339,
+                "drug_score": 0.176,
+                "number_of_alpha_spheres": 109.0,
+                "mean_alpha-sphere_radius": 4.0064,
+                "mean_alpha-sphere_solvent_acc": 0.5205,
+                "mean_b-factor_of_pocket_residues": 0.0,
+                "hydrophobicity_score": 21.381,
+                "polarity_score": 14.0,
+                "amino_acid_based_volume_score": 4.2381,
+                "pocket_volume_(monte_carlo)": 887.3267,
+                "pocket_volume_(convex_hull)": 268.8841,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 42.7917,
+                "number_of_apolar_alpha_sphere": 48.0,
+                "proportion_of_apolar_alpha_sphere": 0.4404,
+                "residue_ids": [
+                    [
+                        "A",
+                        "TYR",
+                        473
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        462
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        454
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        328
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        332
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        434
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        430
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        429
+                    ],
+                    [
+                        "A",
+                        "HIS",
+                        428
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        463
+                    ],
+                    [
+                        "A",
+                        "MET",
+                        456
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        455
+                    ],
+                    [
+                        "A",
+                        "ALA",
+                        464
+                    ],
+                    [
+                        "A",
+                        "SER",
+                        470
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        558
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        335
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        475
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        331
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        469
+                    ],
+                    [
+                        "A",
+                        "GLN",
+                        324
+                    ],
+                    [
+                        "A",
+                        "ARG",
+                        431
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "QSIQEHGSRNGYMYFAKSYFE"
+                }
+            },
+            "10": {
+                "center_x": 10.58,
+                "center_y": -12.332,
+                "center_z": 22.935,
+                "size_x": 13.0,
+                "size_y": 8.0,
+                "size_z": 12.0,
+                "pocket_score": -0.0104,
+                "drug_score": 0.0009,
+                "number_of_alpha_spheres": 27.0,
+                "mean_alpha-sphere_radius": 3.7936,
+                "mean_alpha-sphere_solvent_acc": 0.5634,
+                "mean_b-factor_of_pocket_residues": 0.1719,
+                "hydrophobicity_score": -0.2308,
+                "polarity_score": 7.0,
+                "amino_acid_based_volume_score": 3.5385,
+                "pocket_volume_(monte_carlo)": 337.9269,
+                "pocket_volume_(convex_hull)": 36.6179,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 10.0,
+                "number_of_apolar_alpha_sphere": 11.0,
+                "proportion_of_apolar_alpha_sphere": 0.4074,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLY",
+                        442
+                    ],
+                    [
+                        "A",
+                        "GLU",
+                        412
+                    ],
+                    [
+                        "A",
+                        "LYS",
                         409
                     ],
                     [
                         "A",
                         "HIS",
-                        388
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        207
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        386
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        210
-                    ],
-                    [
-                        "A",
-                        "ASN",
-                        382
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        212
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        404
-                    ],
-                    [
-                        "A",
-                        "PHE",
-                        395
-                    ],
-                    [
-                        "A",
-                        "THR",
-                        206
-                    ],
-                    [
-                        "A",
-                        "VAL",
-                        447
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        446
-                    ],
-                    [
-                        "A",
-                        "HIS",
-                        443
-                    ],
-                    [
-                        "A",
-                        "TYR",
-                        385
-                    ],
-                    [
-                        "A",
-                        "ALA",
-                        199
+                        441
                     ],
                     [
                         "A",
                         "LEU",
-                        390
+                        443
                     ],
                     [
                         "A",
-                        "TRP",
-                        387
+                        "ARG",
+                        444
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        564
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        565
                     ],
                     [
                         "A",
                         "ALA",
-                        202
+                        415
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        411
+                    ],
+                    [
+                        "A",
+                        "ASP",
+                        410
+                    ],
+                    [
+                        "A",
+                        "ASN",
+                        563
+                    ],
+                    [
+                        "A",
+                        "VAL",
+                        567
                     ]
                 ],
                 "chain_ids": [
                     "A"
                 ],
                 "chain_to_sequence": {
-                    "A": "AAQTHFTLNYHWHLMFYLFHIHV"
+                    "A": "KDGEAHGLRNPNV"
+                }
+            },
+            "8": {
+                "center_x": 24.309,
+                "center_y": 0.104,
+                "center_z": -6.892,
+                "size_x": 8.0,
+                "size_y": 10.0,
+                "size_z": 7.0,
+                "pocket_score": -0.002,
+                "drug_score": 0.0001,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.7982,
+                "mean_alpha-sphere_solvent_acc": 0.5918,
+                "mean_b-factor_of_pocket_residues": 0.4392,
+                "hydrophobicity_score": 19.1667,
+                "polarity_score": 4.0,
+                "amino_acid_based_volume_score": 4.8333,
+                "pocket_volume_(monte_carlo)": 175.5537,
+                "pocket_volume_(convex_hull)": 4.5294,
+                "charge_score": 2.0,
+                "local_hydrophobic_density_score": 3.0,
+                "number_of_apolar_alpha_sphere": 4.0,
+                "proportion_of_apolar_alpha_sphere": 0.25,
+                "residue_ids": [
+                    [
+                        "A",
+                        "HIS",
+                        311
+                    ],
+                    [
+                        "A",
+                        "TYR",
+                        306
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        264
+                    ],
+                    [
+                        "A",
+                        "PRO",
+                        318
+                    ],
+                    [
+                        "A",
+                        "PHE",
+                        313
+                    ],
+                    [
+                        "A",
+                        "THR",
+                        307
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "KYTHFP"
+                }
+            },
+            "7": {
+                "center_x": 7.354,
+                "center_y": -9.654,
+                "center_z": 1.066,
+                "size_x": 9.0,
+                "size_y": 8.0,
+                "size_z": 8.0,
+                "pocket_score": -0.002,
+                "drug_score": 0.0001,
+                "number_of_alpha_spheres": 16.0,
+                "mean_alpha-sphere_radius": 3.7958,
+                "mean_alpha-sphere_solvent_acc": 0.4444,
+                "mean_b-factor_of_pocket_residues": 0.6565,
+                "hydrophobicity_score": 30.8571,
+                "polarity_score": 3.0,
+                "amino_acid_based_volume_score": 4.5714,
+                "pocket_volume_(monte_carlo)": 140.9531,
+                "pocket_volume_(convex_hull)": 2.1222,
+                "charge_score": 1.0,
+                "local_hydrophobic_density_score": 1.0,
+                "number_of_apolar_alpha_sphere": 2.0,
+                "proportion_of_apolar_alpha_sphere": 0.125,
+                "residue_ids": [
+                    [
+                        "A",
+                        "GLU",
+                        341
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        345
+                    ],
+                    [
+                        "A",
+                        "ILE",
+                        344
+                    ],
+                    [
+                        "A",
+                        "GLY",
+                        268
+                    ],
+                    [
+                        "A",
+                        "LYS",
+                        348
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        267
+                    ],
+                    [
+                        "A",
+                        "LEU",
+                        270
+                    ]
+                ],
+                "chain_ids": [
+                    "A"
+                ],
+                "chain_to_sequence": {
+                    "A": "LGLEIKK"
                 }
             }
         }

@@ -4,8 +4,9 @@
 
 /notes.txt
 /environment_old.yml
-/test_output
 
 /models/model_old.pkl.gz
+
+/output
 
 *.pyc

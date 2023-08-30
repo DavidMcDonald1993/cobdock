@@ -1,0 +1,46 @@
+
+
+                  PLANTS
+        Protein-Ligand ANT System
+               version 1.2
+
+
+author: Oliver Korb
+
+scientific contributors: T.E. Exner, T. Stuetzle
+
+contact: Oliver.Korb@uni-konstanz.de
+
+
+
+PLANTS started in virtual screening mode ...
+
+
+Structure options:
+flip amide: 0
+flip planar N: 1
+force planarity for flippable bonds: 0
+force free flippable bonds rotation: 1
+flip ring corners: 0
+
+
+Iteration scaling:
+sigma: 1.25
+max evaluations: 1000000000
+
+
+Cluster algorithm settings:
+structures: 10
+RMSD: 2
+
+
+Nelder Mead Simplex:
+tolerance: 0.02
+refine tolerance: 0.0001
+maxEval: 5000
+
+
+Docking performed on host: david-pc
+Docking process ID: 112873
+
+

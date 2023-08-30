@@ -183,7 +183,7 @@ def execute_plants(
     scoring_function: str = "chemplp",
     write_multi_mol2: bool = 0,
     search_speed: int = 1,
-    cluster_rmsd: float = 2.0, # TODO: return to this 
+    cluster_rmsd: float = 2.0, 
     mode: str = "screen",
     num_poses: int = None,
     prepare_ligand: bool = False,
@@ -322,9 +322,11 @@ def execute_plants(
         }
         write_json(plants_data, plants_data_filename, verbose=verbose)
 
-    pose_mol2_filenames = [os.path.join(plants_output_dir, file) 
+    pose_mol2_filenames = [
+        os.path.join(plants_output_dir, file) 
         for file in os.listdir(plants_output_dir) 
-        if re.match(r".*conf_[0-9]+\.mol2$", file)] # return as list for multiprocessing
+        if re.match(r".*conf_[0-9]+\.mol2$", file)
+    ] # return as list for multiprocessing
 
     return pose_mol2_filenames, plants_data_filename
 

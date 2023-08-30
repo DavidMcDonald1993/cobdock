@@ -15,10 +15,11 @@ if __name__ == "__main__":
     import os.path
     sys.path.insert(1, PROJECT_ROOT)
 
+import pandas as pd
+
 from utils.molecules.openbabel_utils import obabel_convert
 from utils.sys_utils import execute_system_command
-from utils.io.io_utils import copy_file
-
+from utils.io.io_utils import copy_file, write_json
 
 GALAXYDOCK_VERSION = 3
 GALAXYDOCK_HOME = os.path.join(PROJECT_ROOT, "bin", "docking", f"GalaxyDock{GALAXYDOCK_VERSION}")
@@ -187,15 +188,20 @@ def execute_galaxydock(
         f"GD{GALAXYDOCK_VERSION}_fb.mol2"
     )
 
+    # pose data
+    all_pose_data_filename = os.path.join(output_dir, "galaxydock_pose_data.json")
+
+
     if verbose:
         print ("Scores will be located at", galaxydock_output_filename)
         print ("Output poses will be located at", pose_mol2_file)
+        print ("Pose data will be written to", all_pose_data_filename)
 
-    if os.path.exists(galaxydock_output_filename) and os.path.exists(pose_mol2_file):
+    if os.path.exists(all_pose_data_filename) and os.path.exists(pose_mol2_file):
         if verbose:
-            print (galaxydock_output_filename, "and", pose_mol2_file, "already exist, skipping docking")
+            print (all_pose_data_filename, "and", pose_mol2_file, "already exist, skipping docking")
         
-        return galaxydock_output_filename, pose_mol2_file
+        return pose_mol2_file, all_pose_data_filename 
 
     current_dir = os.getcwd()
 
@@ -234,24 +240,6 @@ def execute_galaxydock(
     if GALAXYDOCK_N_PROC == 1:
         use_multiprocessing = False 
 
-    # args = f'''\
-    # -d {GALAXYDOCK_HOME} \
-    # -p {target_filename} \
-    # -l {ligand_filename} \
-    # -x {center_x} \
-    # -y {center_y} \
-    # -z {center_z} \
-    # -size_x {size_x} \
-    # -size_y {size_y} \
-    # -size_z {size_z} \
-    # '''
-    # if use_multiprocessing: # only for new GalaxyDock
-    #     args += f" --n_proc {n_proc}"
-
-    # try:
-    #     execute_system_command(f"{RUN_GALAXYDOCK_LOCATION} {args}", timeout=timeout, verbose=verbose)
-   
-
     try:
 
         n_elem_x = int( size_x / 0.375 ) + 1
@@ -274,7 +262,7 @@ def execute_galaxydock(
             n_elem_x=n_elem_x,
             n_elem_y=n_elem_y,
             n_elem_z=n_elem_z,
-            # timeout=timeout,
+            verbose=verbose,
         )
 
     except Exception as e:
@@ -283,7 +271,50 @@ def execute_galaxydock(
         # change back to current_dir
         os.chdir(current_dir)
 
-    return galaxydock_output_filename, pose_mol2_file
+    if verbose:
+        print ("Reading GalaxyDock scores from", galaxydock_output_filename)
+    galaxydock_output_df = pd.read_fwf(
+        galaxydock_output_filename, 
+        comment="!", 
+        sep="\t", 
+        index_col=0)
+    # necessary
+    galaxydock_output_df = galaxydock_output_df.fillna(0)
+
+    all_pose_data = {}
+
+    for rank in galaxydock_output_df.index:
+
+        galaxydock_score = galaxydock_output_df["Energy"].loc[rank]
+        if isinstance(galaxydock_score, str):
+            galaxydock_score = 0
+        galaxydock_rmsd = galaxydock_output_df["l_RMSD"].loc[rank]
+        if isinstance(galaxydock_rmsd, str):
+            galaxydock_rmsd = 0
+        galaxydock_autodock = galaxydock_output_df["ATDK_E"].loc[rank]
+        if isinstance(galaxydock_autodock, str):
+            galaxydock_autodock = 0
+        galaxydock_internal_energy = galaxydock_output_df["INT_E"].loc[rank]
+        if isinstance(galaxydock_autodock, str):
+            galaxydock_internal_energy = 0
+        galaxydock_drug_score = galaxydock_output_df["DS_E"].loc[rank]
+        if isinstance(galaxydock_drug_score, str):
+            galaxydock_drug_score = 0
+
+        pose_data = {
+            "rmsd": galaxydock_rmsd,
+            "score": galaxydock_score,
+            "autodock": galaxydock_autodock,
+            "drug_score": galaxydock_drug_score,
+            "internal_energy": galaxydock_internal_energy, 
+        }
+
+        all_pose_data[rank] = pose_data
+
+    # write all_pose_data to file
+    write_json(all_pose_data, all_pose_data_filename, verbose=verbose)
+
+    return pose_mol2_file, all_pose_data_filename 
 
 if __name__ == "__main__":
 

@@ -1,0 +1,82 @@
+
+
+                  PLANTS
+        Protein-Ligand ANT System
+               version 1.2
+
+
+author: Oliver Korb
+
+scientific contributors: T.E. Exner, T. Stuetzle
+
+contact: Oliver.Korb@uni-konstanz.de
+
+
+
+-------------------------------------------------------------
+Ligand data file: ibuprofen_PLANTS.mol2 (entry 1)
+-------------------------------------------------------------
+
+
+Input molecule: ibuprofen_PLANTS.mol2
+Description: ibuprofen
+
+
+Ligand rotatable bonds (4): 
+C    (5   , C.ar ) -C    (4   , C.3  )
+C    (4   , C.3  ) -C    (2   , C.3  )
+C    (8   , C.ar ) -C    (11  , C.3  )
+C    (11  , C.3  ) -C    (13  , C.2  )
+
+
+Ligand formal charge table:
+14    O     -0.50
+15    O     -0.50
+Ligand formal charge: -1.00
+
+
+Atom type assignment for partial score term CHEMPLP-PLP:
+
+ACCEPTOR(2): 
+    O(  14) [ch]     O(  15) [ch] 
+
+NONPOLAR(13): 
+    C(   1)          C(   2)          C(   3)          C(   4)          C(   5)          C(   6)          C(   7)          C(   8)      
+    C(   9)          C(  10)          C(  11)          C(  12)          C(  13)      
+
+Atom type assignment for partial score term CHEM-HB:
+
+ACCEPTOR(2): 
+    O(  14) [ch]     O(  15) [ch] 
+
+NONPOLAR(13): 
+    C(   1)          C(   2)          C(   3)          C(   4)          C(   5)          C(   6)          C(   7)          C(   8)      
+    C(   9)          C(  10)          C(  11)          C(  12)          C(  13)      
+
+Intra-ligand score: CLASH2
+Ligand clash pairs: 60
+
+Ligand torsions: 27 (27 parameters matched)
+
+Ligand input conformation score: 1447.79
+
+PLPtotal,PLPparthbond,PLPpartsteric,PLPpartmetal,PLPpartrepulsive,PLPpartburpolar,LIG_NUM_CLASH,LIG_NUM_CONTACT,LIG_NUM_NO_CONTACT,CHEMpartmetal,CHEMparthbond,CHEMparthbondCHO,DON,ACC,UNUSED_DON,UNUSED_ACC,CHEMPLP_CLASH2,TRIPOS_TORS
+
+261.832,0,123.983,0,0.255581,0,13,2,0,0,0,0,0,2,0,2,0,1.81629
+
+ACO iterations 234  time 4.04s  evaluations 2235664
+
+Cluster time 0.05s (max. 10 structures, RMSD similarity 2.00 A):
+
+rank  1  score   -67.48  file ibuprofen_entry_00001_conf_01
+rank  2  score   -66.20  file ibuprofen_entry_00001_conf_02
+rank  3  score   -63.56  file ibuprofen_entry_00001_conf_03
+rank  4  score   -63.15  file ibuprofen_entry_00001_conf_04
+rank  5  score   -61.68  file ibuprofen_entry_00001_conf_05
+rank  6  score   -61.59  file ibuprofen_entry_00001_conf_06
+rank  7  score   -59.79  file ibuprofen_entry_00001_conf_07
+rank  8  score   -57.98  file ibuprofen_entry_00001_conf_08
+rank  9  score   -57.10  file ibuprofen_entry_00001_conf_09
+rank 10  score   -56.76  file ibuprofen_entry_00001_conf_10
+
+

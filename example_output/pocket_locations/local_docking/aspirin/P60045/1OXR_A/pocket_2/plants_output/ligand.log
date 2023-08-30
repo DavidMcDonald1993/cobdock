@@ -1,0 +1,81 @@
+
+
+                  PLANTS
+        Protein-Ligand ANT System
+               version 1.2
+
+
+author: Oliver Korb
+
+scientific contributors: T.E. Exner, T. Stuetzle
+
+contact: Oliver.Korb@uni-konstanz.de
+
+
+
+-------------------------------------------------------------
+Ligand data file: aspirin_PLANTS.mol2 (entry 1)
+-------------------------------------------------------------
+
+
+Input molecule: aspirin_PLANTS.mol2
+Description: aspirin
+
+
+Ligand rotatable bonds (3): 
+C    (3   , C.ar ) -O    (11  , O.3  )
+C    (8   , C.ar ) -C    (9   , C.2  )
+O    (11  , O.3  ) -C    (2   , C.2  )
+
+
+Ligand formal charge table:
+12    O     -0.50
+13    O     -0.50
+Ligand formal charge: -1.00
+
+
+Atom type assignment for partial score term CHEMPLP-PLP:
+
+ACCEPTOR(3): 
+    O(  10)          O(  12) [ch]     O(  13) [ch] 
+
+NONPOLAR(10): 
+    C(   1)          C(   2)          C(   3)          C(   4)          C(   5)          C(   6)          C(   7)          C(   8)      
+    C(   9)          O(  11)      
+
+Atom type assignment for partial score term CHEM-HB:
+
+ACCEPTOR(3): 
+    O(  10)          O(  12) [ch]     O(  13) [ch] 
+
+NONPOLAR(10): 
+    C(   1)          C(   2)          C(   3)          C(   4)          C(   5)          C(   6)          C(   7)          C(   8)      
+    C(   9)          O(  11)      
+
+Intra-ligand score: CLASH2
+Ligand clash pairs: 38
+
+Ligand torsions: 8 (8 parameters matched)
+
+Ligand input conformation score: 1323.89
+
+PLPtotal,PLPparthbond,PLPpartsteric,PLPpartmetal,PLPpartrepulsive,PLPpartburpolar,LIG_NUM_CLASH,LIG_NUM_CONTACT,LIG_NUM_NO_CONTACT,CHEMpartmetal,CHEMparthbond,CHEMparthbondCHO,DON,ACC,UNUSED_DON,UNUSED_ACC,CHEMPLP_CLASH2,TRIPOS_TORS
+
+0.203065,0,-1.27795,0,0,-0.00792375,1,4,8,0,0,0,0,3,0,3,1.49596,2.40001
+
+ACO iterations 196  time 1.63s  evaluations 1344851
+
+Cluster time 0.02s (max. 10 structures, RMSD similarity 2.00 A):
+
+rank  1  score   -62.72  file aspirin_entry_00001_conf_01
+rank  2  score   -62.18  file aspirin_entry_00001_conf_02
+rank  3  score   -58.31  file aspirin_entry_00001_conf_03
+rank  4  score   -57.55  file aspirin_entry_00001_conf_04
+rank  5  score   -56.80  file aspirin_entry_00001_conf_05
+rank  6  score   -56.71  file aspirin_entry_00001_conf_06
+rank  7  score   -55.41  file aspirin_entry_00001_conf_07
+rank  8  score   -55.40  file aspirin_entry_00001_conf_08
+rank  9  score   -53.74  file aspirin_entry_00001_conf_09
+rank 10  score   -53.67  file aspirin_entry_00001_conf_10
+
+

@@ -13,7 +13,7 @@ import numpy as np
 
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-from itertools import product
+from itertools import product, combinations
 
 # from utils.molecules.openbabel_utils import obabel_convert
 from utils.molecules.pdb_utils import (
@@ -34,8 +34,8 @@ from utils.molecules.pdb_utils import (
     write_single_model,
     get_all_chain_ids_in_a_PDB_file,
     get_cofactors_for_accessions,
-    define_target_bounding_box_using_biopython
-    )
+    define_target_bounding_box_using_biopython,
+)
 from utils.molecules.openbabel_utils import obabel_convert, smiles_to_3D
 from utils.molecules.pymol_utils import convert_to_ligand, create_complex_with_pymol, cleanup_with_pymol
 from utils.io.io_utils import (
@@ -51,7 +51,7 @@ from utils.io.io_utils import (
     get_token,
     sanitise_filename,
     read_smiles,
-    )
+)
 from utils.rank_aggregation import perform_rank_aggregation
 from utils.molecules.protonation_utils import protonate_pdb
 from utils.alphafold_utils import download_alphafold_structure
@@ -1314,7 +1314,8 @@ def map_pdb_id_to_uniprot_accession(
         print ("Mapping", len(pdb_ids), "PDB IDs to Uniprot accession ID")
 
     pdb_ids = map(str.upper, pdb_ids)
-    pdb_ids = filter(lambda s: len(s) == 4, pdb_ids)
+    # length filter no longer required
+    # pdb_ids = filter(lambda s: len(s) == 4, pdb_ids)
 
     # pdb_to_uniprot = load_json(mapping_json_filename, verbose=verbose)
     pdb_to_uniprot = load_compressed_pickle(pdb_to_uniprot_filename, verbose=verbose)

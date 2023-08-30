@@ -1,0 +1,26 @@
+!==============================================
+! I/O Parameters
+!==============================================
+data_directory    /home/david/aiainsights/cob_dock/bin/docking/GalaxyDock3/data/
+infile_pdb        4TVJ_A.pdb
+infile_ligand     Olaparib.mol2
+top_type          polarh
+fix_type          all
+ligdock_prefix    GD3
+!==============================================
+! Grid Options
+!==============================================
+grid_box_cntr     13.878 0.027 16.457
+grid_n_elem       195 110 161
+grid_width        0.375
+!==============================================
+! Energy Parameters
+!==============================================
+weight_type              GalaxyDock3
+!==============================================
+! Initial Bank Parameters
+!==============================================
+first_bank               rand
+max_trial                50000
+e0max                    1000.0
+e1max                    1000000.0

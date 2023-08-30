@@ -1,0 +1,22 @@
+
+# scoring function and search settings
+scoring_function chemplp
+search_speed speed1
+
+# input
+protein_file 1OXR_A_prepared_protonated_7.4_PLANTS.mol2
+ligand_file aspirin_PLANTS.mol2
+
+# output
+output_dir plants_output
+
+# write single mol2 files (e.g. for RMSD calculation)
+write_multi_mol2 0
+
+# binding site definition
+bindingsite_center 13.006 27.5064 -2.6526
+bindingsite_radius 15
+
+# cluster algorithm
+cluster_structures 10
+cluster_rmsd 2.0

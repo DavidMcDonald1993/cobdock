@@ -19,14 +19,210 @@ from utils.molecules.pymol_utils import create_complex_with_pymol
 # model prediction
 from cobdock.model_utils import load_model, prepare_for_model_prediction
 
-# local docking 
-from cobdock.docking.vina.vina_utils import prepare_ligand_for_vina, prepare_target_for_vina, execute_vina, convert_and_separate_vina_out_file
+# local docking
+from utils.molecules.openbabel_utils  import obabel_convert
+from utils.io.io_utils import delete_file, delete_directory
+
+from cobdock.docking.blind_docking_utils import (
+    prepare_target_for_docking, 
+    prepare_ligand_for_docking,
+)
+
+from cobdock.docking.vina.vina_utils import (
+    VINA_VARIANTS,
+    # prepare_ligand_for_vina, 
+    # prepare_target_for_vina, 
+    execute_vina, 
+    convert_and_separate_vina_out_file,
+)
+from cobdock.docking.plants.plants_utils import (
+    execute_plants,
+)
+from cobdock.docking.galaxydock.galaxydock_utils import (
+    execute_galaxydock,
+)
+
+LOCAL_DOCKING_N_PROC = int(os.environ.get("LOCAL_DOCKING_N_PROC", default=5))
+
+def execute_local_docking(
+    ligand_id: str,
+    ligand_3D_filename: str, 
+    target_id: str,
+    target_3D_filename: str,
+    output_dir: str,
+    center_x: float,
+    center_y: float,
+    center_z: float,
+    size_x: float,
+    size_y: float,
+    size_z: float,
+    docking_program: str = "vina",
+    exhaustiveness: int = 8,
+    num_poses: int = None,
+    # num_complexes: int = None,
+    # complex_prefix: str = None, # to better handle complex naming?
+    n_proc: int = None,
+    verbose: bool = True,
+    ):
+
+    docking_program = docking_program.lower()
+
+    if verbose:
+        print ("Performing docking using program", docking_program)
+        print ("Ligand filename:", ligand_3D_filename)
+        print ("Target filename:", target_3D_filename)
+        print ("Outputting to:", output_dir)
+        print ("Docking to location", center_x, center_y, center_z)
+        print ("Docking using bounding box", size_x, size_y, size_z)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    pose_output_dir = os.path.join(output_dir, "poses")
+    os.makedirs(pose_output_dir, exist_ok=True)
+
+    # execute docking
+    if verbose:
+        print ("Outputting poses to", pose_output_dir)
+
+    docking_program = docking_program.lower()
+
+    if docking_program in VINA_VARIANTS:
+
+        output_filename = os.path.join(output_dir, f"{docking_program}.pdbqt")  
+        log_filename = os.path.join(output_dir, f"{docking_program}.log")  
+        
+        vina_out = execute_vina(
+            ligand_filename=ligand_3D_filename, 
+            target_filename=target_3D_filename,
+            output_filename=output_filename, 
+            log_filename=log_filename,
+            center_x=center_x,
+            center_y=center_y,
+            center_z=center_z,
+            size_x=size_x,
+            size_y=size_y,
+            size_z=size_z,
+            exhaustiveness=exhaustiveness,
+            num_poses=num_poses,
+            vina_variant=docking_program,
+            n_proc=n_proc,
+            verbose=verbose,
+        )
+
+        if vina_out is not None: # run error
+
+            vina_out_filename, all_pose_data_filename = vina_out
+
+            # convert and separate output_file
+            pose_pdb_filenames = convert_and_separate_vina_out_file(
+                vina_output_filename=vina_out_filename,
+                ligand_id=ligand_id,
+                conversion_dir=pose_output_dir,
+                verbose=verbose,
+            )
+
+            # load pose data
+
+        else:
+            pose_pdb_filenames = []
+
+    elif docking_program == "plants":
+
+        # run plants in this dir
+        plants_output_dir = os.path.join(output_dir, "plants_output")
+
+        # write configfile here
+        configfile_location = os.path.join(output_dir, "plantsconfig")
+
+        pose_mol2_filenames, all_pose_data_filename = execute_plants(
+            ligand_title=ligand_id,
+            ligand_filename=ligand_3D_filename,
+            target_title=target_id,
+            target_filename=target_3D_filename,
+            plants_output_dir=plants_output_dir,
+            configfile_location=configfile_location,
+            center_x=center_x,
+            center_y=center_y,
+            center_z=center_z,
+            size_x=size_x,
+            size_y=size_y,
+            size_z=size_z,
+            num_poses=num_poses,
+            verbose=verbose,
+        )
+
+        # convert poses to pdb
+        pose_pdb_filenames = []
+        if pose_mol2_filenames is not None:
+
+            for pose_mol2_filename in pose_mol2_filenames:
+                # get conf id
+                stem, ext = os.path.splitext(pose_mol2_filename)
+                pose_id = int(stem.split("_")[-1])
+                pose_pdb_filename = obabel_convert(
+                    input_format="mol2", 
+                    input_filename=pose_mol2_filename, 
+                    output_format="pdb",
+                    output_filename=os.path.join(pose_output_dir, f"pose_{pose_id}.pdb"),
+                    verbose=verbose,
+                )
+                # delete original mol2 file
+                delete_file(pose_mol2_filename, verbose=verbose)
+                # add to list of PDB pose files
+                pose_pdb_filenames.append(pose_pdb_filename)
+        
+        # delete plants output dir
+        # delete_directory(plants_output_dir, verbose=verbose)
+
+    elif docking_program == "galaxydock":
+
+        pose_mol2_filenames, all_pose_data_filename  = execute_galaxydock(
+            ligand_filename=ligand_3D_filename,
+            target_filename=target_3D_filename,
+            output_dir=output_dir,
+            center_x=center_x,
+            center_y=center_y,
+            center_z=center_z,
+            size_x=size_x,
+            size_y=size_y,
+            size_z=size_z,
+            use_multiprocessing=True,
+            num_poses=num_poses,
+            verbose=verbose,
+        )
+
+        if pose_mol2_filenames is not None:
+
+            # convert and separate output_file
+            # convert to pdb and split
+            obabel_convert(
+                input_format="mol2",
+                input_filename=pose_mol2_filenames,
+                output_format="pdb",
+                output_filename="pose_",
+                output_dir=pose_output_dir, 
+                multiple=True,
+                verbose=verbose,
+            )
+
+        pose_pdb_filenames = glob.glob(os.path.join(pose_output_dir, "*.pdb"))
+    
+    else:
+        raise NotImplementedError(docking_program)
+    
+    # load pose data
+    all_pose_data = load_json(all_pose_data_filename, key_type=int, verbose=verbose)
+        
+    return all_pose_data, pose_pdb_filenames
 
 def generate_all_local_docking_tasks(
     executor,
     ligands_to_targets: dict,
-    output_directory: str,
+    output_dir: str,
     num_poses: int,
+
+    local_docking_program: str = "vina", # TODO
+
     verbose: bool = True,
     ):
 
@@ -35,23 +231,17 @@ def generate_all_local_docking_tasks(
     for ligand_id, ligand_data in ligands_to_targets.items():
 
         # make output for ligand
-        ligand_output_dir = os.path.join(output_directory, ligand_id)
+        ligand_output_dir = os.path.join(output_dir, ligand_id)
         os.makedirs(ligand_output_dir, exist_ok=True)
         
         ligand_pdb_filename = ligand_data["pdb_filename"]
-        prepared_ligand_filename_vina = os.path.join(
-            ligand_output_dir,
-            f"{ligand_id}.pdbqt"
-        )
 
-        # prepare ligand for docking
-        if not os.path.exists(prepared_ligand_filename_vina):
-            prepared_ligand_filename_vina = prepare_ligand_for_vina(
-                ligand_filename=ligand_pdb_filename,
-                output_filename=prepared_ligand_filename_vina,
-                overwrite=False,
-                verbose=verbose,
-            )
+        prepared_ligand_filename_vina = prepare_ligand_for_docking(
+            ligand_filename=ligand_pdb_filename,
+            docking_program=local_docking_program,
+            overwrite=False,
+            verbose=verbose
+        )
 
         if prepared_ligand_filename_vina is None or not os.path.exists(prepared_ligand_filename_vina):
             continue
@@ -79,17 +269,12 @@ def generate_all_local_docking_tasks(
                 # assume target has been prepared already
                 prepared_target_filename = target_data["prepared_filename"]
 
-                # located at root of vina_out)directory
-                prepared_target_filename_vina = os.path.join(
-                    output_directory, 
-                    f"{pdb_id}.pdbqt")
-                if not os.path.exists(prepared_target_filename_vina):
-                    prepared_target_filename_vina = prepare_target_for_vina(
-                        prepared_target_filename,
-                        output_filename=prepared_target_filename_vina,
-                        overwrite=False,
-                        verbose=verbose,
-                    )
+                prepared_target_filename_vina = prepare_target_for_docking(
+                    target_filename=prepared_target_filename,
+                    docking_program=local_docking_program,
+                    overwrite=False,
+                    verbose=verbose,
+                )
 
                 if prepared_target_filename_vina is None or not os.path.exists(prepared_target_filename_vina):
                     if verbose:
@@ -109,26 +294,22 @@ def generate_all_local_docking_tasks(
                     )
                     os.makedirs(ligand_target_pocket_output_dir, exist_ok=True)
 
-                    vina_output_filename = os.path.join(ligand_target_pocket_output_dir, f"{ligand_id}_{pdb_id}_{pocket_num}.pdbqt")
-                    vina_log_filename = os.path.join(ligand_target_pocket_output_dir, f"{ligand_id}_{pdb_id}_{pocket_num}.log")
-                    # vina_log_json_filename = vina_log_filename + ".json"
-                    
-                    # submit task
                     task = executor.submit(
-                        execute_vina,
-                        ligand_filename=prepared_ligand_filename_vina,
-                        target_filename=prepared_target_filename_vina,
-                        output_filename=vina_output_filename,
-                        log_filename=vina_log_filename,
+                        execute_local_docking,
+                        ligand_id=ligand_id,
+                        ligand_3D_filename=prepared_ligand_filename_vina,
+                        target_id=f"{accession}_{pdb_id}_{pocket_num}",
+                        target_3D_filename=prepared_target_filename_vina,
+                        output_dir=ligand_target_pocket_output_dir,
                         center_x=pocket_data["center_x"],
                         center_y=pocket_data["center_y"],
                         center_z=pocket_data["center_z"],
-                        size_x=max(pocket_data["size_x"], 23),
-                        size_y=max(pocket_data["size_y"], 23),
-                        size_z=max(pocket_data["size_z"], 23),
-                        vina_variant="vina",
-                        n_proc=1,
+                        size_x=max(pocket_data["size_x"], 15),
+                        size_y=max(pocket_data["size_y"], 15),
+                        size_z=max(pocket_data["size_z"], 15),
+                        docking_program=local_docking_program,
                         num_poses=num_poses,
+                        n_proc=1,
                         verbose=verbose,
                     )
 
@@ -145,13 +326,21 @@ def generate_all_local_docking_tasks(
 
 def execute_all_final_local_docking(
     ligands_to_targets: dict,
-    output_directory: str,
+    output_dir: str,
     num_poses: int,
     num_complexes: int,
-    local_docking_program: str = "vina", # TODO
-    n_proc: int = 5,
+
+    local_docking_program: str = "vina", 
+    
+    n_proc: int = None,
     verbose: bool = True,
     ):
+
+    if n_proc is None:
+        n_proc = LOCAL_DOCKING_N_PROC
+
+    if num_complexes is None: # convert all poses
+        num_complexes = num_poses
 
     if verbose:
         print("Executing all local docking for", len(ligands_to_targets), "ligands using", n_proc, "process(es)")
@@ -159,15 +348,17 @@ def execute_all_final_local_docking(
         print ("Generating", num_complexes, "complex(es)")
     
     # begin local docking execution
-
     with ProcessPoolExecutor(max_workers=n_proc) as p:
 
         # generate local docking tasks 
         running_tasks = generate_all_local_docking_tasks(
             executor=p,
             ligands_to_targets=ligands_to_targets,
-            output_directory=output_directory,
+            output_dir=output_dir,
             num_poses=num_poses,
+
+            local_docking_program=local_docking_program,
+
             verbose=verbose,
         )
 
@@ -194,63 +385,67 @@ def execute_all_final_local_docking(
             if pocket_num not in all_local_docking_collated_data[ligand_id][accession][pdb_id]:
                 all_local_docking_collated_data[ligand_id][accession][pdb_id][pocket_num] = {}
 
-            output_filename_log_json_filename = running_task.result()
+            # get result of docking task
+            task_output = running_task.result()
 
             del running_tasks[running_task]
             
             # handle missing vina / task fail
-            if output_filename_log_json_filename is None:
+            if task_output is None:
                 continue
 
-            output_filename, log_json_filename = output_filename_log_json_filename
+            # output_filename, log_json_filename = task_output
 
-            # begin collation of poses
-            # check that Vina ran for target
-            if not os.path.exists(log_json_filename) or not os.path.exists(output_filename):
-                continue
+            # # begin collation of poses
+            # # check that Vina ran for target
+            # if not os.path.exists(log_json_filename) or not os.path.exists(output_filename):
+            #     continue
 
-             # load log file as JSON
-            vina_pose_data = load_json(log_json_filename, verbose=verbose,)
+            #  # load log file as JSON
+            all_pose_data, pose_pdb_filenames = task_output
 
             ligand_target_pocket_num_output_dir = os.path.join(
-                output_directory,
+                output_dir,
                 ligand_id,
                 accession,
                 pdb_id,
-                f"pocket_{pocket_num}"
+                f"pocket_{pocket_num}",
             )
 
-            # create pose and complex dir
-            pose_output_dir = os.path.join(
-                ligand_target_pocket_num_output_dir,
-                "poses",
-            )
-            os.makedirs(pose_output_dir, exist_ok=True)
+            # create pose dir
+            # pose_output_dir = os.path.join(
+            #     ligand_target_pocket_num_output_dir,
+            #     "poses",
+            # )
+            # os.makedirs(pose_output_dir, exist_ok=True)
 
+            # create complexes dir
             complex_output_dir = os.path.join(
                 ligand_target_pocket_num_output_dir,
                 "complexes",
             )
             os.makedirs(complex_output_dir, exist_ok=True)
 
-            # split out file into pose_pdb_files
-            pose_pdb_files = convert_and_separate_vina_out_file(
-                vina_output_filename=output_filename,
-                conversion_dir=pose_output_dir,
-                ligand_id=ligand_id,
-                output_format="pdb",
-                verbose=verbose,
-            )
+            # # split out file into pose_pdb_files
+            # pose_pdb_files = convert_and_separate_vina_out_file(
+            #     vina_output_filename=output_filename,
+            #     conversion_dir=pose_output_dir,
+            #     ligand_id=ligand_id,
+            #     output_format="pdb",
+            #     verbose=verbose,
+            # )
 
-            for pose_pdb_filename in pose_pdb_files:
+            # iterate over pose pdb files and compute their location
+            for pose_pdb_filename in pose_pdb_filenames:
                     
                 pose_pdb_basename = os.path.basename(pose_pdb_filename)
                 pose_pdb_basename = os.path.splitext(pose_pdb_basename)[0]
-                pose_id = pose_pdb_basename.split("_")[1]
+                pose_id = int(pose_pdb_basename.split("_")[1])
 
-                pose_data = vina_pose_data[pose_id]
+                # data for current pose
+                pose_data = all_pose_data[pose_id]
 
-                if num_complexes is not None and int(pose_id) <= num_complexes:
+                if num_complexes is not None and pose_id <= num_complexes:
 
                     # make complex
                     complex_filename = os.path.join(
@@ -268,6 +463,7 @@ def execute_all_final_local_docking(
                 center_x, center_y, center_z = center_of_mass
                 size_x, size_y, size_z = get_bounding_box_size(pose_pdb_filename, verbose=verbose)
 
+                # add pose location to pose data
                 pose_data = {
                     "center_x": center_x, 
                     "center_y": center_y, 
@@ -275,14 +471,7 @@ def execute_all_final_local_docking(
                     "size_x": size_x, 
                     "size_y": size_y, 
                     "size_z": size_z, 
-                    **{
-                        k: float(pose_data[k])
-                        for k in (
-                            "energy",
-                            "rmsd_lb",
-                            "rmsd_ub",
-                        )
-                    }
+                    **pose_data
                 }
 
                 all_local_docking_collated_data[ligand_id][accession][pdb_id][pocket_num][pose_id] = pose_data
@@ -300,7 +489,7 @@ def execute_post_docking(
     
     top_pocket_distance_threshold: float = 3,
     local_docking_program: str = "vina",
-    local_docking_n_proc: int = 5, 
+    local_docking_n_proc: int = None, 
     verbose: bool = True,
     ):
 
@@ -436,7 +625,7 @@ def execute_post_docking(
 
     all_local_docking_collated_data = execute_all_final_local_docking(
         ligands_to_targets=ligands_to_targets,
-        output_directory=local_docking_output_dir,
+        output_dir=local_docking_output_dir,
         num_poses=num_poses,
         num_complexes=num_complexes,
         local_docking_program=local_docking_program,

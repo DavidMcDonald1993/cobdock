@@ -476,7 +476,7 @@ def convert_and_separate_vina_out_file(
     # delete vina_output_filename
     # delete_file(vina_output_filename, verbose=verbose)
     # return generator of separate ligand pdb files
-    return glob.iglob(os.path.join(conversion_dir, f"{output_filename}*.{output_format}"))
+    return glob.glob(os.path.join(conversion_dir, f"{output_filename}*.{output_format}"))
 
 
 if __name__ == "__main__":

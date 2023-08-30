@@ -1,0 +1,95 @@
+
+
+                  PLANTS
+        Protein-Ligand ANT System
+               version 1.2
+
+
+author: Oliver Korb
+
+scientific contributors: T.E. Exner, T. Stuetzle
+
+contact: Oliver.Korb@uni-konstanz.de
+
+
+
+-------------------------------------------------------------
+Ligand data file: Olaparib_PLANTS.mol2 (entry 1)
+-------------------------------------------------------------
+
+
+Input molecule: Olaparib_PLANTS.mol2
+Description: Olaparib
+
+
+Ligand rotatable bonds (4): 
+C    (16  , C.ar ) -C    (17  , C.2  )
+C    (14  , C.ar ) -C    (13  , C.3  )
+C    (13  , C.3  ) -C    (12  , C.ar )
+C    (22  , C.2  ) -C    (23  , C.3  )
+
+
+Ligand formal charge table:
+4     N     1.00 
+5     C     1.00 
+Ligand formal charge: 2.00
+
+
+Atom type assignment for partial score term CHEMPLP-PLP:
+
+DONOR(1): 
+    N(   4) [ch] 
+
+ACCEPTOR(4): 
+    N(   3)          O(  29)          O(  30)          O(  31)      
+
+NONPOLAR(27): 
+    N(   1)          N(   2)          C(   5)          C(   6)          C(   7)          C(   8)          C(   9)          C(  10)      
+    C(  11)          C(  12)          C(  13)          C(  14)          C(  15)          C(  16)          C(  17)          C(  18)      
+    C(  19)          C(  20)          C(  21)          C(  22)          C(  23)          C(  24)          C(  25)          C(  26)      
+    C(  27)          C(  28)          F(  32)      
+
+Atom type assignment for partial score term CHEM-HB:
+
+DONOR(1): 
+    N(   4) [ch] 
+
+ACCEPTOR(4): 
+    N(   3)          O(  29)          O(  30)          O(  31)      
+
+NONPOLAR(27): 
+    N(   1)          N(   2)          C(   5)          C(   6)          C(   7)          C(   8)          C(   9)          C(  10)      
+    C(  11)          C(  12)          C(  13)          C(  14)          C(  15)          C(  16)          C(  17)          C(  18)      
+    C(  19)          C(  20)          C(  21)          C(  22)          C(  23)          C(  24)          C(  25)          C(  26)      
+    C(  27)          C(  28)          F(  32)      
+
+HYDROGEN(1): 
+    H(  55) [ch] 
+
+Intra-ligand score: CLASH2
+Ligand clash pairs: 323
+
+Ligand torsions: 22 (22 parameters matched)
+
+Ligand input conformation score: 2435.04
+
+PLPtotal,PLPparthbond,PLPpartsteric,PLPpartmetal,PLPpartrepulsive,PLPpartburpolar,LIG_NUM_CLASH,LIG_NUM_CONTACT,LIG_NUM_NO_CONTACT,CHEMpartmetal,CHEMparthbond,CHEMparthbondCHO,DON,ACC,UNUSED_DON,UNUSED_ACC,CHEMPLP_CLASH2,TRIPOS_TORS
+
+383.999,0,202.719,0,0.509235,0,17,7,8,0,0,0,1,4,1,4,0,8.38574
+
+ACO iterations 287  time 10.48s  evaluations 3762859
+
+Cluster time 0.08s (max. 10 structures, RMSD similarity 2.00 A):
+
+rank  1  score   -97.10  file Olaparib_entry_00001_conf_01
+rank  2  score   -89.49  file Olaparib_entry_00001_conf_02
+rank  3  score   -86.68  file Olaparib_entry_00001_conf_03
+rank  4  score   -84.93  file Olaparib_entry_00001_conf_04
+rank  5  score   -83.68  file Olaparib_entry_00001_conf_05
+rank  6  score   -83.49  file Olaparib_entry_00001_conf_06
+rank  7  score   -83.33  file Olaparib_entry_00001_conf_07
+rank  8  score   -82.02  file Olaparib_entry_00001_conf_08
+rank  9  score   -81.56  file Olaparib_entry_00001_conf_09
+rank 10  score   -80.94  file Olaparib_entry_00001_conf_10
+
+

@@ -19,6 +19,9 @@ from cobdock.docking.blind_docking_utils import predocking_preparation
 from cobdock.data_collation import collate_all_data
 from cobdock.post_docking import execute_post_docking
 
+from cobdock.docking.plants.plants_utils import PLANTS_LOCATION
+from cobdock.docking.galaxydock.galaxydock_utils import RUN_GALAXYDOCK_LOCATION
+
 from utils.io.io_utils import delete_directory
 
 def execute_cobdock(
@@ -46,9 +49,10 @@ def execute_cobdock(
     commercial_use_only: bool = False,
     
     # final output
-    num_poses: int = 10,
-    num_complexes: int = 10,
-    num_top_pockets: int = 5,
+    local_docking_program: str = "plants",
+    num_poses: int = 10, # 10 poses per pocket
+    num_complexes: int = None, # convert all poses into complexes
+    num_top_pockets: int = 3, # number of top-ranked pockets to execute local docking into
     top_pocket_distance_threshold: float = 10, # 10A
 
     verbose: bool = True,
@@ -122,6 +126,15 @@ def execute_cobdock(
     # ##########                                 Post-Docking                                     ########################
     # ####################################################################################################################
 
+    # select local docking program
+    # vina is default
+    if commercial_use_only \
+        or (local_docking_program == "plants" and not os.path.exists(PLANTS_LOCATION))\
+        or (local_docking_program == "galaxydock" and not os.path.exists(RUN_GALAXYDOCK_LOCATION)):
+        if verbose:
+            print ("Setting local docking program to Vina")
+        local_docking_program = "vina"
+
     if run_post_docking_analysis:
 
         # top five pocket locations per pair
@@ -134,7 +147,7 @@ def execute_cobdock(
             num_poses=num_poses,
             num_complexes=num_complexes,
             commercial_use_only=commercial_use_only,
-            local_docking_program="vina",
+            local_docking_program=local_docking_program,
             top_pocket_distance_threshold=top_pocket_distance_threshold,
             verbose=verbose,
         )
@@ -161,15 +174,15 @@ if __name__ == "__main__":
     ligands_to_targets = {
         "aspirin": {
             "smiles": "CC(=O)OC1=CC=CC=C1C(=O)O",
-            "targets": ["P23219", ],
+            "targets": ["1OXR_A", ],
         },
         "ibuprofen": {
             "smiles": "CC(C)Cc1ccc(cc1)[C@@H](C)C(=O)O",
-            "targets": ["P23219", ],
+            "targets": ["3P6H_A", ],
         },
-        "olaparib": {
+        "Olaparib": {
             "smiles": "O=C1C2=CC=CC=C2C(CC3=CC(C(N4CCN(CC4)C(C5CC5)=O)=O)=C(C=C3)F)=NN1",
-            "targets": ["P23219", "P09874"]
+            "targets": ["4TVJ_A"],
         }
     }
 
@@ -181,13 +194,18 @@ if __name__ == "__main__":
     execute_cobdock(
         ligands_to_targets=ligands_to_targets,
         output_dir=output_dir,
-        map_uniprot_to_pdb=True,
-        number_of_pdb=1,
+
+        map_uniprot_to_pdb=False,
+
+        # map_uniprot_to_pdb=True,
+        # number_of_pdb=1,
 
         commercial_use_only=commercial_use_only,
 
-        num_top_pockets=5,
-        num_poses=1,
-        num_complexes=1,
+        local_docking_program="plants",
+        num_top_pockets=3,
+        num_poses=10,
+        num_complexes=None,
+
         verbose=True,
     )

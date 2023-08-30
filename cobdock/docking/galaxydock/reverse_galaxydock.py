@@ -224,23 +224,26 @@ def execute_reverse_docking_galaxydock(
             ligand_pdb_filename = task_data["ligand_pdb_filename"]
             prepared_target_filename = task_data["prepared_target_filename"]
 
-            galaxydock_output_info_filename, galaxydock_pose_output_filename = running_task.result()
+            galaxydock_pose_output_filename, galaxydock_pose_data_filename = running_task.result()
 
             del running_tasks[running_task]
 
             # begin collation of pose data
-            if not os.path.exists(galaxydock_output_info_filename) or not os.path.exists(galaxydock_pose_output_filename): 
+            if not os.path.exists(galaxydock_pose_data_filename) or not os.path.exists(galaxydock_pose_output_filename): 
                 continue
         
-            if verbose:
-                print ("Reading GalaxyDock scores from", galaxydock_output_info_filename)
-            galaxydock_output_df = pd.read_fwf(
-                galaxydock_output_info_filename, 
-                comment="!", 
-                sep="\t", 
-                index_col=0)
-            # necessary
-            galaxydock_output_df = galaxydock_output_df.fillna(0)
+            # load all pose data
+            galaxydock_pose_data = load_json(galaxydock_pose_data_filename, key_type=int, verbose=verbose,)
+
+            # if verbose:
+            #     print ("Reading GalaxyDock scores from", galaxydock_output_info_filename)
+            # galaxydock_output_df = pd.read_fwf(
+            #     galaxydock_output_info_filename, 
+            #     comment="!", 
+            #     sep="\t", 
+            #     index_col=0)
+            # # necessary
+            # galaxydock_output_df = galaxydock_output_df.fillna(0)
 
             ligand_target_output_dir = os.path.join(
                 galaxydock_output_directory,
@@ -297,21 +300,23 @@ def execute_reverse_docking_galaxydock(
                 center_x, center_y, center_z = center_of_mass
                 size_x, size_y, size_z = get_bounding_box_size(pose_pdb_filename, verbose=verbose)
 
-                galaxydock_score = galaxydock_output_df["Energy"].loc[rank]
-                if isinstance(galaxydock_score, str):
-                    galaxydock_score = 0
-                galaxydock_rmsd = galaxydock_output_df["l_RMSD"].loc[rank]
-                if isinstance(galaxydock_rmsd, str):
-                    galaxydock_rmsd = 0
-                galaxydock_autodock = galaxydock_output_df["ATDK_E"].loc[rank]
-                if isinstance(galaxydock_autodock, str):
-                    galaxydock_autodock = 0
-                galaxydock_internal_energy = galaxydock_output_df["INT_E"].loc[rank]
-                if isinstance(galaxydock_autodock, str):
-                    galaxydock_internal_energy = 0
-                galaxydock_drug_score = galaxydock_output_df["DS_E"].loc[rank]
-                if isinstance(galaxydock_drug_score, str):
-                    galaxydock_drug_score = 0
+                # galaxydock_score = galaxydock_output_df["Energy"].loc[rank]
+                # if isinstance(galaxydock_score, str):
+                #     galaxydock_score = 0
+                # galaxydock_rmsd = galaxydock_output_df["l_RMSD"].loc[rank]
+                # if isinstance(galaxydock_rmsd, str):
+                #     galaxydock_rmsd = 0
+                # galaxydock_autodock = galaxydock_output_df["ATDK_E"].loc[rank]
+                # if isinstance(galaxydock_autodock, str):
+                #     galaxydock_autodock = 0
+                # galaxydock_internal_energy = galaxydock_output_df["INT_E"].loc[rank]
+                # if isinstance(galaxydock_autodock, str):
+                #     galaxydock_internal_energy = 0
+                # galaxydock_drug_score = galaxydock_output_df["DS_E"].loc[rank]
+                # if isinstance(galaxydock_drug_score, str):
+                #     galaxydock_drug_score = 0
+
+
 
                 pose_data = {
                     "center_x": center_x, 
@@ -320,11 +325,12 @@ def execute_reverse_docking_galaxydock(
                     "size_x": size_x, 
                     "size_y": size_y, 
                     "size_z": size_z, 
-                    "rmsd": galaxydock_rmsd,
-                    "score": galaxydock_score,
-                    "autodock": galaxydock_autodock,
-                    "drug_score": galaxydock_drug_score,
-                    "internal_energy": galaxydock_internal_energy, 
+                    # "rmsd": galaxydock_rmsd,
+                    # "score": galaxydock_score,
+                    # "autodock": galaxydock_autodock,
+                    # "drug_score": galaxydock_drug_score,
+                    # "internal_energy": galaxydock_internal_energy, 
+                    **galaxydock_pose_data[rank] # add galaxydock data
                 }
 
                 if compute_rmsd_with_submitted_ligand:

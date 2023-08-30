@@ -11,11 +11,19 @@ Then, install `mamba`:
 ```bash
 conda install -c conda-forge mamba
 ```
+If one is experiencing issues installing `mamba` in their base environment, then create a new environment for `mamba` using the following:
+```bash
+conda create -n mamba-env -c conda-forge mamba
+conda activate mamba-env
+```
+
 Create the `cobdock-env` environment using the following command:
 ```bash
 mamba env create -n cobdock-env -f environment.yml
 mamba activate cobdock-env
 ```
+Note that you may need to close and re-open the terminal to activate `cobdock-env`.
+
 Then, install additional packages with pip using the following command:
 ```bash
 pip install -r requirements.txt

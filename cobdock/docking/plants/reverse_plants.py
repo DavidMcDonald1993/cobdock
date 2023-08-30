@@ -203,20 +203,15 @@ def execute_reverse_docking_plants(
     else:
         collated_data = {}
 
-
     plants_output_directory = os.path.join(
         output_dir, 
         "plants",
         )
     os.makedirs(plants_output_directory, exist_ok=True)
 
-    # set of ligand, accession, target tuples to update
-    # to_update = set()
-
     # an example of multiprocessing
     with ProcessPoolExecutor(max_workers=PLANTS_N_PROC) as p:
 
-        
         running_tasks = generate_tasks(
             p=p,
             ligands_to_targets=ligands_to_targets,
@@ -343,7 +338,6 @@ def execute_reverse_docking_plants(
                     )
 
                 collated_data[ligand_id][accession][pdb_id][pose_id] = plants_pose_data
-
 
    # ensure all (ligand, pdb) pairs exist in collated_data
     for ligand_id, ligand_data in ligands_to_targets.items():
