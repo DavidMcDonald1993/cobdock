@@ -53,7 +53,7 @@ def execute_cobdock(
     num_poses: int = 10, # 10 poses per pocket
     num_complexes: int = None, # convert all poses into complexes
     num_top_pockets: int = 3, # number of top-ranked pockets to execute local docking into
-    top_pocket_distance_threshold: float = 10, # 10A
+    top_pocket_distance_threshold: float = 10, # at least 10A between selected pockets 
 
     verbose: bool = True,
     ):

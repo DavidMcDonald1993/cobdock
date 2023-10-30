@@ -52,7 +52,7 @@ mkdir bin/docking/vina
 and place the vina binary inside the newly created `vina` subdirectory. 
 
 ### GalaxyDock3
-GalaxyDock3 [2] can be downloaded from [here](https://galaxy.seoklab.org/softwares/galaxydock.html).
+GalaxyDock3 [2] can be downloaded from [here](https://galaxy.seoklab.org/request_softwares.html).
 Download the archive file and extract the `GalaxyDock3` directory into `./bin/docking`.
 
 ### PLANTS1.2

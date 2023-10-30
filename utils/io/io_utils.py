@@ -26,6 +26,31 @@ from json import JSONDecodeError
 
 from utils.sys_utils import execute_system_command, SUDO_PASSWORD
 
+from typing import Dict, Any
+import hashlib
+import json
+
+# dict hashing
+def remove_list_from_dict(d):
+    if isinstance(d, list) or isinstance(d, set):
+        return {k: None for k in d}
+    if isinstance(d, dict):
+        return {
+            k: remove_list_from_dict(v)
+            for k, v in d.items()
+        }
+    return d
+
+def dict_hash(dictionary: Dict[str, Any]) -> str:
+    """MD5 hash of a dictionary."""
+    dhash = hashlib.md5()
+    # We need to sort arguments so {'a': 1, 'b': 2} is
+    # the same as {'b': 2, 'a': 1}
+    dictionary = remove_list_from_dict(dictionary)
+    encoded = json.dumps(dictionary, sort_keys=True).encode()
+    dhash.update(encoded)
+    return dhash.hexdigest()
+
 def get_token(
     token_nbytes: int = 16, # token is double length
     ): 
@@ -167,6 +192,15 @@ def sanitise_molecule_name(
 
     return mol_name
 
+def sanitise_jq_selector(selector):
+    if pd.isnull(selector):
+        return ""
+    if not isinstance(selector, str):
+        selector = str(selector)
+    
+    selector = re.sub(r"[(^$\/()|?+*[\]{},.)]", "_", selector)
+    return selector
+
 # pickle data
 
 def write_pickle(
@@ -269,8 +303,9 @@ def load_compressed_pickle(
         The loaded object
     """
     # assert compressed_pickle_filename.endswith(".pkl.gz")
-    if not compressed_pickle_filename.endswith(".pkl.gz"):
-        compressed_pickle_filename += ".pkl.gz"
+    if isinstance(compressed_pickle_filename, str):
+        if not compressed_pickle_filename.endswith(".pkl.gz"):
+            compressed_pickle_filename += ".pkl.gz"
     if verbose:
         print ("Loading compressed pickle from", compressed_pickle_filename)
     try:
@@ -1178,34 +1213,5 @@ def clean_up_molecule_names(
 #     return xml_data
 
 if __name__ == "__main__":
-    
-    
-    # smiles = read_smiles(
-    #     smiles_filename="checkme.smi",
-    #     return_list=True,
-    #     smiles_key="smiles",
-    #     molecule_identifier_key="molecule_id",
-    # )
 
-    # print (smiles)
-
-    print (sanitise_filename("-*****.pdb"))
-
-    # print (load_json("tnjogr"))
-
-    # print(gunzip_file(
-    #     gzip_filename="checkme.poc.gz",
-    #     delete_gzip_file=False,
-    # ))
-
-    # gzip_filename = gzip_file(
-    #     input_filename="checkme.poc",
-    #     output_filename="thisisatest.poc.gz",
-    #     verbose=True,
-    # )
-
-    # gunzip_file(
-    #     gzip_filename="/media/david/Elements//pocket_align_scores/POC_6A/Q16654_2E0A_A_ANP_501_6.poc.gz",
-    #     output_filename="checkme.txt",
-    #     verbose=True
-    # )
+    raise Exception(generate_password())

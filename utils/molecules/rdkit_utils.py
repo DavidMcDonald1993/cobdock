@@ -165,10 +165,11 @@ DRUG_LIKE_THRESHOLDS = {
 
 def build_rdkit_mol(
     smiles: str,
-    largest_fragment: bool = True,
+    largest_fragment: bool = False,
     ):
 
     mol = Chem.MolFromSmiles(smiles)
+    # return mol is SMILES does not sanitise or keeping all fragments
     if mol is None or not largest_fragment:
         return mol
 
@@ -233,6 +234,7 @@ def load_multiple_molecules_from_file(
     verbose: bool = True,
     ):
 
+    # determine mol_format from file extension if not given
     if mol_format is None:
         _, mol_format = os.path.splitext(structure_filename)
         # remove .
@@ -672,7 +674,7 @@ def compute_molecule_properties(
         properties_dict[property_string] = property_function
 
     if verbose:
-        print ("Obtaining molecular properties of a single molecule")
+        print ("Obtaining molecular properties of a single molecule:", smi if smi is not None else "")
 
     if mol is None:
         if smi is not None:
@@ -1236,6 +1238,9 @@ def list_lipinski_violations(
 
 def compute_maccs_fp(smi):
     return MACCSkeys.GenMACCSKeys(Chem.MolFromSmiles(smi)) 
+
+def compute_morg2_fp(smi):
+    return AllChem.GetMorganFingerprintAsBitVect(Chem.MolFromSmiles(smi), radius=2, nBits=1024 )
 
 def compute_morg3_fp(smi):
     return AllChem.GetMorganFingerprintAsBitVect(Chem.MolFromSmiles(smi), radius=3, nBits=1024 )

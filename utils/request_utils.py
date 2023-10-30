@@ -232,6 +232,7 @@ def make_get_request(
     stream: bool = False,
     max_retries: int = 5,
     sleep_duration: int = 100,
+    timeout: int = None,
     allowed_status_codes: set = {200,},
     verbose: bool = False,
     ):
@@ -266,7 +267,9 @@ def make_get_request(
                 sleep(sleep_duration)
             if verbose:
                 print ("Making GET request to URL", url, "and params", list(params))
-            response = requests.get(url, params=params, stream=stream, headers=headers)
+                if timeout:
+                    print ("Request timeout:", timeout)
+            response = requests.get(url, params=params, timeout=timeout, stream=stream, headers=headers)
             status_code = response.status_code
             if verbose:
                 print ("Obtained response with status", status_code)
@@ -287,6 +290,7 @@ def make_post_request(
     stream: bool = False,
     max_retries: int = 5,
     sleep_duration: int = 100,
+    timeout: int = None,
     verbose: bool = False,
     ):
     """_summary_
@@ -349,7 +353,7 @@ def make_post_request(
         try:
             if verbose:
                 print ("Making POST request to URL", url)
-            http_response = requests.post(url, data=params, files=files_to_send, stream=stream, headers=headers)
+            http_response = requests.post(url, data=params, files=files_to_send, timeout=timeout, stream=stream, headers=headers)
             successful = True
             break
         except Exception as e:
@@ -377,6 +381,7 @@ def make_http_request(
     stream: bool = False,
     max_retries: int = 5,
     sleep_duration: int = 100,
+    timeout: int = None,
     verbose: bool = False,
     ):
     """Wrapper function to handle making requests with retries enabled.
@@ -431,6 +436,7 @@ def make_http_request(
             stream=stream,
             max_retries=max_retries,
             sleep_duration=sleep_duration,
+            timeout=timeout,
             verbose=verbose,
         )
     # POST                    
@@ -443,6 +449,7 @@ def make_http_request(
             stream=stream,
             max_retries=max_retries,
             sleep_duration=sleep_duration,
+            timeout=timeout,
             verbose=verbose,
         )
     else:
@@ -671,7 +678,7 @@ if __name__ == "__main__":
         # url="http://localhost:8000/natural_products/diseases/all",
         # url="http://localhost:8080/natural_products/diseases/screen",
         # url="http://localhost:8080/natural_products/diseases/screen_species",
-        url="http://localhost:8080/natural_products/diseases/screen_food",
+        # url="http://localhost:8080/natural_products/diseases/screen_food",
         # url="http://localhost:8000/natural_products/diseases/drugs",
         # url="http://localhost:8000/natural_products/diseases/pathways",
         # url="http://localhost:8000/natural_products/drugs/all",
@@ -685,8 +692,20 @@ if __name__ == "__main__":
         # url="http://localhost:8000/natural_products/pathways/diseases",
         # url="http://localhost:8000/natural_products/reactions/all",
         # url="http://localhost:8000/natural_products/reactions/screen",
-        # url="http://localhost:8080/natural_products/herb_analysis",
+        # url="http://localhost:8000/natural_products/api/herb_analysis",
+        # url="http://localhost:8000/natural_products/api/herb_analysis/disease_projection",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis/disease_projection",
+        # url="http://localhost:8000/natural_products/api/herb_analysis/target_coactivation",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis/target_coactivation",
+        # url="http://localhost:8000/natural_products/api/herb_analysis/enrichment_analysis_bubble",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis/enrichment_analysis_bubble",
+        url="http://47.102.129.50/natural_products/api/herb_analysis/enrichment_analysis_bubble",
+        # url="http://localhost:8000/natural_products/api/herb_analysis/small_molecule_distribution",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis/small_molecule_distribution",
+        # url="http://localhost:8000/natural_products/api/herb_analysis/disease_target_species",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis/disease_target_species",
         # url="http://localhost:8080/molecule/properties",
+        # url="http://47.102.129.50:80/molecule/properties",
         # url="http://47.102.129.50:80/natural_products/herb_analysis",
         # url="http://47.102.129.50:80/np-classify/",
         # url="http://localhost:8000/natural_products/pathway_enrichment",
@@ -696,6 +715,7 @@ if __name__ == "__main__":
         # url="http://localhost:8000/toxicity-predict/",
         # url="http://localhost:5000/prediction/",
         params={
+            "user": "b17f3d25a6b695f56fc2075eee263d2e592cf993",
             # "small_molecule_ids": [14060, 20239],
             # "log_p_lt": 3,
             # "log_p_gt": 2.9,
@@ -704,9 +724,11 @@ if __name__ == "__main__":
             # "gene-list": gene_names,
             # # "genus": "Homo",
             # "genus": "Aconitum",
-            # "species": ["Aconitum carmichaelii", "Aconitum napellus", "Isodon serra"],
+            "species": ["Aconitum carmichaelii", "Aconitum napellus", "Isodon serra", "[Candida] zeylanoides"][-1:],
             # "small_molecule_filter": "lipinski_filter",
-            "disease_names": ["Heart failure", "Neoplasms"],
+            # "disease_name": ["Heart failure", "Neoplasm"],
+            # "prediction_classes": "3-HIGH",
+            # "max_enrichment_records": 10,
             # "return_format": "graph",
             # "return_format": "cytoscape",
             # "return_format": "table",
@@ -761,5 +783,7 @@ if __name__ == "__main__":
         method="POST",
         verbose=True,
     )
+
+    # print (response.text)
 
     write_json(json.loads(response.text), "checkme.json", verbose=True)
