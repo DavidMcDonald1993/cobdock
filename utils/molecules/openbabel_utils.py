@@ -9,6 +9,9 @@ if __name__ == "__main__":
         )))
 
 import os
+import openbabel # confirm package
+
+from tqdm import tqdm
 
 import subprocess
 
@@ -26,8 +29,10 @@ def obabel_convert(
     multiple: bool = False,
     output_dir: str = None,
     gen_3d: bool = False,
+    gen_3d_speed: str = "med", # fast? https://open-babel.readthedocs.io/en/latest/Command-line_tools/babel.html#specify-speed
     add_hydrogen: bool = False,
     delete_hydrogen: bool = False,
+    center: bool = False,
     pH: float = None,
     title: str = None,
     append: str = None,
@@ -79,12 +84,11 @@ def obabel_convert(
         _, input_format = os.path.splitext(input_filename[0])
         input_format = input_format.replace(".", "")
 
-
     if output_filename is None: # output to same directory as input, if NOT multiple 
         stem, ext = os.path.splitext(input_filename[0])
         output_filename = stem + "." + output_format
 
-    if output_dir is not None:
+    if output_dir is not None and not output_filename.startswith(output_dir):
         os.makedirs(output_dir, exist_ok=True)
         output_filename = os.path.join(output_dir, output_filename)
 
@@ -93,19 +97,19 @@ def obabel_convert(
         args.append(f"-i {input_format}")
     if input_filename is not None:
         # args.append(f"{input_filename}")
-        args.append(" ".join(input_filename))
+        args.append(" ".join(map(lambda s: f"'{s}'", input_filename)))
     if output_format is not None:
         args.append(f"-o {output_format}")
         if not output_filename.endswith(output_format):
             output_filename += f".{output_format}"
     if output_filename is not None:
-        args.append(f"-O {output_filename}")
+        args.append(f"-O '{output_filename}'")
     if multiple:
         args.append("-m")
 
     # gen 3D
     if gen_3d:
-        args.append("--gen3d")
+        args.append(f"--gen3d {gen_3d_speed}")
 
     # handle hydrogens
     if pH is not None:
@@ -114,15 +118,24 @@ def obabel_convert(
         args.append("-h")
     elif delete_hydrogen:
         args.append("-d")
+    
+    if center:
+        args.append("-c") 
    
     if title is not None:
-        args.append(f"--title {title}")
+        args.append(f"--title '{title}'")
     if append is not None:
         args.append(f"--append {append}")
 
+    # convert to string
     args = " ".join(args)
 
+    # define command
     cmd = f"obabel {args}"
+
+    # hide error stream
+    cmd += " 2> /dev/null"
+
     if not os.path.exists(output_filename) or input_filename[0] == output_filename or overwrite:
         if verbose:
             print ("Using OpenBabel to convert", len(input_filename), "file(s), first is:", input_filename[0], 
@@ -133,13 +146,120 @@ def obabel_convert(
             execute_system_command(cmd, main_job_id=main_job_id, verbose=verbose)
         except Exception as e:
             print ("OPENBABEL exception", e)
+            # raise e
             return None
+        
+    return output_filename
+
+def obabel_smiles_convert(
+    smiles: str, 
+    output_filename,
+    output_format: str = None,
+    output_dir: str = None,
+    gen_3d: bool = True,
+    gen_3d_speed: str = "med", # med/fast? https://open-babel.readthedocs.io/en/latest/Command-line_tools/babel.html#specify-speed
+    add_hydrogen: bool = False,
+    delete_hydrogen: bool = False,
+    pH: float = None,
+    title: str = None,
+    append: str = None,
+    overwrite: bool = False,
+    main_job_id: bool = None,
+    verbose: bool = False,
+    ):
+    """Wrapper for obabel command.
+    Used to convert molecule formats.
+
+    Parameters
+    ----------
+    smiles : str
+        Input smiles
+    output_format : str
+        Desired output format type
+    output_filename : str, optional
+        Desired output filename, by default None
+    multiple : bool, optional
+        Flag to generate multiple output files, by default False
+    output_dir : str, optional
+        Directory to output multiple files to, by default None
+    add_hydrogen : bool, optional
+        Flag to make all hydrogen explicit, by default False
+    delete_hydrogen : bool, optional
+        Flag to make all hydrogen implicit, by default False
+    title : str, optional
+        Optional title of the molecule, by default None
+    overwrite : bool, optional
+        Flag to overwrite the output file if it already exists, by default False
+    main_job_id : bool, optional
+        Job ID to associate with, by default None
+    verbose : bool, optional
+        Flag to print updates to console, by default False
+
+    Returns
+    -------
+    str
+        The output filename or None if obabel failed
+    """
+
+    if output_dir is not None and not output_filename.startswith(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+        output_filename = os.path.join(output_dir, output_filename)
+
+    args = []
+    args.append(f"-i smi")
+    args.append(f"-:\"{smiles}\"")
+    if output_format is not None:
+        args.append(f"-o {output_format}")
+        if not output_filename.endswith(output_format):
+            output_filename += f".{output_format}"
+    if output_filename is not None:
+        args.append(f"-O '{output_filename}'")
+
+    # gen 3D
+    if gen_3d:
+        args.append(f"--gen3d {gen_3d_speed}")
+    else:
+        args.append("--gen2d")
+
+    # handle hydrogens
+    if pH is not None:
+        args.append(f"-p {pH}")
+    elif add_hydrogen:
+        args.append("-h")
+    elif delete_hydrogen:
+        args.append("-d")
+   
+    if title is not None:
+        args.append(f"--title '{title}'")
+    if append is not None:
+        args.append(f"--append {append}")
+
+    args = " ".join(args)
+
+    cmd = f"obabel {args}"
+
+    # hide error stream
+    cmd += " 2> /dev/null"
+
+    if not os.path.exists(output_filename) or overwrite:
+        if verbose:
+            print ("Using OpenBabel to convert SMILEs", smiles, "to format", output_format)
+            print ("Writing to directory", output_dir)
+            print ("Writing to file", output_filename)
+        try:
+            # added timeout since obabel can hang when generating 3D coordinates
+            execute_system_command(cmd, timeout="10m", main_job_id=main_job_id, verbose=verbose)
+        except Exception as e:
+            print ("OPENBABEL exception", e)
+            # raise e
+            return None
+        
     return output_filename
 
 def convert_single_smiles_to_3D(
-    smiles_record,
-    output_dir,
-    output_format,
+    smiles_record: dict,
+    output_dir: str,
+    output_format:str ,
     desired_output_filename: str,
     add_hydrogen: bool = True,
     delete_hydrogen: bool = False,
@@ -158,7 +278,7 @@ def convert_single_smiles_to_3D(
         raise NotImplementedError
     # sanitise molname for filename
     molecule_identifier_sanitised = sanitise_filename(molecule_identifier)
-    
+
     if desired_output_filename is None:
         mol_output_filename = os.path.join(
             output_dir, 
@@ -170,6 +290,22 @@ def convert_single_smiles_to_3D(
     # alway run if overwrite == True
     if not os.path.exists(mol_output_filename) or overwrite:
 
+        # upe openbabel to convert from SMILES to 3D format directly?
+        # mol_output_filename = obabel_smiles_convert(
+        #     smiles=smi,
+        #     output_filename=mol_output_filename,
+        #     output_format=output_format,
+        #     # output_dir=output_dir,
+        #     output_dir=None, # already included in output_filename
+        #     add_hydrogen=add_hydrogen,
+        #     delete_hydrogen=delete_hydrogen,
+        #     pH=pH,
+        #     gen_3d=True,
+        #     title=molecule_identifier_sanitised,
+        #     overwrite=overwrite,
+        #     verbose=verbose,
+        # )
+
         sdf_filename = os.path.join(
             output_dir, 
             f"{molecule_identifier_sanitised}.sdf") # generate name based on molecule id in file
@@ -180,13 +316,14 @@ def convert_single_smiles_to_3D(
             molecule_identifier=molecule_identifier_sanitised, 
             sdf_filename=sdf_filename, 
             add_hydrogen=add_hydrogen,
+            # add_hydrogen=False,
             overwrite=overwrite,
             verbose=verbose,
             )
         
         # use obabel to convert from SDF to other 3D formats
         if output_format != "sdf":
-            
+            # convert SDF to desired format
             mol_output_filename = obabel_convert(
                 input_format="sdf", 
                 input_filename=sdf_filename, 
@@ -198,16 +335,14 @@ def convert_single_smiles_to_3D(
                 title=molecule_identifier_sanitised,
                 overwrite=overwrite,
                 verbose=verbose,
-                )
+            )
+            # delete SDF file
             delete_file(sdf_filename, verbose=verbose)
         else:
             # output format is SDF
             mol_output_filename = sdf_filename 
 
-    
-    # relabel residue
-
-    return {molecule_identifier: mol_output_filename}
+    return mol_output_filename
 
 def smiles_to_3D(
     supplied_molecules, 
@@ -282,6 +417,7 @@ def smiles_to_3D(
             delimiter=delimiter,
             smiles_key=smiles_key,
             molecule_identifier_key=molecule_identifier_key,
+            verbose=verbose,
         )
 
     num_supplied_molecules = len(supplied_molecules)
@@ -292,7 +428,7 @@ def smiles_to_3D(
 
     if verbose:
         print ("Converting", num_supplied_molecules, "molecule(s) to", output_format, "format")
-    
+
     if desired_output_filename is not None:
 
         desired_mol_name, _ = os.path.splitext(os.path.basename(desired_output_filename))
@@ -322,10 +458,9 @@ def smiles_to_3D(
         # else:
         #     raise ValueError("YOU MUST NOT SPECIFY AN OUTPUT FILENAME FOR MORE THAN ONE MOLECULE!")
 
-    
-    with ThreadPoolExecutor(max_workers=n_proc) as p:
+    with tqdm(total=num_supplied_molecules, desc="Converting ligands to 3D", disable=not verbose) as pbar, ThreadPoolExecutor(max_workers=n_proc) as p:
 
-        running_tasks = []
+        running_tasks = {}
 
         for smiles_record in supplied_molecules:
 
@@ -341,21 +476,35 @@ def smiles_to_3D(
                 smiles_key=smiles_key,
                 molecule_identifier_key=molecule_identifier_key,
                 overwrite=overwrite,
-                verbose=verbose
+                # verbose=verbose,
+                verbose=False, # suppress output of ligand conversion to 3D
             )
 
-            running_tasks.append(task)
+            running_tasks[task] = smiles_record[molecule_identifier_key] # molecule id
 
-    all_filenames = {}
+        all_filenames = {}
 
-    for task in as_completed(running_tasks):
+        for task in as_completed(running_tasks):
 
-        task_result = task.result()
+            # get task result 
+            task_result = task.result()
+            # get molecule id
+            molecule_id = running_tasks[task]
+            # delete task from running tasks
+            del running_tasks[task]
 
-        all_filenames.update(task_result)
+            # check if task failed
+            if task_result is None:
+                continue
+
+            # update all filenames with filename from task
+            all_filenames[molecule_id] = task_result
+            # update progress bar
+            pbar.update(1)
 
     if verbose:
         print ("Conversion from 2D to 3D complete")
+
     return all_filenames
 
 def generate_conformer_with_obabel(

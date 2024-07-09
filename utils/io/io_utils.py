@@ -157,7 +157,7 @@ def sanitise_filename(
         return ""
     if not isinstance(filename, str):
         filename = str(filename)
-    filename = re.sub(r"[ |/(),'\*]", "_", filename)[:max_length]
+    filename = re.sub(r"[ |/(),'\*;]", "_", filename)[:max_length]
     if filename.startswith("-"):
         filename = "_" + filename[1:]
 
@@ -465,7 +465,7 @@ def write_json(
         json_filename += ".json"
 
     if verbose:
-        print ("writing json to", json_filename)
+        print ("Writing json to", json_filename)
 
     if isinstance(data, str):
         if verbose:
@@ -483,7 +483,7 @@ def write_json(
         json.dump(data, f, indent=indent, ensure_ascii=ensure_ascii, default=str)
 
     if verbose:
-        print ("wrote json to", json_filename)
+        print ("Wrote json to", json_filename)
     return json_filename
 
 def load_json(
@@ -512,7 +512,7 @@ def load_json(
     """
     try:
         if verbose:
-            print ("loading json from", json_filename)
+            print ("Loading json from", json_filename)
         # return default if file does not exist
         if not os.path.exists(json_filename):
             if verbose:
@@ -528,7 +528,7 @@ def load_json(
                 for key, value in obj.items()
             }
         if verbose:
-            print ("loaded data from", json_filename)
+            print ("Loaded data from", json_filename)
     except JSONDecodeError as e:
         print ("Error reading json file", json_filename, ":", e)
         print ("Returning", default)
@@ -777,7 +777,7 @@ def read_smiles(
         May be one of pd.Series, pd.DataFrame or a list of dicts
     """
     if verbose:
-        print ("reading SMILES from file", smiles_filename)
+        print ("Reading SMILES from file", smiles_filename)
     if not os.path.exists(smiles_filename):
         print ("Attempting to read SMILES from a file that does not exist:", smiles_filename)
         return []
@@ -814,7 +814,7 @@ def read_smiles(
     smiles_df = smiles_df.loc[~pd.isnull(smiles_df[smiles_key])]
     
     if verbose:
-        print ("read", smiles_df.shape[0], "SMILES from file", smiles_filename)
+        print ("Read", smiles_df.shape[0], "SMILES from file", smiles_filename)
     
     if remove_invalid_molecules:
         if verbose:
@@ -1018,21 +1018,21 @@ def download_from_client(
     input_filename = input_filehandle.name
     input_filename = sanitise_filename(input_filename)
     if verbose:
-        print ("input file", input_filename, "has been received from client -- downloading")
+        print ("Input file", input_filename, "has been received from client -- downloading")
 
     # write compounds to local directory of server
     local_filename = os.path.join(
         output_dir,
         input_filename)
     if verbose:
-        print ("downloading file to", local_filename)
+        print ("Downloading file to", local_filename)
     with open(local_filename, "wb+") as out_file:
         if verbose:
-            print ("opened file", local_filename)
+            print ("Opened file", local_filename)
         for i, chunk in enumerate(input_filehandle.chunks(), start=1):
             out_file.write(chunk)
-            if verbose:
-                print ("wrote chunk", i)
+            # if verbose:
+            #     print ("wrote chunk", i)
     if verbose:
         print ("Download file from client complete")
     return local_filename
@@ -1080,137 +1080,6 @@ def clean_up_molecule_names(
     assert len(set(molecule_names)) == n_molecules
 
     return molecule_names
-
-# def get_compound_names(filename):
-#     print ("DETERMINING COMPOUND NAMES IN SUBMITTED FILE", filename)
-#     if filename.endswith(".sdf"):
-#         sdf_id_col = "ID"
-#         sdf = LoadSDF(filename, idName=sdf_id_col)
-#         names = list(sdf[sdf_id_col].values)
-#         changed, names = clean_up_molecule_names(names)
-#         if changed:
-#             sdf[sdf_id_col] = names
-#             print ("names have changed, writing SDF to file", filename)
-#             WriteSDF(sdf, out=filename, idName=sdf_id_col)
-#     else: # assume smiles file
-#         print ("FILE IS IN SMILES FORMAT")
-#         smiles = read_smiles(filename, 
-#             remove_invalid_molecules=True, 
-#             return_series=True)
-#         names = list(smiles.index)
-#         _, names = clean_up_molecule_names(names)
-            
-#         print ("names have changed, writing smiles to file", filename)
-#         write_smiles([(name, smi) 
-#             for name, smi in zip(names, smiles.values)], 
-#         filename)
-
-#     print ("COMPLETED DETERMINING COMPOUND NAMES IN SUBMITTED FILE", filename)
-#     return names
-
-# def convert_file(
-#     input_filename: str, 
-#     desired_format: str,
-#     ):
-
-#     desired_format = desired_format.lower()
-
-#     smiles_input_types = {".smi", ".txt", ".tsv", ".sml", ".smiles", ".msi"}
-#     sdf_input_types = {".sdf", }
-
-#     valid_input_file_types = {*smiles_input_types, *sdf_input_types}
-
-#     input_filename, input_file_type = os.path.splitext(input_filename)
-#     assert input_file_type in valid_input_file_types
-
-
-
-#     # convert if necessary
-#     if input_file_type != desired_format:
-        
-#         print ("CONVERSION REQUIRED")
-
-#         if desired_format == ".smi":
-#             print ("COVERTING TO SMILES FORMAT")
-#             if input_file_type == ".sdf":
-#                 # convert SDF to smiles
-#                 print ("converting SDF to SMILES")
-#                 print ("SDF filename:", input_filename)
-#                 sdf_df = LoadSDF(input_filename, smilesName="SMILES")
-#                 # write smiles
-#                 smiles = [(row["ID"], row["SMILES"])
-#                     for _, row in sdf_df.iterrows()]
-#                 # write smiles to temp_file
-#                 output_filename = input_filename + desired_format
-#                 write_smiles(smiles, output_filename)
-           
-#             elif input_file_type in valid_input_file_types - {".sdf"}:
-#                 # rename .txt smiles format to .smi
-#                 print ("INPUT FILE TYPE:", input_file_type)
-#                 # os.rename(input_file, input_file_name + desired_format)
-#                 output_filename = input_filename + desired_format
-#                 print ("COPYING FROM", input_filename, "TO", output_filename)
-#                 shutil.copyfile(input_filename, output_filename)
-#             else:
-#                 raise NotImplementedError
-
-#         elif desired_format == ".sdf":
-#             if input_file_type in {".smi", ".sml", ".txt"}:
-#                 # convert from SMILES to SDF
-#                 print ("converting SMILES to SDF")
-#                 smiles_filename = input_filename
-#                 print ("SMILES filename:", smiles_filename)
-#                 output_filename = input_filename + desired_format
-#                 smiles_to_SDF_3D_rdkit(
-#                     smiles_filename, 
-#                     output_filename,
-#                     standardise=False, 
-#                     embed=False)
-#             else:
-#                 raise NotImplementedError
-        
-#         else:
-#             raise NotImplementedError # conversion not yet implemented
-#     else:
-#         print ("NO CONVERSION REQUIRED")
-#         output_filename = input_filename
-    
-#     # assert output_filename.endswith(desired_format)
-
-#     # # copy to output directory
-#     # output_filename = os.path.join(output_dir, os.path.basename(input_file))
-#     # if output_filename != input_file:
-#     #     shutil.copyfile(input_file, output_filename)
-
-#     return output_filename
-
-# def read_xml_file_and_covert_to_dict(
-#     xml_filename: str,
-#     verbose: bool = False,
-#     ):
-#     """Use `xmltodict` library to parse xml file as dictionary.
-
-#     Parameters
-#     ----------
-#     xml_filename : str
-#         Path of XML file to read
-#     verbose : bool, optional
-#         Flag to print updates to the console, by default False
-
-#     Returns
-#     -------
-#     dict
-#         The data in the XML file, in dictionary form
-#     """
-#     if verbose:
-#         print ("Reading xml file", xml_filename)
-#     if xml_filename.endswith(".gz"):
-#         f = gzip.open(xml_filename)
-#     else:
-#         f = open(xml_filename)
-#     xml_data = parse(f.read())
-#     f.close()
-#     return xml_data
 
 if __name__ == "__main__":
 

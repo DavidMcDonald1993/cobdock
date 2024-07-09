@@ -119,7 +119,7 @@ def execute_system_command(
     main_job_id : int, optional
         ID of main job, by default None
     timeout : int, optional
-        Timeout for comman before a SIGKILL signal is sent, by default None
+        Timeout for command before a SIGKILL signal is sent, by default None
     allow_non_zero_return : bool, optional
         Flag to allow a non-zero return code, by default False
     verbose : bool, optional
@@ -142,7 +142,6 @@ def execute_system_command(
     if verbose:
         print ("Executing system command:", cmd, )
         start_time = default_timer()
-
 
     if as_subprocess:
 

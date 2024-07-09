@@ -693,13 +693,15 @@ if __name__ == "__main__":
         # url="http://localhost:8000/natural_products/reactions/all",
         # url="http://localhost:8000/natural_products/reactions/screen",
         # url="http://localhost:8000/natural_products/api/herb_analysis",
+        # url="https://app.npaiengine.com/natural_products/api/herb_analysis",
+        # url="http://47.102.129.50/natural_products/api/herb_analysis",
         # url="http://localhost:8000/natural_products/api/herb_analysis/disease_projection",
         # url="https://app.npaiengine.com/natural_products/api/herb_analysis/disease_projection",
         # url="http://localhost:8000/natural_products/api/herb_analysis/target_coactivation",
         # url="https://app.npaiengine.com/natural_products/api/herb_analysis/target_coactivation",
         # url="http://localhost:8000/natural_products/api/herb_analysis/enrichment_analysis_bubble",
         # url="https://app.npaiengine.com/natural_products/api/herb_analysis/enrichment_analysis_bubble",
-        url="http://47.102.129.50/natural_products/api/herb_analysis/enrichment_analysis_bubble",
+        # url="http://47.102.129.50/natural_products/api/herb_analysis/enrichment_analysis_bubble",
         # url="http://localhost:8000/natural_products/api/herb_analysis/small_molecule_distribution",
         # url="https://app.npaiengine.com/natural_products/api/herb_analysis/small_molecule_distribution",
         # url="http://localhost:8000/natural_products/api/herb_analysis/disease_target_species",
@@ -714,8 +716,9 @@ if __name__ == "__main__":
         # url="http://localhost:8000/natural_products/pathway_enrichment",
         # url="http://localhost:8000/toxicity-predict/",
         # url="http://localhost:5000/prediction/",
+        url="http://localhost:8080/natural_products/api/herb_analysis?return_format=cytoscape&prediction_classes=1-LOW&prediction_classes=2-MED&prediction_classes=3-HIGH&chinese_species_name=%E5%B0%BC%E6%B3%8A%E5%B0%94%E4%BA%94%E5%A4%B4%E8%9B%87",
         params={
-            "user": "b17f3d25a6b695f56fc2075eee263d2e592cf993",
+            # "user": "b17f3d25a6b695f56fc2075eee263d2e592cf993",
             # "small_molecule_ids": [14060, 20239],
             # "log_p_lt": 3,
             # "log_p_gt": 2.9,
@@ -724,10 +727,11 @@ if __name__ == "__main__":
             # "gene-list": gene_names,
             # # "genus": "Homo",
             # "genus": "Aconitum",
-            "species": ["Aconitum carmichaelii", "Aconitum napellus", "Isodon serra", "[Candida] zeylanoides"][-1:],
+            # "species": ["Aconitum carmichaelii", "Aconitum napellus", "Isodon serra", "[Candida] zeylanoides"][-1:],
+            # "chinese_species_name": "尼泊尔五头蛇",
             # "small_molecule_filter": "lipinski_filter",
             # "disease_name": ["Heart failure", "Neoplasm"],
-            # "prediction_classes": "3-HIGH",
+            # "prediction_classes": ["3-HIGH", "2-MED", "1-LOW"],
             # "max_enrichment_records": 10,
             # "return_format": "graph",
             # "return_format": "cytoscape",
@@ -780,10 +784,12 @@ if __name__ == "__main__":
             # "n_proc": 23,
         },
         max_retries=1,
-        method="POST",
+        method="GET",
+        # method="POST",
         verbose=True,
     )
 
     # print (response.text)
 
-    write_json(json.loads(response.text), "checkme.json", verbose=True)
+    # write_json(json.loads(response.text), "herb_analysis_GET_app.npaiengine.com.json", verbose=True)
+    write_json(json.loads(response.text), "herb_analysis_GET_47.102.129.50.json", verbose=True)

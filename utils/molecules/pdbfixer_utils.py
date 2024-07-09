@@ -9,6 +9,7 @@ if __name__ == "__main__":
         )))
 
 import os
+import pdbfixer # confirm package
 
 # from utils.io.io_utils import delete_directory, delete_file
 # from utils.molecules.openbabel_utils import obabel_convert 
@@ -42,7 +43,9 @@ def fix_pdb_file_with_pdbfixer(
         print ("Keeping heterogens:", keep_heterogens)
         print ("Outputting to", output_filename)
     
-    cmd = f"pdbfixer {pdb_filename} --output {output_filename} --add-atoms {add_atoms} --keep-heterogens {keep_heterogens} --ph={pH}"
+    cmd = f"pdbfixer {pdb_filename} --output {output_filename} --add-atoms {add_atoms} --keep-heterogens {keep_heterogens}"
+    if pH is not None:
+        cmd += f" --ph={pH}"
     if replace_nonstandard_residues:
         cmd += " --replace-nonstandard"
     if add_missing_residues:

@@ -17,6 +17,8 @@ from Bio.PDB.parse_pdb_header import parse_pdb_header
 
 import scoria
 
+import pdbtools # confirm package
+
 import numpy as np
 
 from utils.molecules.openbabel_utils import obabel_convert
@@ -495,6 +497,8 @@ def download_pdb_structure_using_pdb_fetch(
         return None
     # download pdb file
     cmd = f"pdb_fetch {pdb_id} > {pdb_filename}"
+    # if not verbose: # does not work
+    #     cmd += " > /dev/null 2>&1"
     try:
         # 1 minute timeout
         execute_system_command(cmd, timeout="1m", verbose=verbose)
@@ -615,7 +619,7 @@ def get_structure_biopython(
         )
 
     # set structure and return it 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     return parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -766,7 +770,7 @@ def select_chains_from_pdb_file(
         print ("Selecting chains", chain_ids, "from PDB file", pdb_filename)
         print ("writing chain(s) to", output_filename)
     
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -801,7 +805,7 @@ def get_number_of_atoms_in_pdb_file(
     if verbose:
         print ("Getting number of atoms in PDB file", pdb_filename)
 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -834,7 +838,7 @@ def get_number_of_residues_in_PDB_file(
     if verbose:
         print ("Counting number of residues in PDB file", pdb_filename)
 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -863,7 +867,7 @@ def get_all_chain_ids_in_a_PDB_file(
         All of the chain IDs in the supplied PDB file
     """
 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -902,7 +906,7 @@ def remove_all_hetero_residues_using_biopython(
         stem, ext = os.path.splitext(pdb_filename)
         output_filename = stem + "_cleaned" + ext
 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -910,10 +914,7 @@ def remove_all_hetero_residues_using_biopython(
     # write all models to file (removing all hetero-residues)
     io = PDBIO()
     io.set_structure(structure)
-    print ("Writing cleaned structure to", output_filename)
     io.save(output_filename, CleanResidueSelect())
-    print ("Write successful",)
-
 
     return output_filename
 
@@ -1049,7 +1050,7 @@ def extract_natural_ligand_and_chain(
     if output_dir is not None:
         os.makedirs(output_dir, exist_ok=True)
     
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -1146,7 +1147,7 @@ def extract_closest_chain(
         if verbose:
             print ("Identifying closest chain to point", point, "and writing chains to", output_dir)
     
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -1206,7 +1207,7 @@ def identify_contact_residues_for_natural_ligand(
     ):
 
     # load protein structur
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -1320,8 +1321,8 @@ def build_binding_site_based_on_distance_to_natural_ligand(
         print ("Building a binding site using pdb_filename", pdb_filename,
             "and radius", radius)
 
-    # load protein structur
-    parser = PDBParser()
+    # load protein structure
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -1438,7 +1439,7 @@ def get_all_natural_ligands_from_pdb_file(
 
     filter_by_ligand_type = "NON-POLYMER" in LIGAND_TYPE_TO_ID
 
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         pdb_id, 
         pdb_filename)
@@ -1660,13 +1661,13 @@ def load_scoria_molecule(
 
     return scoria.Molecule(mol_path)
     
-def define_target_bounding_box_using_biopython(
+def define_bounding_box_using_biopython(
     pdb_filename: str,
     scale: float = 1.0,
     precision: int = 3,
     verbose: bool = False,
     ):
-    """Use the PDB file of a ligand to define a bounding box for docking
+    """Use the PDB file to define a bounding box for docking
 
     Parameters
     ----------
@@ -1683,11 +1684,22 @@ def define_target_bounding_box_using_biopython(
         The location and size of the computed bounding box
     """
 
+
+    delete_pdb_file = False
+    if not pdb_filename.endswith(".pdb"):
+        pdb_filename = obabel_convert(
+            input_filename=pdb_filename,
+            output_format="pdb",
+            output_filename=None,
+            verbose=verbose,
+        )
+        delete_pdb_file = True # file was converted so delete
+
     if verbose:
-        print ("Determinning bounding box location and size using PDB file:", pdb_filename)
+        print ("Determining bounding box location and size using PDB file:", pdb_filename)
 
     # load structure
-    parser = PDBParser()
+    parser = PDBParser(QUIET=True)
     structure = parser.get_structure(
         "my-target",
         pdb_filename
@@ -1722,6 +1734,9 @@ def define_target_bounding_box_using_biopython(
             for k, v in bounding_box.items()
         }
 
+    if delete_pdb_file:
+        delete_file(pdb_filename, verbose=verbose)
+
     return bounding_box
 
 def define_target_binding_site_using_scoria(
@@ -1747,7 +1762,7 @@ def define_target_binding_site_using_scoria(
     """
 
     if verbose:
-        print ("Determinning bounding box location and size using PDB file:", pdb_filename)
+        print ("Determining bounding box location and size using PDB file:", pdb_filename)
 
     # create a scoria mol object from the ligand pdb file
     mol = load_scoria_molecule(
@@ -2135,8 +2150,9 @@ def get_cofactors_for_accessions(
     ):
     if isinstance(accessions, str):
         accessions = [accessions]
-    if verbose:
-        print ("Getting co-factor IDs for accessions", accessions)
+    
+    # if verbose:
+    #     print ("Getting co-factor IDs for accessions", list(accessions))
 
     return {
         accession: (
